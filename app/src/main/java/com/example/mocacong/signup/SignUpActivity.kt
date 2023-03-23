@@ -1,4 +1,4 @@
-package com.example.mocacong
+package com.example.mocacong.signup
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
