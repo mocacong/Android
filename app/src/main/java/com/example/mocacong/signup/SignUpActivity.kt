@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.addTextChangedListener
+import com.example.mocacong.data.SignUpRequest
 import com.example.mocacong.databinding.ActivitySignUpBinding
 
 class SignUpActivity : AppCompatActivity() {
@@ -60,7 +61,7 @@ class SignUpActivity : AppCompatActivity() {
 
             //가입하기 버튼 클릭 이벤트
             registerBtn.setOnClickListener {
-                val member = SignUpData(emailText.text.toString(), phoneText.text.toString(), pwText.text.toString(), nicknameText.text.toString())
+                val member = SignUpRequest(emailText.text.toString(), phoneText.text.toString(), pwText.text.toString(), nicknameText.text.toString())
                 signUpController.signUp(member)
             }
 
