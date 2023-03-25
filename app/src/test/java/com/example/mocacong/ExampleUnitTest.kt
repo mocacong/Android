@@ -27,12 +27,19 @@ class ExampleUnitTest {
     }
 
     @Test
-    fun test(){
+    fun `비밀번호가 8자 이상 20자 이하가 아닌 경우 예외를 반환한다`(){
         assertEquals(true, passwordRegex(arr[0]))
         assertEquals(true, passwordRegex(arr[1]))
         assertEquals(true, passwordRegex(arr[2]))
         assertEquals(false, passwordRegex(arr[3]))
         assertEquals(false, passwordRegex(arr[4]))
+
+    }
+
+
+    //테스트 코드 함수 기능 열심히 쪼개자!
+    @Test
+    fun `비밀번호에 소문자, 숫자 둘 다 포함돼있지 않은 경우 예외를 반환한다`() {
 
     }
 
