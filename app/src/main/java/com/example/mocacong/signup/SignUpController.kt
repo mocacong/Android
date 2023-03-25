@@ -2,27 +2,17 @@ package com.example.mocacong.signup
 
 import android.util.Log
 import com.example.mocacong.RetrofitClient
-import com.example.mocacong.data.SignUpRequest
-import com.example.mocacong.data.SignUpResponse
+import com.example.mocacong.data.request.SignUpRequest
+import com.example.mocacong.data.response.SignUpResponse
+import com.example.mocacong.network.SignUpAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
-
 class SignUpController(private val view: SignUpActivity) {
 
-    interface SignUpAPI{
-    @POST("/members")
-    fun signUp(@Body member: SignUpRequest): Call<SignUpResponse>
-    }
-
     fun signUp(member : SignUpRequest) {
+        Log.d("dd","signupfun called")
         //회원 가입 로직 처리 함수
-
-        //retrofit 객체 생성
-        fun signUp(member: SignUpRequest) {
-
             val signUpApi = RetrofitClient.create(SignUpAPI::class.java)
             val call = signUpApi.signUp(member)
 
@@ -31,15 +21,14 @@ class SignUpController(private val view: SignUpActivity) {
                     if(response.isSuccessful) {
                         val id = response.body()?.id
                         // id 받음
-
+                        Log.d("dd","Success id: "+id.toString())
                     }
                 }
                 override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
                     // 실패
+                    Log.d("dd", "Failure code: "+t.message)
                 }
             })
-
-        }
 
     }
 

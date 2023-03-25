@@ -4,20 +4,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.addTextChangedListener
-import com.example.mocacong.data.SignUpRequest
+import com.example.mocacong.data.request.SignUpRequest
 import com.example.mocacong.databinding.ActivitySignUpBinding
 
 class SignUpActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivitySignUpBinding
-    private lateinit var signUpController : SignUpController
+    private lateinit var binding: ActivitySignUpBinding
+    private lateinit var controller : SignUpController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        signUpController = SignUpController(this)
+        controller = SignUpController(this)
         init()
     }
 
@@ -28,17 +28,17 @@ class SignUpActivity : AppCompatActivity() {
 
             //이메일 확인 버튼 클릭 이벤트
             emailOk.setOnClickListener {
-                signUpController.emailConfirm(emailText.text.toString())
+                controller.emailConfirm(emailText.text.toString())
             }
 
             //닉네임 확인 버튼 클릭 이벤트
             nicknameOk.setOnClickListener {
-                signUpController.nicknameConfirm(nicknameText.text.toString())
+                controller.nicknameConfirm(nicknameText.text.toString())
             }
 
             //비밀번호 형식 검증
             pwText.addTextChangedListener {
-                if(signUpController.passwordRegex(pwText.text.toString())){
+                if(controller.passwordRegex(pwText.text.toString())){
                     pwConfirmText.visibility = View.INVISIBLE
                 }else{
                     pwConfirmText.visibility = View.VISIBLE
@@ -62,7 +62,7 @@ class SignUpActivity : AppCompatActivity() {
             //가입하기 버튼 클릭 이벤트
             registerBtn.setOnClickListener {
                 val member = SignUpRequest(emailText.text.toString(), phoneText.text.toString(), pwText.text.toString(), nicknameText.text.toString())
-                signUpController.signUp(member)
+                controller.signUp(member)
             }
 
             //취소
