@@ -53,9 +53,9 @@ class SignInActivity : AppCompatActivity() {
         lifecycleScope.launch {
             toastMsg = controller.signIn(member)
             Log.d("signIn", "signInResponseMSG : $toastMsg")
+            Toast.makeText(applicationContext, toastMsg, Toast.LENGTH_SHORT).show()
         }
 
-        Toast.makeText(applicationContext, toastMsg, Toast.LENGTH_SHORT).show()
 
     }
 

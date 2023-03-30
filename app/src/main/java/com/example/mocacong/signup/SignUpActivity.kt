@@ -76,8 +76,7 @@ class SignUpActivity : AppCompatActivity() {
 
         //취소
         binding.cancelBtn.setOnClickListener {
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
+            onBackPressed()
         }
 
     }

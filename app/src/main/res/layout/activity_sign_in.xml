@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15"
+        app:layout_constraintGuide_percent="0.1"
         />
 
     <androidx.constraintlayout.widget.Guideline
@@ -49,7 +49,7 @@
         android:text="Welcome"
         android:textStyle="bold"
         android:textColor="@color/darkBrown"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="@id/leftline"
         app:layout_constraintRight_toRightOf="@id/rightline"
         app:layout_constraintTop_toTopOf="@id/topline" />
@@ -61,7 +61,7 @@
         android:gravity="center"
         android:text="Mocacong"
         android:textColor="@color/white"
-        android:textSize="50sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@id/leftline"
         app:layout_constraintRight_toRightOf="@id/rightline"
@@ -76,10 +76,10 @@
         app:layout_constraintLeft_toLeftOf="@id/leftline"
         app:layout_constraintRight_toRightOf="@id/rightline"
         android:paddingHorizontal="15dp"
-        android:paddingVertical="10dp"
+        android:paddingVertical="5dp"
         android:textColor="@color/black"
         android:background="@color/white"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:hint="ID"
 
         android:textSize="18sp"
@@ -96,7 +96,7 @@
         app:layout_constraintLeft_toLeftOf="@id/leftline"
         app:layout_constraintRight_toRightOf="@id/rightline"
         android:paddingHorizontal="15dp"
-        android:paddingVertical="10dp"
+        android:paddingVertical="5dp"
         android:background="@color/white"
         android:layout_marginTop="20dp"
         android:hint="password"
@@ -173,6 +173,7 @@
     <ImageButton
         android:layout_width="70dp"
         android:layout_height="70dp"
+        android:paddingVertical="5dp"
         android:src="@drawable/kakaologin"
         android:background="@color/transparent"
         android:scaleType="fitCenter"
@@ -190,6 +191,7 @@
         android:scaleType="fitCenter"
         android:layout_marginLeft="10dp"
         android:id="@+id/naverBtn"
+        android:padding = "5dp"
         app:layout_constraintLeft_toRightOf="@id/kakaoBtn"
         app:layout_constraintTop_toTopOf="@id/kakaoBtn"
         app:layout_constraintBottom_toBottomOf="@id/kakaoBtn"
