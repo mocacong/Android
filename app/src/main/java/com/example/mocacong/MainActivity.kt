@@ -3,6 +3,7 @@ package com.example.mocacong
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.mocacong.databinding.ActivityMainBinding
+import com.naver.maps.map.MapFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,6 +13,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        val fm = supportFragmentManager
+        val mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
+            ?: MapFragment.newInstance().also {
+                fm.beginTransaction().add(R.id.map, it).commit()
+            }
 
     }
 }
