@@ -24,14 +24,12 @@ class SignInActivity : AppCompatActivity() {
         layoutInit()
     }
 
-    fun layoutInit() {
-        val id = intent.getStringExtra("id")
-        val pw = intent.getStringExtra("pw")
+    private fun layoutInit() {
 
         binding.signInBtn.setOnClickListener {
-            val id = binding.emailText.text.toString()
-            val pw = binding.pwText.text.toString()
-            val request = SignInRequest(id, pw)
+            val emailid = binding.emailText.text.toString()
+            val pwText = binding.pwText.text.toString()
+            val request = SignInRequest(emailid, pwText)
             signInEvent(request)
         }
 
