@@ -1,35 +1,36 @@
 package com.example.mocacong.signin
 
 import android.util.Log
+import com.example.mocacong.Member
 import com.example.mocacong.RetrofitClient
 import com.example.mocacong.data.request.SignInRequest
-import com.example.mocacong.data.response.SignInResponse
 import com.example.mocacong.network.SignInAPI
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import org.json.JSONObject
 
 class SignInController {
 
-    fun signIn(signInRequest: SignInRequest){
-        Log.d("signIn", "signIn function Called")
-
-        val signInAPI = RetrofitClient.create(SignInAPI::class.java)
-        val call = signInAPI.signIn(signInRequest)
-
-        call.enqueue(object :Callback<SignInResponse>{
-            override fun onResponse(
-                call: Call<SignInResponse>,
-                response: Response<SignInResponse>
-            ) {
-                Log.d("signIn", "signIn http Success Token:"+response.body()?.token)
+    suspend fun signIn(signInRequest: SignInRequest) : String{
+        val response = RetrofitClient.create(SignInAPI::class.java).signIn(signInRequest)
+        if(response.isSuccessful){
+            //로그인 성공
+            try {
+                Member.setAuthToken(response.body()!!.token)
+            }catch (e: NullPointerException){
+                Log.d("signIn", "성공했는데 responseBody 없음")
             }
-
-            override fun onFailure(call: Call<SignInResponse>, t: Throwable) {
-                Log.d("signIn", "signIn http Failed :"+t.message)
-            }
-
-        })
+            return "로그인 성공";
+        }
+        else{
+            //로그인 실패
+            val json = JSONObject(response.errorBody()?.string())
+            val code = json.getInt("code")
+            val msg = json.getString("message")
+            Log.d("signIn", "Error: $msg Code: $code")
+            return msg
+        }
     }
+
+
+
 
 }
