@@ -1,7 +1,8 @@
-package com.example.mocacong
+package com.example.mocacong.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.mocacong.R
 import com.example.mocacong.databinding.ActivityMainBinding
 import com.naver.maps.map.MapFragment
 

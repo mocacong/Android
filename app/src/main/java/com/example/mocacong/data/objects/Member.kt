@@ -1,4 +1,4 @@
-package com.example.mocacong
+package com.example.mocacong.data.objects
 
 object Member{
 

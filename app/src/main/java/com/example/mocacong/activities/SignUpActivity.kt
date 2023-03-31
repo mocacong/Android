@@ -1,4 +1,4 @@
-package com.example.mocacong.signup
+package com.example.mocacong.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.data.request.SignUpRequest
 import com.example.mocacong.databinding.ActivitySignUpBinding
-import com.example.mocacong.signin.SignInActivity
+import com.example.mocacong.controllers.SignUpController
 import kotlinx.coroutines.launch
 
 class SignUpActivity : AppCompatActivity() {

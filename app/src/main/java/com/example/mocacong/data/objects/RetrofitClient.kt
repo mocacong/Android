@@ -1,4 +1,4 @@
-package com.example.mocacong
+package com.example.mocacong.data.objects
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

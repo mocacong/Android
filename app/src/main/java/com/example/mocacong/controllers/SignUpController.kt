@@ -1,7 +1,7 @@
-package com.example.mocacong.signup
+package com.example.mocacong.controllers
 
 import android.util.Log
-import com.example.mocacong.RetrofitClient
+import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.request.SignUpRequest
 import com.example.mocacong.network.SignUpAPI
 import org.json.JSONObject

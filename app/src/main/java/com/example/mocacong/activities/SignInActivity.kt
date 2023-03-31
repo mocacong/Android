@@ -1,4 +1,4 @@
-package com.example.mocacong.signin
+package com.example.mocacong.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.data.request.SignInRequest
 import com.example.mocacong.databinding.ActivitySignInBinding
-import com.example.mocacong.signup.SignUpActivity
+import com.example.mocacong.controllers.SignInController
 import kotlinx.coroutines.launch
 
 class SignInActivity : AppCompatActivity() {
