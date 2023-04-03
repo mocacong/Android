@@ -2,8 +2,10 @@ package com.example.mocacong.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.FragmentManager
 import com.example.mocacong.R
 import com.example.mocacong.databinding.ActivityMainBinding
+import com.example.mocacong.fragments.HomeFragment
 import com.naver.maps.map.MapFragment
 
 class MainActivity : AppCompatActivity() {
@@ -15,11 +17,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val fm = supportFragmentManager
-        val mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
-            ?: MapFragment.newInstance().also {
-                fm.beginTransaction().add(R.id.map, it).commit()
-            }
+        createFragment()
+
+
+    }
+
+    fun createFragment(){
+        val transaction = supportFragmentManager.beginTransaction()
+        val homeFragment = HomeFragment()
+        transaction.replace(R.id.home, homeFragment).commit()
 
     }
 }
