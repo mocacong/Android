@@ -1,0 +1,40 @@
+<resources>
+    <string-array name="wifi">
+        <item>빵빵해요</item>
+        <item>적당해요</item>
+        <item>느려요</item>
+    </string-array>
+
+    <string-array name="parking">
+        <item>여유로워요</item>
+        <item>협소해요</item>
+        <item>없어요</item>
+    </string-array>
+
+    <string-array name="toilet">
+        <item>깨끗해요</item>
+        <item>평범해요</item>
+        <item>불편해요</item>
+    </string-array>
+
+    <string-array name="desk">
+        <item>편해요</item>
+        <item>보통이에요</item>
+        <item>불편해요</item>
+    </string-array>
+
+    <string-array name="power">
+        <item>충분해요</item>
+        <item>적당해요</item>
+        <item>없어요</item>
+    </string-array>
+
+    <string-array name="sound">
+        <item>북적북적해요</item>
+        <item>적당해요</item>
+        <item>조용해요</item>
+    </string-array>
+
+    <string name="plzRV">리뷰를 등록해 주세요</string>
+
+</resources>

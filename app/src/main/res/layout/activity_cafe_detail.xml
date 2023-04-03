@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activities.CafeDetailActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <GridLayout
+            android:id="@+id/imagesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </GridLayout>
+
+        <Button
+            android:id="@+id/cafeName"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:background="@drawable/round_rectangle"
+            android:enabled="false"
+            android:text="cafe123"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBottomOf="@id/imagesContainer"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintWidth_percent="0.6" />
+
+        <LinearLayout
+            android:id="@+id/scoreImgs"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cafeName">
+
+            <ImageView
+                android:id="@+id/star_1"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/false_cong" />
+
+            <ImageView
+                android:id="@+id/star_2"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/false_cong" />
+
+            <ImageView
+                android:id="@+id/star_3"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/false_cong" />
+
+            <ImageView
+                android:id="@+id/star_4"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/false_cong" />
+
+            <ImageView
+                android:id="@+id/star_5"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/false_cong" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/scoreText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:text="★ 0.0 / 5"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scoreImgs" />
+
+        <ImageButton
+            android:id="@+id/favBtn"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@color/transparent"
+            android:paddingRight="10dp"
+            android:scaleType="fitEnd"
+            android:src="@drawable/detail_fav"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/editBtn"
+            app:layout_constraintTop_toBottomOf="@id/scoreText" />
+
+        <ImageButton
+            android:id="@+id/editBtn"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@color/transparent"
+            android:paddingLeft="10dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/detail_edit"
+            app:layout_constraintLeft_toRightOf="@id/favBtn"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/favBtn" />
+
+        <ImageView
+            android:id="@+id/locIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/detail_location"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/addressText"
+            app:layout_constraintTop_toBottomOf="@id/favBtn"
+            app:tint="@color/darkBrown" />
+
+        <TextView
+            android:id="@+id/addressText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="주소 정보 없음"
+            android:textColor="@color/darkBrown"
+            app:layout_constraintLeft_toRightOf="@id/locIcon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/locIcon" />
+
+        <ImageView
+            android:id="@+id/timeIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
+            android:src="@drawable/detail_time"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/timeText"
+            app:layout_constraintTop_toBottomOf="@id/locIcon"
+
+            app:tint="@color/darkBrown" />
+
+        <TextView
+            android:id="@+id/timeText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="영업 시간 정보 없음"
+            android:textColor="@color/darkBrown"
+            app:layout_constraintLeft_toRightOf="@id/timeIcon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/timeIcon"
+
+            />
+
+        <ImageView
+            android:id="@+id/callIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
+            android:src="@drawable/detail_call"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/callText"
+            app:layout_constraintTop_toBottomOf="@id/timeIcon"
+            app:tint="@color/darkBrown" />
+
+        <TextView
+            android:id="@+id/callText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="전화번호 정보 없음"
+            android:textColor="@color/darkBrown"
+            app:layout_constraintLeft_toRightOf="@id/callIcon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/callIcon" />
+
+        <TextView
+            android:id="@+id/reviewCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/callIcon"
+            android:text="0 Reviewers Answered : "
+            android:textColor="@color/darkBrown"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="20dp"
+            />
+
+        <GridLayout
+
+            android:id="@+id/detailsContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/reviewCountText"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:orientation="horizontal"
+            android:columnCount="4"
+            android:padding="10dp"
+
+            >
+
+            <ImageView
+                android:src="@drawable/detail_wifi"
+                app:tint="@color/darkBrown"
+                android:layout_margin="10dp" />
+
+            <TextView
+                android:text="@string/plzRV"
+                android:textColor="@color/jingray"
+                android:layout_margin="10dp" />
+
+            <ImageView
+                android:src="@drawable/detail_parking"
+                app:tint="@color/darkBrown"
+                android:layout_margin="10dp" />
+
+            <TextView
+                android:text="@string/plzRV"
+                android:textColor="@color/jingray"
+                android:layout_margin="10dp"/>
+
+            <ImageView
+                android:src="@drawable/detail_toilet"
+                app:tint="@color/darkBrown"
+                android:layout_margin="10dp" />
+
+            <TextView
+                android:text="@string/plzRV"
+                android:textColor="@color/jingray"
+                android:layout_margin="10dp" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/detail_desk"
+                app:tint="@color/darkBrown"
+                android:layout_margin="10dp"/>
+
+            <TextView
+                android:text="@string/plzRV"
+                android:textColor="@color/jingray"
+                android:layout_margin="10dp" />
+
+            <ImageView
+                android:src="@drawable/detail_power"
+                app:tint="@color/darkBrown"
+                android:layout_margin="10dp"/>
+
+            <TextView
+                android:text="@string/plzRV"
+                android:textColor="@color/jingray"
+                android:layout_margin="10dp" />
+
+            <ImageView
+                android:src="@drawable/detail_sound"
+                app:tint="@color/darkBrown"
+                android:layout_margin="10dp"/>
+
+            <TextView
+                android:text="@string/plzRV"
+                android:textColor="@color/jingray"
+                android:layout_margin="10dp" />
+
+
+        </GridLayout>
+
+        <TextView
+            android:id="@+id/commentCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/detailsContainer"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="0 Comments :"
+            android:textColor="@color/darkBrown"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="0dp"
+            android:layout_height="400dp"
+            android:scrollbars="vertical"
+            app:layout_constraintTop_toBottomOf="@id/commentCountText"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_margin="20dp"
+            android:background="#F6F6F6"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>
