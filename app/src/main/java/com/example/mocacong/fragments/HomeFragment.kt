@@ -14,6 +14,7 @@ import com.example.mocacong.databinding.FragmentHomeBinding
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.coroutines.launch
 
@@ -87,7 +88,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         naverMap.locationSource = locationSource
 
-
         val locationOverlay = naverMap.locationOverlay
         locationOverlay.isVisible = true
 
@@ -124,6 +124,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             marker.position = LatLng(it.y.toDouble(), it.x.toDouble())
             marker.captionText = it.place_name
             marker.captionMinZoom = 9.0
+            marker.icon = OverlayImage.fromResource(R.drawable.custom_marker)
+
             marker.map = naverMap
         }
     }
@@ -137,6 +139,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         markers.clear()
     }
+
 
 
     override fun onDestroyView() {
