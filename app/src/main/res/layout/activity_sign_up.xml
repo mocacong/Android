@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         >
 
         <androidx.constraintlayout.widget.Guideline
@@ -79,6 +79,7 @@
             android:text="확인"
             android:textColor="@color/white"
             android:background="@drawable/round_btn"
+            android:backgroundTint="@color/darkBrown"
             app:layout_constraintWidth_percent="0.2"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintLeft_toRightOf="@id/emailText"
@@ -122,6 +123,7 @@
             android:background="@drawable/round_btn"
             app:layout_constraintWidth_percent="0.2"
             app:layout_constraintHorizontal_bias="1"
+            android:backgroundTint="@color/darkBrown"
             app:layout_constraintLeft_toRightOf="@id/nicknameText"
             app:layout_constraintRight_toRightOf="@id/rightline"
             app:layout_constraintTop_toTopOf="@+id/nickname" />

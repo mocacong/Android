@@ -117,6 +117,7 @@
         android:background="@drawable/round_btn"
         android:textColor="@color/white"
         android:textStyle="bold"
+        android:backgroundTint="@color/darkBrown"
         android:text="로그인"
         />
 
@@ -129,6 +130,7 @@
         app:layout_constraintLeft_toLeftOf="@id/leftline"
         app:layout_constraintRight_toLeftOf="@id/rightline"
         android:background="@drawable/round_btn"
+        android:backgroundTint="@color/darkBrown"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:text="회원가입"
@@ -158,6 +160,7 @@
         android:background="@drawable/round_rectangle"
         app:layout_constraintBottom_toBottomOf="@id/bottomline"
         app:layout_constraintHeight_percent="0.15"
+        android:backgroundTint="@color/jinBrown"
         />
 
     <TextView
@@ -166,7 +169,7 @@
         app:layout_constraintTop_toTopOf="@id/OAuthContainer"
         app:layout_constraintLeft_toLeftOf="@id/OAuthContainer"
         android:id="@+id/OAuthText"
-        android:text="다음 소셜 계정으로 로그인"
+        android:text="소셜 계정으로 로그인하기"
         android:layout_margin="15dp"
         />
 
@@ -198,8 +201,6 @@
         app:layout_constraintRight_toRightOf="@id/OAuthContainer"
         app:layout_constraintHorizontal_bias="0"
         />
-
-
 
 
 

@@ -26,9 +26,11 @@
             android:id="@+id/cafeName"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:background="@drawable/round_rectangle"
+            android:background="@drawable/round_btn"
+
             android:enabled="false"
             android:text="cafe123"
+            android:backgroundTint="@color/darkBrown"
             android:textColor="@color/white"
             android:textSize="25sp"
             android:textStyle="bold"
