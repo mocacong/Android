@@ -13,7 +13,8 @@ interface KakaoLocationBasedSearchAPI {
         @Query("x") x : String,
         @Query("y") y : String,
         @Query("radius") radius : Int = 500,
-        @Query("page") page : Int = 2,
+        @Query("page") page : Int = 1,
+        @Query("size") size : Int = 15,
         @Query("sort") sort : String = "distance",
     ) : Response<LocalSearchResponse>
 }
