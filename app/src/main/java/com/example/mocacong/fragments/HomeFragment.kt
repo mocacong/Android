@@ -1,5 +1,6 @@
 package com.example.mocacong.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,11 +9,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
+import com.example.mocacong.activities.SearchActivity
 import com.example.mocacong.controllers.SearchController
 import com.example.mocacong.data.response.Place
 import com.example.mocacong.databinding.FragmentHomeBinding
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.*
+import com.naver.maps.map.LocationTrackingMode
+import com.naver.maps.map.MapFragment
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
@@ -42,8 +47,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         searchController = SearchController()
 
         getMapFragment()
-        //setLocation()
+        setLayout()
         return binding.root
+    }
+
+    private fun setLayout() {
+
+        binding.searchBar.setOnClickListener {
+            val intent = Intent(activity, SearchActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
 
@@ -102,11 +116,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             binding.refreshBtn.visibility = View.INVISIBLE
             val y = naverMap.cameraPosition.target.latitude.toString()
             val x = naverMap.cameraPosition.target.longitude.toString()
-            lifecycleScope.launch {
-                val response = searchController.searchByXY(x, y)
 
-                Log.d("MAP", "x:$x, y:$y")
-                Log.d("MAP", response.toString())
+
+            lifecycleScope.launch {
+                var response = searchController.searchByXY(x, y)
 
                 if (response != null) {
                     setMarkers(response.documents)
@@ -114,7 +127,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             }
 
         }
-
     }
 
     private fun setMarkers(places: List<Place>) {
@@ -131,15 +143,13 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun delMarkers() {
-        if (markers.isEmpty())
-            return
+        if (markers.isEmpty()) return
         markers.forEach {
             it.map = null
         }
 
         markers.clear()
     }
-
 
 
     override fun onDestroyView() {
