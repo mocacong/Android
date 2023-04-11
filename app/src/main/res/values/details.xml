@@ -36,5 +36,11 @@
     </string-array>
 
     <string name="plzRV">리뷰를 등록해 주세요</string>
+    <string name="wifi">와이파이는 </string>
+    <string name="parking">주차장은 </string>
+    <string name="toilet">화장실은 </string>
+    <string name="desk">책상은 </string>
+    <string name="power">콘센트는 </string>
+    <string name="sound">분위기는 </string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.example.mocacong.fragments
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
+import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.activities.SearchActivity
 import com.example.mocacong.controllers.SearchController
 import com.example.mocacong.data.response.Place
@@ -33,6 +35,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var locationSource: FusedLocationSource
     private lateinit var searchController: SearchController
     private val markers = ArrayList<Marker>()
+    private lateinit var markerImg: OverlayImage
+    var clickedMarker: Marker? = null
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
@@ -52,12 +56,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setLayout() {
-
         binding.searchBar.setOnClickListener {
             val intent = Intent(activity, SearchActivity::class.java)
             startActivity(intent)
         }
-
     }
 
 
@@ -103,51 +105,99 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         naverMap.locationSource = locationSource
 
         val locationOverlay = naverMap.locationOverlay
-        locationOverlay.isVisible = true
+        markerImg = OverlayImage.fromResource(R.drawable.custom_marker)
 
-        naverMap.addOnCameraChangeListener { i, b ->
+        naverMap.addOnCameraChangeListener { _, _ ->
             binding.refreshBtn.visibility = View.VISIBLE
+        }
+
+        naverMap.setOnMapClickListener { _, _ ->
+            revertMarker()
         }
 
         binding.refreshBtn.setOnClickListener {
             //현 지도에서 검색 클릭 시 카메라 시점 기반 500m 카페 검색
             //최대 15개
-            delMarkers()
-            binding.refreshBtn.visibility = View.INVISIBLE
-            val y = naverMap.cameraPosition.target.latitude.toString()
-            val x = naverMap.cameraPosition.target.longitude.toString()
+            refreshMarkerList()
+        }
+    }
+
+    private fun revertMarker() {
+        if (clickedMarker != null) {
+            clickedMarker!!.icon = markerImg
+            clickedMarker!!.captionColor = Color.BLACK
+            clickedMarker!!.tag = 0
+            clickedMarker = null
+        }
+    }
+
+    private fun refreshMarkerList() {
+        delMarkers()
+        binding.refreshBtn.visibility = View.INVISIBLE
+        val y = naverMap.cameraPosition.target.latitude.toString()
+        val x = naverMap.cameraPosition.target.longitude.toString()
 
 
-            lifecycleScope.launch {
-                var response = searchController.searchByXY(x, y)
+        lifecycleScope.launch {
+            var response = searchController.searchByXY(x, y)
 
-                if (response != null) {
-                    setMarkers(response.documents)
-                }
+            if (response != null) {
+                setMarkers(response.documents)
             }
-
         }
     }
 
     private fun setMarkers(places: List<Place>) {
-        places.forEach {
+        places.forEach { place ->
             val marker = Marker()
             markers.add(marker)
-            marker.position = LatLng(it.y.toDouble(), it.x.toDouble())
-            marker.captionText = it.place_name
+            marker.tag = 0
+            marker.position = LatLng(place.y.toDouble(), place.x.toDouble())
+            marker.captionText = place.place_name
             marker.captionMinZoom = 9.0
-            marker.icon = OverlayImage.fromResource(R.drawable.custom_marker)
+            marker.icon = markerImg
+            marker.isHideCollidedSymbols = true
+
+
+            marker.setOnClickListener {
+                if (marker.tag == 0) {
+                    markerFirstClicked(marker)
+                    //마커 한 번 클릭
+                } else {
+                    //두 번 클릭
+                    revertMarker()
+                    gotoDetailActivity(place)
+                }
+                true
+            }
 
             marker.map = naverMap
         }
+
+
     }
+
+    private fun markerFirstClicked(marker: Marker) {
+        revertMarker()
+        clickedMarker = marker
+        marker.captionColor = Color.GREEN
+        marker.icon = Marker.DEFAULT_ICON
+        marker.tag = 1
+    }
+
+    private fun gotoDetailActivity(cafe : Place) {
+        val intent = Intent(activity, CafeDetailActivity::class.java)
+        intent.putExtra("cafe", cafe)
+        startActivity(intent)
+    }
+
+
 
     private fun delMarkers() {
         if (markers.isEmpty()) return
         markers.forEach {
             it.map = null
         }
-
         markers.clear()
     }
 

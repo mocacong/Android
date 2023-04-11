@@ -1,5 +1,7 @@
 package com.example.mocacong.data.response
 
+import java.io.Serializable
+
 
 data class LocalSearchResponse(
     val documents: List<Place>,
@@ -19,7 +21,7 @@ data class Place(
     val road_address_name: String?,
     val x: String,
     val y: String
-)
+) : Serializable
 
 data class Meta(
     val is_end: Boolean,
