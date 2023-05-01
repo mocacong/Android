@@ -20,7 +20,29 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:gravity="left|center"
+        />
 
+    <com.willy.ratingbar.BaseRatingBar
+        android:id="@+id/scoreImgs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srb_numStars="5"
+        app:srb_minimumStars="0"
+        app:srb_rating="0"
+        app:srb_starWidth="20dp"
+        app:srb_starHeight="20dp"
+        app:srb_starPadding="1dp"
+        app:srb_stepSize="0.5"
+        app:srb_isIndicator="true"
+        app:srb_clickable="false"
+        app:srb_scrollable="false"
+        app:srb_clearRatingEnabled="true"
+        app:srb_drawableEmpty="@drawable/false_cong"
+        app:srb_drawableFilled="@drawable/true_cong"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:paddingRight="10dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

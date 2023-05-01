@@ -1,46 +1,56 @@
 <resources>
-    <string-array name="wifi">
+    <string-array name="wifiLevels">
         <item>빵빵해요</item>
         <item>적당해요</item>
         <item>느려요</item>
     </string-array>
 
-    <string-array name="parking">
+    <string-array name="parkingLevels">
         <item>여유로워요</item>
         <item>협소해요</item>
         <item>없어요</item>
     </string-array>
 
-    <string-array name="toilet">
+    <string-array name="toiletLevels">
         <item>깨끗해요</item>
         <item>평범해요</item>
         <item>불편해요</item>
     </string-array>
 
-    <string-array name="desk">
+    <string-array name="deskLevels">
         <item>편해요</item>
         <item>보통이에요</item>
         <item>불편해요</item>
     </string-array>
 
-    <string-array name="power">
+    <string-array name="powerLevels">
         <item>충분해요</item>
         <item>적당해요</item>
         <item>없어요</item>
     </string-array>
 
-    <string-array name="sound">
+    <string-array name="soundLevels">
         <item>북적북적해요</item>
         <item>적당해요</item>
         <item>조용해요</item>
     </string-array>
 
     <string name="plzRV">리뷰를 등록해 주세요</string>
+    <string-array name="reviewLabels">
+        <item>와이파이는</item>
+        <item>주차장은</item>
+        <item>화장실은</item>
+        <item>책상은</item>
+        <item>콘센트는</item>
+        <item>분위기는</item>
+    </string-array>
+
     <string name="wifi">와이파이는 </string>
     <string name="parking">주차장은 </string>
     <string name="toilet">화장실은 </string>
     <string name="desk">책상은 </string>
     <string name="power">콘센트는 </string>
     <string name="sound">분위기는 </string>
+
 
 </resources>

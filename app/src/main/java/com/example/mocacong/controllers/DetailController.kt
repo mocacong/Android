@@ -17,11 +17,11 @@ class DetailController {
 
     suspend fun getCafeDetail(id: String) :CafeResponse? {
         val response = api.getCafeResponse(cafeId = id)
-        if(response.isSuccessful)
-            return response.body()
+        return if(response.isSuccessful)
+            response.body()
         else{
             Log.d("Detail", "GET Error : ${response.errorBody()?.string()}")
-            return null
+            null
         }
     }
 

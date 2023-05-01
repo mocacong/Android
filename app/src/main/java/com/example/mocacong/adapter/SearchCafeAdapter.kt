@@ -4,20 +4,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mocacong.data.response.Place
-import com.example.mocacong.databinding.SearchCafeItemBinding
+import com.example.mocacong.databinding.ItemCafeListsBinding
 
 class SearchCafeAdapter : RecyclerView.Adapter<SearchCafeAdapter.MyViewHolder>() {
 
     var cafeList = listOf<Place>()
 
-    inner class MyViewHolder(private val binding : SearchCafeItemBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class MyViewHolder(private val binding : ItemCafeListsBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(place : Place){
             binding.cafe.text = place.place_name
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = SearchCafeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemCafeListsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
