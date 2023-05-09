@@ -2,4 +2,5 @@
     <string name="app_name">Mocacong</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="REST_KEY">0c5797613ead2a6d69354f77254c6a25</string>
 </resources>

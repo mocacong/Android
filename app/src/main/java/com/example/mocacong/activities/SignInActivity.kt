@@ -1,5 +1,6 @@
 package com.example.mocacong.activities
 
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,20 +17,23 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
     private lateinit var controller: SignInController
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
         controller = SignInController()
         layoutInit()
+
     }
+
 
     private fun layoutInit() {
 
         binding.signInBtn.setOnClickListener {
-            val emailid = binding.emailText.text.toString()
+            val emailID = binding.emailText.text.toString()
             val pwText = binding.pwText.text.toString()
-            val request = SignInRequest(emailid, pwText)
+            val request = SignInRequest(emailID, pwText)
             signInEvent(request)
         }
 
@@ -42,14 +46,24 @@ class SignInActivity : AppCompatActivity() {
         }
 
         binding.kakaoBtn.setOnClickListener {
+            kakaoLogin()
         }
 
         binding.naverBtn.setOnClickListener {
         }
     }
 
+    private fun kakaoLogin() {
+        val intent = Intent(this, KakaoLoginActivity::class.java)
+        startActivity(intent)
+        //post하기
+        //회원가입-로그인 처리
+
+    }
+
+
     private fun signInEvent(member: SignInRequest) {
-        var toastMsg = ""
+        var toastMsg: String
         lifecycleScope.launch {
             toastMsg = controller.signIn(member)
             Log.d("signIn", "signInResponseMSG : $toastMsg")

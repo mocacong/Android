@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CafeItemView">
-        <attr name="rating" format="integer"/>
-        <attr name="cafeName" format="string"/>
-        <attr name="count" format="integer"/>
+    <declare-styleable name="LabeledRadioButton">
     </declare-styleable>
 </resources>
