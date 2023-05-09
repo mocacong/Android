@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,8 +13,11 @@ import com.example.mocacong.R
 import com.example.mocacong.controllers.DetailController
 import com.example.mocacong.data.request.CafeDetailRequest
 import com.example.mocacong.data.response.CafeResponse
+import com.example.mocacong.data.response.Comment
 import com.example.mocacong.data.response.Place
+import com.example.mocacong.data.response.ReviewResponse
 import com.example.mocacong.databinding.ActivityCafeDetailBinding
+import com.example.mocacong.fragments.EditReviewFragment
 import kotlinx.coroutines.launch
 import java.io.Serializable
 
@@ -22,6 +26,7 @@ class CafeDetailActivity : AppCompatActivity() {
     lateinit var controller: DetailController
 
     private lateinit var binding: ActivityCafeDetailBinding
+    lateinit var cafeId : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCafeDetailBinding.inflate(layoutInflater)
@@ -29,11 +34,27 @@ class CafeDetailActivity : AppCompatActivity() {
 
         controller = DetailController()
         getCafeInfo()
+        setlayout()
+    }
+    private fun setlayout() {
+        binding.editBtn.setOnClickListener {
+            makeEditPopUp()
+        }
+    }
+
+    private fun makeEditPopUp() {
+        val bundle = Bundle()
+        bundle.putString("cafeId",cafeId)
+
+        val editReviewFragment = EditReviewFragment()
+        editReviewFragment.arguments = bundle
+        editReviewFragment.show(supportFragmentManager, editReviewFragment.tag)
     }
 
     private fun getCafeInfo() {
         val cafe = intent.intentSerializable("cafe", Place::class.java)!!
         val postRequest = CafeDetailRequest(cafe.id, cafe.place_name)
+        cafeId = cafe.id
 
         lifecycleScope.launch {
             controller.postCafe(postRequest)
@@ -44,10 +65,33 @@ class CafeDetailActivity : AppCompatActivity() {
             if (data != null) {
                 Log.d("Detail",data.toString())
                 setDetailInfoLayout(data)
+                setCommentsLayout(data.comments, data.commentsCount)
+                //Todo:코멘트, 즐찾
             } else {
                 Toast.makeText(applicationContext, "카페 정보 불러오기 실패", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
 
+    private fun setCommentsLayout(comments: List<Comment>, commentsCount: Int) {
+        binding.writeCommentBtn.setOnClickListener {
+            //todo:코멘트 작성 기능
+
+        }
+
+        if(commentsCount>3){
+            binding.commentMoreBtn.visibility = View.VISIBLE
+            binding.commentMoreBtn.setOnClickListener {
+                //todo:댓글 더보기 기능
+            }
+        }
+
+        for(i in 0 .. comments.size){
+            val cmtViews = arrayOf(binding.comment1, binding.comment2, binding.comment3)
+            cmtViews[i].visibility = View.VISIBLE
+            cmtViews[i].setComment(comments[i].content)
+            cmtViews[i].setMyComment(comments[i].isMe)
+            cmtViews[i].setNickname(comments[i].nickname)
         }
     }
 
@@ -63,7 +107,6 @@ class CafeDetailActivity : AppCompatActivity() {
         binding.apply {
             scoreImgs.rating = data.score.toFloat()
 
-            //수정필요
             val tmp = "${data.score} / 5.0"
             scoreText.text = tmp
 
@@ -80,6 +123,26 @@ class CafeDetailActivity : AppCompatActivity() {
             soundText.setReviewText(data.sound, getString(R.string.sound))
 
         }
+    }
+
+    fun refreshDetailInfo(data : ReviewResponse?){
+
+        binding.apply {
+            data?.let {
+                scoreImgs.rating = data.score.toFloat()
+
+                val tmp = "${data.score} / 5.0"
+                scoreText.text = tmp
+
+                wifiText.setReviewText(data.wifi, getString(R.string.wifi))
+                parkingText.setReviewText(data.parking,getString(R.string.parking))
+                toiletText.setReviewText(data.toilet, getString(R.string.toilet))
+                deskText.setReviewText(data.desk,getString(R.string.desk))
+                powerText.setReviewText(data.power,getString(R.string.power))
+                soundText.setReviewText(data.sound, getString(R.string.sound))
+            }
+        }
+
     }
 
     private fun TextView.setReviewText(rev : String?, type: String){

@@ -1,6 +1,6 @@
 package com.example.mocacong.data.request
 
-data class ReviewRegistrationRequest(
+data class ReviewRequest(
     val myScore: Int?,
     val myStudyType: String?,
     val myWifi: String?,

@@ -36,6 +36,7 @@
     </string-array>
 
     <string name="plzRV">리뷰를 등록해 주세요</string>
+
     <string-array name="reviewLabels">
         <item>와이파이는</item>
         <item>주차장은</item>

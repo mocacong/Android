@@ -62,6 +62,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cafeName"
             app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="10dp"
             />
 
         <TextView
@@ -290,63 +291,62 @@
             android:layout_marginLeft="20dp"
             />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/ssook"
+            android:text="작성하기"
+            android:id="@+id/writeCommentBtn"
+            app:layout_constraintRight_toRightOf="@id/commentsLayout"
+            app:layout_constraintTop_toTopOf="@id/commentCountText"
+            app:layout_constraintBottom_toBottomOf="@id/commentCountText"
+            />
+
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:scrollbars="vertical"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/commentCountText"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_margin="20dp"
             android:background="#F6F6F6"
+            android:padding="10dp"
+            android:id="@+id/commentsLayout"
             >
 
-            <LinearLayout
+            <com.example.mocacong.ui.CommentView
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="0.5dp"
-                android:background="@color/darkBrown"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:layout_height="wrap_content"
+                android:id="@+id/comment1"
+                android:layout_marginVertical="0.5dp"
+                />
+            <com.example.mocacong.ui.CommentView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comment2"
+                />
+            <com.example.mocacong.ui.CommentView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comment3"
+                android:layout_marginVertical="0.5dp"
+                />
 
-                <ImageView
-                    android:id="@+id/cm_img"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/baseline_person_24" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="10dp"
-                    android:orientation="vertical"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/cm_nick"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="nickName"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/cm_content"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="left|center"
-                        android:text="코멘트 내용" />
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="더보기"
+                style="@style/textStyle"
+                android:layout_marginVertical="0.5dp"
+                android:paddingVertical="10dp"
+                android:background="@color/mocaBrown"
+                android:visibility="gone"
+                android:id="@+id/commentMoreBtn"
+                />
 
         </LinearLayout>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

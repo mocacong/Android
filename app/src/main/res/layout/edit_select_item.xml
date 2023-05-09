@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
     android:layout_marginVertical="10dp"
-    >
+    android:background="@color/white">
 
     <TextView
+        android:id="@+id/labelText"
+        style="@style/textStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/labelText"
         android:layout_marginHorizontal="20dp"
-        android:text="label"
-        style="@style/textStyle"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/radioGroup"
         android:gravity="center"
-        />
+        android:text="label"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/radioGroup"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -32,69 +32,31 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <com.example.mocacong.ui.LabeledRadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:button="@drawable/selector_best_radio_btn"
+            android:id="@+id/bestBtn"
+            android:layout_marginHorizontal="10dp"
+            />
 
-            <RadioButton
-                android:id="@+id/bestBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:button="@drawable/selector_best_radio_btn" />
-
-            <TextView
-                android:id="@+id/text1"
-                style="@style/textStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="text" />
-        </LinearLayout>
-
-        <LinearLayout
+        <com.example.mocacong.ui.LabeledRadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:button="@drawable/selector_soso_radio_btn"
+            android:id="@+id/sosoBtn"
+            android:layout_marginHorizontal="10dp"
+            />
 
-            <RadioButton
-                android:id="@+id/sosoBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:button="@drawable/selector_soso_radio_btn" />
-
-            <TextView
-                android:id="@+id/text2"
-                style="@style/textStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="text" />
-        </LinearLayout>
-
-        <LinearLayout
+        <com.example.mocacong.ui.LabeledRadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:button="@drawable/selector_bad_radio_btn"
+            android:id="@+id/badBtn"
+            android:layout_marginHorizontal="10dp"
+            />
 
-            <RadioButton
-                android:id="@+id/badBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:button="@drawable/selector_bad_radio_btn" />
-
-            <TextView
-                android:id="@+id/text3"
-                style="@style/textStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="text" />
-        </LinearLayout>
     </RadioGroup>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
