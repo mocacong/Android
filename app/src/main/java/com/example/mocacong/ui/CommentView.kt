@@ -3,6 +3,7 @@ package com.example.mocacong.ui
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.mocacong.databinding.ItemCommentViewBinding
@@ -32,6 +33,7 @@ class CommentView @JvmOverloads constructor(
 
     fun setComment(comment: String) {
         binding.commentTextView.text = comment
+        setViewMore()
     }
 
     fun setMyComment(my : Boolean){

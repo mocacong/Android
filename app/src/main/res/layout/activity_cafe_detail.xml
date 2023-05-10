@@ -285,10 +285,19 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/detailsContainer"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:text="0 Comments :"
+            android:text="0"
             android:textColor="@color/darkBrown"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBaseline_toBaselineOf="@id/commentCountText"
+            app:layout_constraintLeft_toRightOf="@id/commentCountText"
+            android:text=" Comments :"
+            android:textColor="@color/darkBrown"
             />
 
         <TextView
@@ -314,24 +323,36 @@
             android:background="#F6F6F6"
             android:padding="10dp"
             android:id="@+id/commentsLayout"
+            android:gravity="center"
             >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/textStyle"
+                android:text="첫 번째 코멘트를 등록해 주세요!"
+                android:id="@+id/noCmtTextView"
+                android:layout_marginVertical="100dp"
+                />
 
             <com.example.mocacong.ui.CommentView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/comment1"
                 android:layout_marginVertical="0.5dp"
+                android:visibility="gone"
                 />
             <com.example.mocacong.ui.CommentView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/comment2"
+                android:visibility="gone"
                 />
             <com.example.mocacong.ui.CommentView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/comment3"
                 android:layout_marginVertical="0.5dp"
+                android:visibility="gone"
                 />
 
             <TextView

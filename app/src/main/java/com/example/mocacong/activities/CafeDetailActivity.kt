@@ -18,6 +18,7 @@ import com.example.mocacong.data.response.Place
 import com.example.mocacong.data.response.ReviewResponse
 import com.example.mocacong.databinding.ActivityCafeDetailBinding
 import com.example.mocacong.fragments.EditReviewFragment
+import com.example.mocacong.fragments.WriteCommentFragment
 import kotlinx.coroutines.launch
 import java.io.Serializable
 
@@ -26,7 +27,7 @@ class CafeDetailActivity : AppCompatActivity() {
     lateinit var controller: DetailController
 
     private lateinit var binding: ActivityCafeDetailBinding
-    lateinit var cafeId : String
+    lateinit var cafeId: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCafeDetailBinding.inflate(layoutInflater)
@@ -36,15 +37,24 @@ class CafeDetailActivity : AppCompatActivity() {
         getCafeInfo()
         setlayout()
     }
+
     private fun setlayout() {
         binding.editBtn.setOnClickListener {
             makeEditPopUp()
+        }
+
+        binding.writeCommentBtn.setOnClickListener {
+            makeCommentPopup()
+        }
+
+        binding.commentMoreBtn.setOnClickListener {
+            //todo:댓글 더보기 기능
         }
     }
 
     private fun makeEditPopUp() {
         val bundle = Bundle()
-        bundle.putString("cafeId",cafeId)
+        bundle.putString("cafeId", cafeId)
 
         val editReviewFragment = EditReviewFragment()
         editReviewFragment.arguments = bundle
@@ -63,7 +73,7 @@ class CafeDetailActivity : AppCompatActivity() {
             setBasicInfo(cafe)
 
             if (data != null) {
-                Log.d("Detail",data.toString())
+                Log.d("Detail", data.toString())
                 setDetailInfoLayout(data)
                 setCommentsLayout(data.comments, data.commentsCount)
                 //Todo:코멘트, 즐찾
@@ -74,25 +84,43 @@ class CafeDetailActivity : AppCompatActivity() {
     }
 
     private fun setCommentsLayout(comments: List<Comment>, commentsCount: Int) {
-        binding.writeCommentBtn.setOnClickListener {
-            //todo:코멘트 작성 기능
-
+        if (commentsCount > 0) {
+            binding.noCmtTextView.visibility = View.GONE
         }
 
-        if(commentsCount>3){
+
+        if (commentsCount > 3) {
             binding.commentMoreBtn.visibility = View.VISIBLE
             binding.commentMoreBtn.setOnClickListener {
                 //todo:댓글 더보기 기능
             }
         }
 
-        for(i in 0 .. comments.size){
+        for (i in comments.indices) {
             val cmtViews = arrayOf(binding.comment1, binding.comment2, binding.comment3)
             cmtViews[i].visibility = View.VISIBLE
             cmtViews[i].setComment(comments[i].content)
             cmtViews[i].setMyComment(comments[i].isMe)
             cmtViews[i].setNickname(comments[i].nickname)
         }
+    }
+
+    fun commentsAdded(cmts: List<Comment>?){
+        if(cmts==null)
+            return
+
+        binding.commentCountText.text = (binding.commentCountText.text.toString().toInt()+1).toString()
+        setCommentsLayout(cmts, cmts.size)
+    }
+
+
+    private fun makeCommentPopup() {
+        val bundle = Bundle()
+        bundle.putString("cafeId", cafeId)
+
+        val writeCommentFragment = WriteCommentFragment()
+        writeCommentFragment.arguments = bundle
+        writeCommentFragment.show(supportFragmentManager, writeCommentFragment.tag)
     }
 
     private fun setBasicInfo(cafe: Place) {
@@ -110,22 +138,23 @@ class CafeDetailActivity : AppCompatActivity() {
             val tmp = "${data.score} / 5.0"
             scoreText.text = tmp
 
-            if(data.favorite)
+            if (data.favorite)
                 favBtn.setImageResource(R.drawable.true_fav)
 
             reviewCountText.text = data.reviewsCount.toString()
+            commentCountText.text = data.commentsCount.toString()
 
             wifiText.setReviewText(data.wifi, getString(R.string.wifi))
-            parkingText.setReviewText(data.parking,getString(R.string.parking))
+            parkingText.setReviewText(data.parking, getString(R.string.parking))
             toiletText.setReviewText(data.toilet, getString(R.string.toilet))
-            deskText.setReviewText(data.desk,getString(R.string.desk))
-            powerText.setReviewText(data.power,getString(R.string.power))
+            deskText.setReviewText(data.desk, getString(R.string.desk))
+            powerText.setReviewText(data.power, getString(R.string.power))
             soundText.setReviewText(data.sound, getString(R.string.sound))
 
         }
     }
 
-    fun refreshDetailInfo(data : ReviewResponse?){
+    fun refreshDetailInfo(data: ReviewResponse?) {
 
         binding.apply {
             data?.let {
@@ -135,22 +164,22 @@ class CafeDetailActivity : AppCompatActivity() {
                 scoreText.text = tmp
 
                 wifiText.setReviewText(data.wifi, getString(R.string.wifi))
-                parkingText.setReviewText(data.parking,getString(R.string.parking))
+                parkingText.setReviewText(data.parking, getString(R.string.parking))
                 toiletText.setReviewText(data.toilet, getString(R.string.toilet))
-                deskText.setReviewText(data.desk,getString(R.string.desk))
-                powerText.setReviewText(data.power,getString(R.string.power))
+                deskText.setReviewText(data.desk, getString(R.string.desk))
+                powerText.setReviewText(data.power, getString(R.string.power))
                 soundText.setReviewText(data.sound, getString(R.string.sound))
             }
         }
 
     }
 
-    private fun TextView.setReviewText(rev : String?, type: String){
-        if(rev!=null){
+    private fun TextView.setReviewText(rev: String?, type: String) {
+        if (rev != null) {
             val str = "$type $rev"
             this.text = str
             this.setTextColor(getColor(R.color.darkBrown))
-        }else{
+        } else {
             this.text = getString(R.string.plzRV)
             this.setTextColor(getColor(R.color.stroke))
         }
