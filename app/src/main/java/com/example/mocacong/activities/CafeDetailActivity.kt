@@ -109,8 +109,9 @@ class CafeDetailActivity : AppCompatActivity() {
         if(cmts==null)
             return
 
-        binding.commentCountText.text = (binding.commentCountText.text.toString().toInt()+1).toString()
-        setCommentsLayout(cmts, cmts.size)
+        val cmtCount = binding.commentCountText.text.toString().toInt()+1
+        binding.commentCountText.text = (cmtCount).toString()
+        setCommentsLayout(cmts, cmtCount)
     }
 
 
