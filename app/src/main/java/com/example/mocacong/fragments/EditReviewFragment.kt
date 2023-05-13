@@ -5,16 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mocacong.R
 import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.adapter.EditListAdapter
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.request.ReviewRequest
+import com.example.mocacong.data.response.MyReviewResponse
 import com.example.mocacong.data.response.ReviewResponse
 import com.example.mocacong.databinding.FragmentEditReviewBinding
-import com.example.mocacong.network.ReviewAPI
+import com.example.mocacong.network.CafeDetailAPI
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
 
@@ -24,27 +25,90 @@ class EditReviewFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
     lateinit var adapter: EditListAdapter
 
+    private val api = RetrofitClient.create(CafeDetailAPI::class.java)
+
     lateinit var cafeId: String
+    var isFirst = true
+
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEditReviewBinding.inflate(inflater, container, false)
 
-        setRecyclerLayout()
+        cafeId = arguments?.getString("cafeId")!!
+        setLayout()
         setListeners()
 
         return binding.root
+    }
+
+    private fun setLayout() {
+        lifecycleScope.launch {
+            val myReview = getMyReview()
+            if (myReview != null) {
+                Log.d("Cafe","리뷰 정보 가져오기 성공 : ${myReview}")
+                setRecyclerLayout(myReview)
+            } else {
+                Toast.makeText(requireActivity(), "리뷰 정보 가져오기 실패", Toast.LENGTH_SHORT).show()
+                setRecyclerLayout()
+            }
+        }
+    }
+
+
+    private suspend fun getMyReview(): MyReviewResponse? {
+        val response = api.getMyReview(cafeId = cafeId)
+        if (response.isSuccessful) {
+            Log.d("Cafe", "리뷰 겟 성공 : ${response.body()}")
+            return response.body()
+        } else {
+            Log.d("Cafe", "나의리뷰 GET ERROR : ${response.errorBody()?.string()}")
+            return null
+        }
+    }
+
+
+    private fun setRecyclerLayout(myReview: MyReviewResponse?) {
+        if (myReview == null) {
+            Toast.makeText(requireActivity(), "리뷰 정보 가져오기 실패", Toast.LENGTH_SHORT).show()
+            setRecyclerLayout()
+            return
+        }
+
+        isFirst = myReview.myScore.toInt() == 0
+
+        binding.ratingBar.rating = myReview.myScore
+
+        val myRV = HashMap<String, String?>()
+        myRV["wifi"] = myReview.myWifi
+        myRV["parking"] = myReview.myParking
+        myRV["toilet"] = myReview.myToilet
+        myRV["power"] = myReview.myPower
+        myRV["sound"] = myReview.mySound
+        myRV["desk"] = myReview.myDesk
+
+        adapter = EditListAdapter(myRV)
+        binding.editRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.editRecyclerView.adapter = adapter
+        Log.d("Cafe","어댑터 부착 완료")
+
+    }
+
+    private fun setRecyclerLayout() {
+        adapter = EditListAdapter(HashMap())
+        binding.editRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.editRecyclerView.adapter = adapter
     }
 
     private fun setListeners() {
         binding.completeBtn.setOnClickListener {
             //post
             lifecycleScope.launch {
-                cafeId = arguments?.getString("cafeId")!!
-                val refreshData = postReview()
+                val refreshData = if (isFirst) postReview() else putReview()
+
                 (activity as CafeDetailActivity).refreshDetailInfo(refreshData)
                 dismiss()
             }
@@ -56,18 +120,41 @@ class EditReviewFragment : BottomSheetDialogFragment() {
 
     }
 
-
-    private suspend fun postReview() : ReviewResponse?{
-        val api = RetrofitClient.create(ReviewAPI::class.java)
+    private suspend fun putReview(): ReviewResponse? {
         val myReview = ReviewRequest(
             binding.ratingBar.rating.toInt(),
-            adapter.selectedRVs["studyType"],
-            adapter.selectedRVs[getString(R.string.wifi)],
-            adapter.selectedRVs[getString(R.string.parking)],
-            adapter.selectedRVs[getString(R.string.toilet)],
-            adapter.selectedRVs[getString(R.string.power)],
-            adapter.selectedRVs[getString(R.string.sound)],
-            adapter.selectedRVs[getString(R.string.desk)]
+            //todo:studytype
+            null,
+            adapter.selectedRVs["wifi"],
+            adapter.selectedRVs["parking"],
+            adapter.selectedRVs["toilet"],
+            adapter.selectedRVs["power"],
+            adapter.selectedRVs["sound"],
+            adapter.selectedRVs["desk"]
+        )
+
+        val response = api.putReview(cafeId = cafeId, myReview = myReview)
+        if (response.isSuccessful) {
+            Log.d("EditReview", "리뷰수정성공 : ${response.body()}")
+            return response.body()
+        } else {
+            Log.d("EditReview", "리뷰수정실패 : ${response.errorBody()?.string()}")
+            return null
+        }
+    }
+
+
+    private suspend fun postReview(): ReviewResponse? {
+        val myReview = ReviewRequest(
+            binding.ratingBar.rating.toInt(),
+            //todo:studytype
+            null,
+            adapter.selectedRVs["wifi"],
+            adapter.selectedRVs["parking"],
+            adapter.selectedRVs["toilet"],
+            adapter.selectedRVs["power"],
+            adapter.selectedRVs["sound"],
+            adapter.selectedRVs["desk"]
         )
 
         val response = api.postReview(cafeId = cafeId, myReview = myReview)
@@ -78,23 +165,6 @@ class EditReviewFragment : BottomSheetDialogFragment() {
             Log.d("EditReview", "review POST Failed : ${response.errorBody()?.string()}")
             return null
         }
-    }
-
-    private fun setRecyclerLayout() {
-        val lvArrs = arrayListOf<Array<String>>()
-        lvArrs.add(resources.getStringArray(R.array.wifiLevels))
-        lvArrs.add(resources.getStringArray(R.array.parkingLevels))
-        lvArrs.add(resources.getStringArray(R.array.toiletLevels))
-        lvArrs.add(resources.getStringArray(R.array.deskLevels))
-        lvArrs.add(resources.getStringArray(R.array.powerLevels))
-        lvArrs.add(resources.getStringArray(R.array.soundLevels))
-
-        adapter = EditListAdapter(resources.getStringArray(R.array.reviewLabels), lvArrs)
-        binding.editRecyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.editRecyclerView.adapter = adapter
-
-
     }
 
 

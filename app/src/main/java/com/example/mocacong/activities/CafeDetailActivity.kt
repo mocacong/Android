@@ -27,7 +27,8 @@ class CafeDetailActivity : AppCompatActivity() {
     lateinit var controller: DetailController
 
     private lateinit var binding: ActivityCafeDetailBinding
-    lateinit var cafeId: String
+    private lateinit var cafeId: String
+    private var isFirst : Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCafeDetailBinding.inflate(layoutInflater)
@@ -55,6 +56,10 @@ class CafeDetailActivity : AppCompatActivity() {
     private fun makeEditPopUp() {
         val bundle = Bundle()
         bundle.putString("cafeId", cafeId)
+        if(isFirst)
+            bundle.putBoolean("isFirst",true)
+        else
+            bundle.putBoolean("isFirst",false)
 
         val editReviewFragment = EditReviewFragment()
         editReviewFragment.arguments = bundle
@@ -74,6 +79,7 @@ class CafeDetailActivity : AppCompatActivity() {
 
             if (data != null) {
                 Log.d("Detail", data.toString())
+                if(data.myScore==0) isFirst = true
                 setDetailInfoLayout(data)
                 setCommentsLayout(data.comments, data.commentsCount)
                 //Todo:코멘트, 즐찾
@@ -136,7 +142,8 @@ class CafeDetailActivity : AppCompatActivity() {
         binding.apply {
             scoreImgs.rating = data.score.toFloat()
 
-            val tmp = "${data.score} / 5.0"
+            val tmp = "${ String.format("%.1f", data.score) } / 5.0"
+
             scoreText.text = tmp
 
             if (data.favorite)
@@ -161,7 +168,7 @@ class CafeDetailActivity : AppCompatActivity() {
             data?.let {
                 scoreImgs.rating = data.score.toFloat()
 
-                val tmp = "${data.score} / 5.0"
+                val tmp = "${ String.format("%.1f", data.score) } / 5.0"
                 scoreText.text = tmp
 
                 wifiText.setReviewText(data.wifi, getString(R.string.wifi))

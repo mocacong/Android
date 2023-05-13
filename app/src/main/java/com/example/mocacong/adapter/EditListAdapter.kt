@@ -3,38 +3,54 @@ package com.example.mocacong.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mocacong.data.objects.CafeDetailData
+import com.example.mocacong.data.objects.CafeDetailData.labels
+import com.example.mocacong.data.objects.CafeDetailData.levels
 import com.example.mocacong.databinding.EditSelectItemBinding
 
 class EditListAdapter(
-    val typeLabelList: Array<String>, //[와이파이는, 주차장은 ...]
-    val levelLists: ArrayList<Array<String>> // 와이파이는 [빵빵해요, 적당해요 ...] ...
+    val checkedLists: HashMap<String, String?>
+    //({"wifi", "빵빵해요"}, {"parking", null}
 ) : RecyclerView.Adapter<EditListAdapter.MyViewHolder>() {
 
-    //val selectedRVs = post 보낼 리뷰값 key-value로 저장하기 012중 머?
-    val selectedRVs = HashMap<String, String>()
-    //[(와이파이는, 빵빵해요), (주차장은, 보통이에요) ... ]
+    val selectedRVs = HashMap<String, String?>()
+    //[(wifi, 빵빵해요), (parking, 보통이에요) ... ]
 
     inner class MyViewHolder(private val binding: EditSelectItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(labelStr: String, levels: Array<String>) {
-            binding.labelText.text = labelStr
-            binding.bestBtn.setLabelText(levels[0])
-            binding.sosoBtn.setLabelText(levels[1])
-            binding.badBtn.setLabelText(levels[2])
+        fun bind(key: String) {
+            binding.labelText.text = labels[key]
+            binding.bestBtn.setLabelText(levels[key]?.get(0) ?: "")
+            binding.sosoBtn.setLabelText(levels[key]?.get(1) ?: "")
+            binding.badBtn.setLabelText(levels[key]?.get(2) ?: "")
 
-            binding.radioGroup.setOnCheckedChangeListener { group, i ->
+            when (checkedLists[key]) {
+                levels[key]?.get(0) -> {
+                    binding.radioGroup.check(binding.bestBtn.id)
+                    selectedRVs[key] = levels[key]?.get(0)
+                }
+                levels[key]?.get(1) -> {
+                    binding.radioGroup.check(binding.sosoBtn.id)
+                    selectedRVs[key] = levels[key]?.get(1)
+                }
+                levels[key]?.get(2) -> {
+                    binding.radioGroup.check(binding.badBtn.id)
+                    selectedRVs[key] = levels[key]?.get(2)
+                }
+            }
+
+            binding.radioGroup.setOnCheckedChangeListener { _, i ->
                 when (i) {
                     binding.bestBtn.id -> {
-                        selectedRVs.put(labelStr, levels[0])
+                        selectedRVs[key] = levels[key]?.get(0)
                     }
                     binding.sosoBtn.id -> {
-                        selectedRVs.put(labelStr, levels[1])
+                        selectedRVs[key] = levels[key]?.get(1)
                     }
                     binding.badBtn.id -> {
-                        selectedRVs.put(labelStr, levels[2])
+                        selectedRVs[key] = levels[key]?.get(2)
                     }
                 }
-
             }
         }
     }
@@ -48,13 +64,10 @@ class EditListAdapter(
         return MyViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = typeLabelList.size
+    override fun getItemCount(): Int = CafeDetailData.keys.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(
-            typeLabelList[position] //와이파이는
-            , levelLists[position] //[빵빵해요, 적당해요, 안좋아요]
-        )
+        holder.bind(CafeDetailData.keys[position])
     }
 
 }
