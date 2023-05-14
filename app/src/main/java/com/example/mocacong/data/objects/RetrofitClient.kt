@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
 
     // Base URL 설정
-    private const val BASE_URL = "http://54.180.48.192:8080/"
+    private const val BASE_URL = "http://3.37.64.38:8080/"
 
     // Retrofit 객체 생성
     private val retrofit: Retrofit = Retrofit.Builder()
