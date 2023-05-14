@@ -2,7 +2,6 @@ package com.example.mocacong.data.response
 
 import java.io.Serializable
 
-
 data class LocalSearchResponse(
     val documents: List<Place>,
     val meta: Meta

@@ -2,6 +2,8 @@ package com.example.mocacong.fragments
 
 import android.content.Intent
 import android.graphics.Color
+import android.media.MediaDrm.PlaybackComponent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,14 +18,12 @@ import com.example.mocacong.controllers.SearchController
 import com.example.mocacong.data.response.Place
 import com.example.mocacong.databinding.FragmentHomeBinding
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.LocationTrackingMode
-import com.naver.maps.map.MapFragment
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.coroutines.launch
+import java.io.Serializable
 
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
@@ -38,9 +38,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var markerImg: OverlayImage
     var clickedMarker: Marker? = null
 
-    companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-    }
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1000
 
 
     override fun onCreateView(
@@ -52,7 +50,43 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         getMapFragment()
         setLayout()
+
+
         return binding.root
+    }
+
+
+    private fun <T : Serializable> Intent.intentSerializable(key: String, clazz: Class<T>): T? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            this.getSerializableExtra(key, clazz)
+        } else {
+            this.getSerializableExtra(key) as T?
+        }
+    }
+
+    private fun <T:Serializable> Bundle.argSerializable(key:String, clazz: Class<T>) : T?{
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            this.getSerializable(key, clazz)
+        } else {
+            this.getSerializable(key) as T?
+        }
+    }
+
+    private fun gotoSearchedPlace() {
+        val searchedPlace = arguments?.argSerializable("searchedPlace", Place::class.java)
+        if(searchedPlace!=null){
+            Log.d("search","searched 받았음 : ${searchedPlace}")
+
+            val cameraUpdate = CameraUpdate.scrollTo(LatLng(searchedPlace.y.toDouble(),searchedPlace.x.toDouble()))
+                .animate(CameraAnimation.Easing)
+                .finishCallback {
+                    setMarkers(listOf(searchedPlace))
+                    markers[0].performClick()
+                }
+
+            naverMap.moveCamera(cameraUpdate)
+
+        }
     }
 
     private fun setLayout() {
@@ -120,6 +154,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             //최대 15개
             refreshMarkerList()
         }
+
+        gotoSearchedPlace()
+
     }
 
     private fun revertMarker() {
@@ -185,12 +222,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         marker.tag = 1
     }
 
-    private fun gotoDetailActivity(cafe : Place) {
+    private fun gotoDetailActivity(cafe: Place) {
         val intent = Intent(activity, CafeDetailActivity::class.java)
         intent.putExtra("cafe", cafe)
         startActivity(intent)
     }
-
 
 
     private fun delMarkers() {

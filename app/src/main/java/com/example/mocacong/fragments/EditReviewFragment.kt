@@ -50,7 +50,7 @@ class EditReviewFragment : BottomSheetDialogFragment() {
                 Log.d("Cafe","리뷰 정보 가져오기 성공 : ${myReview}")
                 setRecyclerLayout(myReview)
             } else {
-                Toast.makeText(requireActivity(), "리뷰 정보 가져오기 실패", Toast.LENGTH_SHORT).show()
+                Log.d("Cafe","등록된 리뷰 없음")
                 setRecyclerLayout()
             }
         }
