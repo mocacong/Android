@@ -58,4 +58,15 @@ interface CafeDetailAPI {
         @Body myReview: ReviewRequest
     ) : Response<ReviewResponse>
 
+    @POST("/cafes/{cafeId}/favorites")
+    suspend fun postFavorite(
+        @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
+        @Path("cafeId") cafeId: String
+    ) : Response<Void>
+
+    @DELETE("/cafes/{cafeId}/favorites")
+    suspend fun deleteFavorite(
+        @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
+        @Path("cafeId") cafeId: String
+    ) : Response<Void>
 }

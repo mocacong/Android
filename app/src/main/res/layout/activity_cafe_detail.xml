@@ -29,7 +29,6 @@
             android:background="@drawable/round_btn"
 
             android:enabled="false"
-            android:text="카페 이름"
             android:backgroundTint="@color/darkBrown"
             android:textColor="@color/white"
             android:autoSizeTextType="uniform"
@@ -42,13 +41,12 @@
             app:layout_constraintWidth_percent="0.6" />
 
         <com.willy.ratingbar.BaseRatingBar
-
             android:id="@+id/scoreImgs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srb_numStars="5"
             app:srb_minimumStars="0"
-            app:srb_rating="4.5"
+            app:srb_rating="0"
             app:srb_starWidth="40dp"
             app:srb_starHeight="40dp"
             app:srb_starPadding="2dp"
@@ -124,30 +122,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/locIcon" />
 
-        <ImageView
-            android:id="@+id/timeIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
-            android:src="@drawable/detail_time"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/timeText"
-            app:layout_constraintTop_toBottomOf="@id/locIcon"
 
-            app:tint="@color/darkBrown" />
-
-        <TextView
-            android:id="@+id/timeText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="영업 시간 정보 없음"
-            android:textColor="@color/darkBrown"
-            app:layout_constraintLeft_toRightOf="@id/timeIcon"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/timeIcon"
-
-            />
 
         <ImageView
             android:id="@+id/callIcon"
@@ -158,7 +133,7 @@
             android:src="@drawable/detail_call"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/callText"
-            app:layout_constraintTop_toBottomOf="@id/timeIcon"
+            app:layout_constraintTop_toBottomOf="@id/locIcon"
             app:tint="@color/darkBrown" />
 
         <TextView

@@ -5,9 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mocacong.R
 import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.adapter.EditListAdapter
 import com.example.mocacong.data.objects.RetrofitClient
@@ -29,6 +32,9 @@ class EditReviewFragment : BottomSheetDialogFragment() {
 
     lateinit var cafeId: String
     var isFirst = true
+    var soloClicked = false
+    var groupClicked = false
+
 
 
     override fun onCreateView(
@@ -54,7 +60,9 @@ class EditReviewFragment : BottomSheetDialogFragment() {
                 setRecyclerLayout()
             }
         }
+
     }
+
 
 
     private suspend fun getMyReview(): MyReviewResponse? {
@@ -76,10 +84,25 @@ class EditReviewFragment : BottomSheetDialogFragment() {
             return
         }
 
+        //별점
         isFirst = myReview.myScore.toInt() == 0
-
         binding.ratingBar.rating = myReview.myScore
 
+        //혼자같이
+        when(myReview.myStudyType){
+            "solo"->{
+                binding.soloBtn.performClick()
+            }
+            "group"->{
+                binding.withBtn.performClick()
+            }
+            "both"->{
+                binding.soloBtn.performClick()
+                binding.withBtn.performClick()
+            }
+        }
+
+        //세부리뷰
         val myRV = HashMap<String, String?>()
         myRV["wifi"] = myReview.myWifi
         myRV["parking"] = myReview.myParking
@@ -123,8 +146,7 @@ class EditReviewFragment : BottomSheetDialogFragment() {
     private suspend fun putReview(): ReviewResponse? {
         val myReview = ReviewRequest(
             binding.ratingBar.rating.toInt(),
-            //todo:studytype
-            null,
+            getStudyType(),
             adapter.selectedRVs["wifi"],
             adapter.selectedRVs["parking"],
             adapter.selectedRVs["toilet"],
@@ -134,21 +156,31 @@ class EditReviewFragment : BottomSheetDialogFragment() {
         )
 
         val response = api.putReview(cafeId = cafeId, myReview = myReview)
-        if (response.isSuccessful) {
+        return if (response.isSuccessful) {
             Log.d("EditReview", "리뷰수정성공 : ${response.body()}")
-            return response.body()
+            response.body()
         } else {
             Log.d("EditReview", "리뷰수정실패 : ${response.errorBody()?.string()}")
-            return null
+            null
         }
+    }
+
+    private fun getStudyType() : String {
+        if(binding.soloBtn.isButtonClicked() && binding.withBtn.isButtonClicked()){
+            return "both"
+        }else if(binding.soloBtn.isButtonClicked()){
+            return "solo"
+        }else if(binding.withBtn.isButtonClicked()){
+            return "group"
+        }else
+            return ""
     }
 
 
     private suspend fun postReview(): ReviewResponse? {
         val myReview = ReviewRequest(
             binding.ratingBar.rating.toInt(),
-            //todo:studytype
-            null,
+            getStudyType(),
             adapter.selectedRVs["wifi"],
             adapter.selectedRVs["parking"],
             adapter.selectedRVs["toilet"],

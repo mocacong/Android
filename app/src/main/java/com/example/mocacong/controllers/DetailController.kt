@@ -25,5 +25,25 @@ class DetailController {
         }
     }
 
+    suspend fun postFavorite(id : String) : String{
+        val response = api.postFavorite(cafeId = id)
+        return if(response.isSuccessful)
+            "즐겨찾기에 등록되었습니다"
+        else{
+            Log.d("Detail", "즐찾등록에러 : ${response.errorBody()?.string()}")
+            "서버 오류"
+        }
+    }
+
+    suspend fun deleteFavorite(id : String) : String{
+        val response = api.deleteFavorite(cafeId = id)
+        return if(response.isSuccessful)
+            "즐겨찾기에서 해제되었습니다"
+        else{
+            Log.d("Detail", "즐찾삭제에러 : ${response.errorBody()?.string()}")
+            "서버 오류"
+        }
+    }
+
 
 }

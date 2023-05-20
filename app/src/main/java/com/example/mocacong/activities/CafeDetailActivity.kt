@@ -24,20 +24,24 @@ import java.io.Serializable
 
 class CafeDetailActivity : AppCompatActivity() {
 
-    lateinit var controller: DetailController
+    private val controller: DetailController = DetailController()
 
     private lateinit var binding: ActivityCafeDetailBinding
     private lateinit var cafeId: String
+    private lateinit var cafe : Place
     private var isFirst : Boolean = false
+    private var isFav = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCafeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        controller = DetailController()
         getCafeInfo()
         setlayout()
     }
+
+
 
     private fun setlayout() {
         binding.editBtn.setOnClickListener {
@@ -51,7 +55,21 @@ class CafeDetailActivity : AppCompatActivity() {
         binding.commentMoreBtn.setOnClickListener {
             //todo:댓글 더보기 기능
         }
+
+        binding.favBtn.setOnClickListener {
+            favoriteClicked()
+        }
     }
+
+    private fun favoriteClicked() {
+        lifecycleScope.launch {
+            val str = if(isFav) controller.deleteFavorite(cafeId) else controller.postFavorite(cafeId)
+            //통신 실패했을 때 핸들링 필요
+            isFav = !isFav
+            Toast.makeText(this@CafeDetailActivity,str, Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     private fun makeEditPopUp() {
         val bundle = Bundle()
@@ -67,21 +85,23 @@ class CafeDetailActivity : AppCompatActivity() {
     }
 
     private fun getCafeInfo() {
-        val cafe = intent.intentSerializable("cafe", Place::class.java)!!
-        val postRequest = CafeDetailRequest(cafe.id, cafe.place_name)
+
+        cafe = intent.intentSerializable("cafe", Place::class.java)!!
         cafeId = cafe.id
 
+        val postRequest = CafeDetailRequest(cafeId, cafe.place_name)
         lifecycleScope.launch {
             controller.postCafe(postRequest)
-            val data = controller.getCafeDetail(cafe.id)
+            val cafeData = controller.getCafeDetail(cafe.id)
 
             setBasicInfo(cafe)
 
-            if (data != null) {
-                Log.d("Detail", data.toString())
-                if(data.myScore==0) isFirst = true
-                setDetailInfoLayout(data)
-                setCommentsLayout(data.comments, data.commentsCount)
+            if (cafeData != null) {
+                Log.d("Detail", cafeData.toString())
+                if(cafeData.myScore==0) isFirst = true
+                isFav = cafeData.favorite
+                setDetailInfoLayout(cafeData)
+                setCommentsLayout(cafeData.comments, cafeData.commentsCount)
                 //Todo:코멘트, 즐찾
             } else {
                 Toast.makeText(applicationContext, "카페 정보 불러오기 실패", Toast.LENGTH_SHORT).show()
@@ -120,7 +140,6 @@ class CafeDetailActivity : AppCompatActivity() {
         setCommentsLayout(cmts, cmtCount)
     }
 
-
     private fun makeCommentPopup() {
         val bundle = Bundle()
         bundle.putString("cafeId", cafeId)
@@ -134,7 +153,7 @@ class CafeDetailActivity : AppCompatActivity() {
         binding.apply {
             addressText.text = cafe.road_address_name
             cafeName.text = cafe.place_name
-            callText.text = cafe.phone
+            if(cafe.phone!="")callText.text = cafe.phone
         }
     }
 
@@ -146,9 +165,6 @@ class CafeDetailActivity : AppCompatActivity() {
 
             scoreText.text = tmp
 
-            if (data.favorite)
-                favBtn.setImageResource(R.drawable.true_fav)
-
             reviewCountText.text = data.reviewsCount.toString()
             commentCountText.text = data.commentsCount.toString()
 
@@ -158,7 +174,6 @@ class CafeDetailActivity : AppCompatActivity() {
             deskText.setReviewText(data.desk, getString(R.string.desk))
             powerText.setReviewText(data.power, getString(R.string.power))
             soundText.setReviewText(data.sound, getString(R.string.sound))
-
         }
     }
 
@@ -170,6 +185,7 @@ class CafeDetailActivity : AppCompatActivity() {
 
                 val tmp = "${ String.format("%.1f", data.score) } / 5.0"
                 scoreText.text = tmp
+
 
                 wifiText.setReviewText(data.wifi, getString(R.string.wifi))
                 parkingText.setReviewText(data.parking, getString(R.string.parking))
