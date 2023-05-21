@@ -3,8 +3,12 @@ package com.example.mocacong.activities
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.example.mocacong.R
 import com.example.mocacong.data.response.Place
@@ -16,9 +20,7 @@ import java.io.Serializable
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-
     private lateinit var homeFragment: HomeFragment
-    private lateinit var mypageFragment: MypageFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,17 +48,17 @@ class MainActivity : AppCompatActivity() {
         val btnv = binding.bottomMenu
 
         homeFragment = HomeFragment()
-        mypageFragment= MypageFragment()
 
 
         btnv.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_map -> {
+                    homeFragment = HomeFragment()
                     showFragment(homeFragment)
                     true
                 }
                 R.id.menu_mypage -> {
-                    showFragment(mypageFragment)
+                    showFragment(MypageFragment())
                     true
                 }
                 R.id.menu_settings -> {

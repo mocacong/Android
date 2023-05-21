@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -94,6 +95,24 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             val intent = Intent(activity, SearchActivity::class.java)
             startActivity(intent)
         }
+
+        binding.filteringBtn.setOnTouchListener { _, motionEvent ->
+            val y = motionEvent.y
+            val height = binding.filteringBtn.height
+            val isTopHalf = y<=height/2
+
+            when (motionEvent.action){
+                MotionEvent.ACTION_DOWN->{
+                    if(isTopHalf){
+
+                    }else{
+
+                    }
+                }
+            }
+            true
+        }
+
     }
 
 
