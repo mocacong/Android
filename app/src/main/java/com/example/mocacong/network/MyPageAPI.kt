@@ -30,5 +30,12 @@ interface MyPageAPI {
         @Query("count") count : Int = 20
     ) : Response<MypageCafesResponse>
 
+    @GET("/members/mypage/comments")
+    suspend fun getMyComments(
+        @Header("Authorization") token : String? = "Bearer ${Member.getAuthToken()}",
+        @Query("page") page : Int,
+        @Query("count") count : Int = 20
+    ) : Response<MypageCafesResponse>
+
 
 }
