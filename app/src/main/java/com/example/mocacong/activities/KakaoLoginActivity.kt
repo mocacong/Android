@@ -104,9 +104,13 @@ class KakaoLoginActivity : AppCompatActivity() {
                 responseBody = response.body()!!
                 responseBody.let {
                     if (it.isRegistered) {
-                        //회원가입되어있음
+                        //회원가입되어있는 경우
                         Member.setAuthToken(it.token)
                         val intent = Intent(this@KakaoLoginActivity, MainActivity::class.java)
+
+                        //스택의 하위 액티비티 지움 -> MainActivity를 단일 최상위 액티비티로 설정
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+
                         startActivity(intent)
                     } else {
                         Toast.makeText(this@KakaoLoginActivity,"회원 정보 없음. 가입을 시작합니다",Toast.LENGTH_SHORT).show()
