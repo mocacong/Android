@@ -1,5 +1,7 @@
 package com.example.mocacong.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.example.mocacong.R
+import com.example.mocacong.activities.EditProfileActivity
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.response.ProfileResponse
 import com.example.mocacong.databinding.FragmentMypageBinding
@@ -28,16 +33,26 @@ class MypageFragment : Fragment() {
 
         setInitialFragment()
         setTabLayout()
-        setInfoLayout()
+        setLayout()
 
         return binding.root
     }
 
-    private fun setInfoLayout() {
+    private fun setLayout() {
+        binding.editProfileBtn.setOnClickListener {
+            val intent = Intent(requireContext(), EditProfileActivity::class.java)
+            startActivity(intent)
+        }
+        setProfileInfo()
+    }
+
+    private fun setProfileInfo(){
         lifecycleScope.launch {
             val response = getProfile()
             response?.let {
                 binding.nickNameText.text = it.nickname
+                if(it.imgUrl == null) binding.profileImg.setImageResource(R.drawable.profile_no_image)
+                else Glide.with(this@MypageFragment).load(it.imgUrl).into(binding.profileImg)
             }
         }
     }
@@ -87,6 +102,7 @@ class MypageFragment : Fragment() {
             commit()
         }
     }
+
 
 
 

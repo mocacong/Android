@@ -3,12 +3,8 @@ package com.example.mocacong.activities
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.example.mocacong.R
 import com.example.mocacong.data.response.Place
@@ -69,7 +65,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        btnv.selectedItemId = R.id.menu_map
+        val id =
+            when (intent.getIntExtra("tabNumber", 0)) {
+                0 -> R.id.menu_map
+                1 -> R.id.menu_mypage
+                2 -> R.id.menu_settings
+                else -> R.id.menu_map
+            }
+
+        btnv.selectedItemId = id
     }
 
     private fun showFragment(fragment: Fragment) {

@@ -14,6 +14,7 @@
     <color name="textGray">#878787</color>
     <color name="transparent">#00000000</color>
     <color name="pblue">#303B9F</color>
+    <color name="skyBlue">#86A1FF</color>
     <color name="stroke">#F0F0F0</color>
     <color name="ssook">#A2B091</color>
 </resources>
