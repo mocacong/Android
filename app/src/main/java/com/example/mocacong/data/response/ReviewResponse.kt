@@ -8,5 +8,6 @@ data class ReviewResponse (
     val toilet: String?,
     val power: String?,
     val sound: String?,
-    val desk: String?
+    val desk: String?,
+    val reviewsCount : Int
 )

@@ -185,7 +185,7 @@ class CafeDetailActivity : AppCompatActivity() {
 
                 val tmp = "${ String.format("%.1f", data.score) } / 5.0"
                 scoreText.text = tmp
-
+                reviewCountText.text = data.reviewsCount.toString()
 
                 wifiText.setReviewText(data.wifi, getString(R.string.wifi))
                 parkingText.setReviewText(data.parking, getString(R.string.parking))
