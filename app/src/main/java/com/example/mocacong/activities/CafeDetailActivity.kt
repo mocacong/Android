@@ -89,6 +89,8 @@ class CafeDetailActivity : AppCompatActivity() {
         cafe = intent.intentSerializable("cafe", Place::class.java)!!
         cafeId = cafe.id
 
+        Log.d("cafe","cafeID = $cafeId")
+
         val postRequest = CafeDetailRequest(cafeId, cafe.place_name)
         lifecycleScope.launch {
             controller.postCafe(postRequest)

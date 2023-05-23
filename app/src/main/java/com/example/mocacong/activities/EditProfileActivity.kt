@@ -39,7 +39,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun setLayout() {
         setEditImgBtn()
-//        getMemberInfo()
+        setMemberInfo()
 //        setLogoutBtn()
 //        setEditPwBtn()
 
@@ -76,7 +76,13 @@ class EditProfileActivity : AppCompatActivity() {
     private fun setEditPwBtn() {
     }
 
-    private fun getMemberInfo() {
+    private fun setMemberInfo() {
+
+
+    }
+
+    private suspend fun getProfileInfo(){
+
     }
 
 
