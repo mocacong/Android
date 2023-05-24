@@ -12,30 +12,28 @@
         android:layout_height="wrap_content">
 
         <GridLayout
-            android:id="@+id/imagesContainer"
+            android:id="@+id/imagesGridLayout"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </GridLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/cafeName"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:background="@drawable/round_btn"
-
-            android:enabled="false"
-            android:backgroundTint="@color/darkBrown"
-            android:textColor="@color/white"
             android:autoSizeTextType="uniform"
-            android:textStyle="bold"
+
+            android:background="@drawable/round_btn"
+            android:backgroundTint="@color/darkBrown"
+            android:enabled="false"
             android:paddingHorizontal="30dp"
             android:paddingVertical="10dp"
-            app:layout_constraintBaseline_toBottomOf="@id/imagesContainer"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBottomOf="@id/imagesGridLayout"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintWidth_percent="0.6" />
@@ -44,24 +42,23 @@
             android:id="@+id/scoreImgs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srb_numStars="5"
-            app:srb_minimumStars="0"
-            app:srb_rating="0"
-            app:srb_starWidth="40dp"
-            app:srb_starHeight="40dp"
-            app:srb_starPadding="2dp"
-            app:srb_stepSize="0.5"
-            app:srb_isIndicator="true"
-            app:srb_clickable="true"
-            app:srb_scrollable="true"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cafeName"
             app:srb_clearRatingEnabled="true"
+            app:srb_clickable="true"
             app:srb_drawableEmpty="@drawable/false_cong"
             app:srb_drawableFilled="@drawable/true_cong"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cafeName"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="10dp"
-            />
+            app:srb_isIndicator="true"
+            app:srb_minimumStars="0"
+            app:srb_numStars="5"
+            app:srb_rating="0"
+            app:srb_scrollable="true"
+            app:srb_starHeight="40dp"
+            app:srb_starPadding="2dp"
+            app:srb_starWidth="40dp"
+            app:srb_stepSize="0.5" />
 
         <TextView
             android:id="@+id/scoreText"
@@ -123,7 +120,6 @@
             app:layout_constraintTop_toTopOf="@id/locIcon" />
 
 
-
         <ImageView
             android:id="@+id/callIcon"
             android:layout_width="wrap_content"
@@ -150,106 +146,104 @@
             android:id="@+id/reviewCountText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/callIcon"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
             android:text="0"
             android:textColor="@color/darkBrown"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="20dp"
-            />
+            app:layout_constraintTop_toBottomOf="@id/callIcon" />
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/reviewCountText"
-            app:layout_constraintBottom_toBottomOf="@id/reviewCountText"
             android:text=" Reviewers Answered : "
             android:textColor="@color/darkBrown"
+            app:layout_constraintBottom_toBottomOf="@id/reviewCountText"
             app:layout_constraintLeft_toRightOf="@id/reviewCountText"
-            />
+            app:layout_constraintTop_toTopOf="@id/reviewCountText" />
 
         <GridLayout
 
             android:id="@+id/detailsContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/reviewCountText"
+            android:columnCount="4"
+            android:orientation="horizontal"
+            android:padding="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:orientation="horizontal"
-            android:columnCount="4"
-            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@id/reviewCountText"
 
             >
 
             <ImageView
+                android:layout_margin="10dp"
                 android:src="@drawable/detail_wifi"
-                app:tint="@color/darkBrown"
-                android:layout_margin="10dp" />
+                app:tint="@color/darkBrown" />
 
             <TextView
                 android:id="@+id/wifiText"
+                android:layout_margin="10dp"
                 android:text="@string/plzRV"
-                android:textColor="@color/jingray"
-                android:layout_margin="10dp" />
+                android:textColor="@color/jingray" />
 
             <ImageView
+                android:layout_margin="10dp"
                 android:src="@drawable/detail_parking"
-                app:tint="@color/darkBrown"
-                android:layout_margin="10dp" />
+                app:tint="@color/darkBrown" />
 
             <TextView
                 android:id="@+id/parkingText"
+                android:layout_margin="10dp"
                 android:text="@string/plzRV"
-                android:textColor="@color/jingray"
-                android:layout_margin="10dp"/>
+                android:textColor="@color/jingray" />
 
             <ImageView
+                android:layout_margin="10dp"
                 android:src="@drawable/detail_toilet"
-                app:tint="@color/darkBrown"
-                android:layout_margin="10dp" />
+                app:tint="@color/darkBrown" />
 
             <TextView
                 android:id="@+id/toiletText"
+                android:layout_margin="10dp"
                 android:text="@string/plzRV"
-                android:textColor="@color/jingray"
-                android:layout_margin="10dp" />
+                android:textColor="@color/jingray" />
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_margin="10dp"
                 android:src="@drawable/detail_desk"
-                app:tint="@color/darkBrown"
-                android:layout_margin="10dp"/>
+                app:tint="@color/darkBrown" />
 
             <TextView
                 android:id="@+id/deskText"
+                android:layout_margin="10dp"
                 android:text="@string/plzRV"
-                android:textColor="@color/jingray"
-                android:layout_margin="10dp" />
+                android:textColor="@color/jingray" />
 
             <ImageView
+                android:layout_margin="10dp"
                 android:src="@drawable/detail_power"
-                app:tint="@color/darkBrown"
-                android:layout_margin="10dp"/>
+                app:tint="@color/darkBrown" />
 
             <TextView
                 android:id="@+id/powerText"
+                android:layout_margin="10dp"
                 android:text="@string/plzRV"
-                android:textColor="@color/jingray"
-                android:layout_margin="10dp" />
+                android:textColor="@color/jingray" />
 
             <ImageView
+                android:layout_margin="10dp"
                 android:src="@drawable/detail_sound"
-                app:tint="@color/darkBrown"
-                android:layout_margin="10dp"/>
+                app:tint="@color/darkBrown" />
 
             <TextView
                 android:id="@+id/soundText"
+                android:layout_margin="10dp"
                 android:text="@string/plzRV"
-                android:textColor="@color/jingray"
-                android:layout_margin="10dp" />
+                android:textColor="@color/jingray" />
 
 
         </GridLayout>
@@ -258,89 +252,83 @@
             android:id="@+id/commentCountText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/detailsContainer"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
             android:text="0"
             android:textColor="@color/darkBrown"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detailsContainer" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBaseline_toBaselineOf="@id/commentCountText"
-            app:layout_constraintLeft_toRightOf="@id/commentCountText"
             android:text=" Comments :"
             android:textColor="@color/darkBrown"
-            />
+            app:layout_constraintBaseline_toBaselineOf="@id/commentCountText"
+            app:layout_constraintLeft_toRightOf="@id/commentCountText" />
 
         <TextView
+            android:id="@+id/writeCommentBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/ssook"
             android:text="작성하기"
-            android:id="@+id/writeCommentBtn"
-            app:layout_constraintRight_toRightOf="@id/commentsLayout"
-            app:layout_constraintTop_toTopOf="@id/commentCountText"
+            android:textColor="@color/ssook"
             app:layout_constraintBottom_toBottomOf="@id/commentCountText"
-            />
+            app:layout_constraintRight_toRightOf="@id/commentsLayout"
+            app:layout_constraintTop_toTopOf="@id/commentCountText" />
 
         <LinearLayout
+            android:id="@+id/commentsLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/commentCountText"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_margin="20dp"
             android:background="#F6F6F6"
-            android:padding="10dp"
-            android:id="@+id/commentsLayout"
             android:gravity="center"
-            >
+            android:orientation="vertical"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/commentCountText">
+
             <TextView
+                android:id="@+id/noCmtTextView"
+                style="@style/textStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/textStyle"
-                android:text="첫 번째 코멘트를 등록해 주세요!"
-                android:id="@+id/noCmtTextView"
                 android:layout_marginVertical="100dp"
-                />
+                android:text="첫 번째 코멘트를 등록해 주세요!" />
 
             <com.example.mocacong.ui.CommentView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/comment1"
-                android:layout_marginVertical="0.5dp"
-                android:visibility="gone"
-                />
-            <com.example.mocacong.ui.CommentView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="0.5dp"
+                android:visibility="gone" />
+
+            <com.example.mocacong.ui.CommentView
                 android:id="@+id/comment2"
-                android:visibility="gone"
-                />
-            <com.example.mocacong.ui.CommentView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <com.example.mocacong.ui.CommentView
                 android:id="@+id/comment3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginVertical="0.5dp"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
             <TextView
+                android:id="@+id/commentMoreBtn"
+                style="@style/textStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="더보기"
-                style="@style/textStyle"
                 android:layout_marginVertical="0.5dp"
-                android:paddingVertical="10dp"
                 android:background="@color/mocaBrown"
-                android:visibility="gone"
-                android:id="@+id/commentMoreBtn"
-                />
+                android:paddingVertical="10dp"
+                android:text="더보기"
+                android:visibility="gone" />
 
         </LinearLayout>
 

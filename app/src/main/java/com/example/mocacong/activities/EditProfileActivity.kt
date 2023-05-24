@@ -2,6 +2,7 @@ package com.example.mocacong.activities
 
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -12,11 +13,12 @@ import com.example.mocacong.databinding.ActivityEditProfileBinding
 import com.example.mocacong.network.MyPageAPI
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
-class EditProfileActivity : AppCompatActivity() {
+class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedListener {
 
     lateinit var binding: ActivityEditProfileBinding
     private val api = RetrofitClient.create(MyPageAPI::class.java)
     lateinit var imgController : ImageController
+    private var body : MultipartBody.Part? = null
 
 
     private suspend fun sendImage(body: MultipartBody.Part) {
@@ -32,7 +34,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
 
-        imgController = ImageController(this, binding.profileImg)
+        imgController = ImageController(this, this)
         setLayout()
         setContentView(binding.root)
     }
@@ -54,8 +56,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun completeBtnClicked() {
         lifecycleScope.launch {
-            val body = imgController.getBody()
-            if (body != null) sendImage(body)
+            body?.let { sendImage(it) }
             val intent = Intent(this@EditProfileActivity, MainActivity::class.java)
             intent.putExtra("tabNumber", 1)
             startActivity(intent)
@@ -67,6 +68,7 @@ class EditProfileActivity : AppCompatActivity() {
     private fun setEditImgBtn() {
         binding.editImageBtn.setOnClickListener {
             imgController.selectGallery()
+            binding.profileImg.setImageURI(imgController.getImageUrl())
         }
     }
 
@@ -83,6 +85,14 @@ class EditProfileActivity : AppCompatActivity() {
 
     private suspend fun getProfileInfo(){
 
+    }
+
+    override fun onImageSelected(body: MultipartBody.Part?) {
+        this.body = body
+    }
+
+    override fun onImageSelected(imageUri: Uri) {
+        binding.profileImg.setImageURI(imageUri)
     }
 
 

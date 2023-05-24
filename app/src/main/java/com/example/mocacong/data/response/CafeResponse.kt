@@ -14,9 +14,14 @@ data class CafeResponse(
     val sound: String?,
     val desk: String?,
     val commentsCount: Int,
-    val comments: List<Comment>
+    val comments: List<Comment>,
+    val cafeImages: List<CafeImage>
 )
-
+data class CafeImage(
+    val id : Int,
+    val imageUrl : String?,
+    val isMe: Boolean
+)
 
 data class Comment(
     val imgUrl: String,

@@ -12,31 +12,52 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 
-class ImageController(private val activity: AppCompatActivity , private val imgView : CircleImageView) {
+class ImageController(private val activity: AppCompatActivity, private val listener : ImageSelectedListener) {
+    private var imageUrl: Uri? = null
     private var body: MultipartBody.Part? = null
+
     companion object {
         const val REQ_GALLERY = 1
     }
 
+    interface ImageSelectedListener {
+        fun onImageSelected(body: MultipartBody.Part?)
+
+        fun onImageSelected(imageUri: Uri)
+    }
+
+
     private var imageResult =
         activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val imageUrl = result.data?.data ?: return@registerForActivityResult
+                imageUrl = result.data?.data ?: return@registerForActivityResult
                 val file = File(absolutelyPath(imageUrl, activity))
                 val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
                 body = MultipartBody.Part.createFormData("file", file.name, requestFile)
-                Log.d("editProfile", "프로필 이미지 파일 이름 : ${file.name}")
-                imgView.setImageURI(imageUrl)
+                Log.d("Image", "이미지 파일 이름 : ${file.name}")
+
+                //이미지 선택 완료
+                listener.onImageSelected(body)
+                imageUrl?.let { listener.onImageSelected(it) }
             }
         }
 
-    fun getBody(): MultipartBody.Part? {return body}
+
+
+    fun getImageUrl(): Uri? {
+        return imageUrl
+    }
+
+    fun getBody(): MultipartBody.Part? {
+        val tmp = body
+        body = null
+        return tmp
+    }
 
     private fun absolutelyPath(path: Uri?, context: Context): String {
         val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)

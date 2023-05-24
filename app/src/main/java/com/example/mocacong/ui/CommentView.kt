@@ -1,11 +1,12 @@
 package com.example.mocacong.ui
 
 import android.content.Context
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
+import com.example.mocacong.R
 import com.example.mocacong.databinding.ItemCommentViewBinding
 
 
@@ -23,9 +24,11 @@ class CommentView @JvmOverloads constructor(
     }
 
 
-    fun setProfileImage(@DrawableRes resId: Int) {
-        binding.profileImage.setImageResource(resId)
+    fun setProfileImage(imgUrl: Uri?) {
+        if(imgUrl == null) binding.profileImage.setImageResource(R.drawable.profile_no_image)
+        else Glide.with(context).load(imgUrl).into(binding.profileImage)
     }
+
 
     fun setNickname(nickname: String) {
         binding.nicknameTextView.text = nickname
