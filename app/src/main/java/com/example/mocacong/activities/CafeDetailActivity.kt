@@ -116,36 +116,12 @@ class CafeDetailActivity : AppCompatActivity() {
 
     private fun setCafeImagesView(cafeImages: List<CafeImage>) {
         val grid = binding.imagesGridLayout
-        val numImages = cafeImages.size
 
-        val numColumns = when {
-            numImages <= 2 -> 2
-            numImages <= 4 -> 3
-            else -> 4
-        }
+        if(cafeImages.isEmpty()) return
 
-        val numRows = (numImages + numColumns - 1) / numColumns
-
-        grid.columnCount = numColumns
-        grid.rowCount = numRows
-
-
-        for (i in 0 until numImages) {
-            val imageView = ImageView(this)
-
-            val uri = Uri.parse(cafeImages[i].imageUrl)
-            if (uri == null) imageView.setImageResource(R.drawable.profile_no_image)
-            else Glide.with(this).load(uri).into(imageView)
-
-            val params = GridLayout.LayoutParams()
-            params.columnSpec = GridLayout.spec(i % numColumns)
-            params.rowSpec = GridLayout.spec(i / numColumns)
-            imageView.layoutParams = params
-
-            grid.addView(imageView)
-        }
-
-
+        val uri = Uri.parse(cafeImages[0].imageUrl)
+        if (uri == null) grid.setImageResource(R.drawable.profile_no_image)
+        else Glide.with(this).load(uri).into(grid)
 
     }
 

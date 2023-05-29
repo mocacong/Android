@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.mocacong.adapter.ImageAdapter
@@ -55,8 +56,7 @@ class CafeImagesActivity : AppCompatActivity(),ImageController.ImageSelectedList
                 isEnd = response.isEnd
                 adapter = ImageAdapter(imageUriList)
                 binding.recyclerView.adapter = adapter
-                binding.recyclerView.layoutManager =
-                    StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+                binding.recyclerView.layoutManager = GridLayoutManager(this@CafeImagesActivity,3)
             }
         }
 
