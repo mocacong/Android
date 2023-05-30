@@ -16,6 +16,7 @@ import com.example.mocacong.activities.SearchActivity
 import com.example.mocacong.controllers.SearchController
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.request.FilteringRequest
+import com.example.mocacong.data.response.FilteringResponse
 import com.example.mocacong.data.response.Place
 import com.example.mocacong.databinding.FragmentHomeBinding
 import com.example.mocacong.network.MapFilteringAPI
@@ -24,9 +25,9 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.Serializable
-
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
@@ -37,7 +38,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var locationSource: FusedLocationSource
     private lateinit var searchController: SearchController
 
-    //private val markers = ArrayList<Marker>()
+
     private val markers = HashMap<Place, Marker>()
     private lateinit var markerImg: OverlayImage
     private var clickedMarker: Marker? = null
@@ -91,7 +92,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 }
 
             naverMap.moveCamera(cameraUpdate)
-
         }
     }
 
@@ -110,7 +110,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
 
         binding.favBtn.setOnClickListener {
-
+            filterFavs()
         }
 
         binding.refreshBtn.setOnClickListener {
@@ -126,32 +126,63 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         val y = naverMap.cameraPosition.target.latitude.toString()
         val x = naverMap.cameraPosition.target.longitude.toString()
         lifecycleScope.launch {
-            var response = searchController.searchByXY(x, y)
-            if (response != null) {
-                val nonFilteredPlaces = HashMap<String, Place>()
-                response.documents.forEach {
-                    nonFilteredPlaces[it.id] = it
-                }
-                val filteredIds = getFilteredIds(type, nonFilteredPlaces.keys.toList())
-                if (filteredIds != null) {
-                    filteredIds.forEach {
-                        setAMarker(nonFilteredPlaces[it])
-                    }
-                }
+            val response = async { searchController.searchByXY(x, y) }.await()
+
+            val nonFilteredPlaces = HashMap<String, Place>()
+            response?.documents?.forEach {
+                nonFilteredPlaces[it.id] = it
+            }
+            val filteredIds =
+                async { getFilteredIds(type, nonFilteredPlaces.keys.toList()) }.await()?.mapIds
+            filteredIds?.forEach {
+                addMarker(nonFilteredPlaces[it])
             }
         }
     }
 
-    private suspend fun getFilteredIds(type: String, ids: List<String>): List<String>? {
+    private fun filterFavs() {
+        delMarkers()
+        val y = naverMap.cameraPosition.target.latitude.toString()
+        val x = naverMap.cameraPosition.target.longitude.toString()
+        lifecycleScope.launch {
+            val response = async { searchController.searchByXY(x, y) }.await()
+            val nonFilteredPlaces = HashMap<String, Place>()
+            response?.documents?.forEach {
+                nonFilteredPlaces[it.id] = it
+            }
+            val filteredIds =
+                async { getFavFilteredIds(nonFilteredPlaces.keys.toList()) }.await()?.mapIds
+            filteredIds?.forEach {
+                addMarker(nonFilteredPlaces[it])
+            }
+        }
+    }
+
+    private suspend fun getFilteredIds(type: String, ids: List<String>): FilteringResponse? {
         val filteringApi = RetrofitClient.create(MapFilteringAPI::class.java)
         val req = FilteringRequest(ids)
+        Log.d("filtering", "필터링 보낸다 나 stt : $type, req : $req")
         val response = filteringApi.getFilteredCafes(studyType = type, filteringRequest = req)
-        if (response.isSuccessful) {
+        return if (response.isSuccessful) {
             Log.d("filtering", "filtering response 성공 : ${response.body()}")
-            return response.body()
+            response.body()
         } else {
             Log.d("filtering", "filtering response 실패 : ${response.errorBody()?.string()}")
-            return listOf()
+            throw Exception("필터링 싫패!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        }
+    }
+
+    private suspend fun getFavFilteredIds(ids: List<String>): FilteringResponse? {
+        val filteringApi = RetrofitClient.create(MapFilteringAPI::class.java)
+        val req = FilteringRequest(ids)
+        Log.d("filtering", "필터링 보낸다 나 stt :  req : $req")
+        val response = filteringApi.getFavCafes(filteringRequest = req)
+        return if (response.isSuccessful) {
+            Log.d("filtering", "fav filtering response 성공 : ${response.body()}")
+            response.body()
+        } else {
+            Log.d("filtering", "fav filtering response 실패 : ${response.errorBody()?.string()}")
+            throw Exception("즐찾 필터링 싫패!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         }
     }
 
@@ -231,7 +262,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setAMarker(place: Place?) {
+    private fun addMarker(place: Place?) {
         place?.let {
             val marker = Marker()
             markers[place] = marker

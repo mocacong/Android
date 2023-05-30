@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.example.mocacong.R
 import com.example.mocacong.controllers.ImageController
 import com.example.mocacong.data.objects.Member
 import com.example.mocacong.data.objects.RetrofitClient
@@ -96,6 +98,9 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
             Member.imgUrl?.let {
                 binding.profileImg.setImageURI(Uri.parse(it))
             }
+
+            if(Member.imgUrl!=null)
+                Glide.with(this@EditProfileActivity).load(Member.imgUrl).into(binding.profileImg)
             binding.emailText.text = Member.email
             binding.nameText.setText(Member.nickname)
             binding.phoneText.setText(Member.phone)

@@ -2,20 +2,22 @@ package com.example.mocacong.network
 
 import com.example.mocacong.data.objects.Member
 import com.example.mocacong.data.request.FilteringRequest
-import com.example.mocacong.data.response.ProfileResponse
+import com.example.mocacong.data.response.FilteringResponse
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface MapFilteringAPI {
-
-    @GET("/cafes")
+    @POST("/cafes/studytypes")
     suspend fun getFilteredCafes(
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
-        @Query("studyType") studyType : String,
+        @Query("studytype") studyType : String,
         @Body filteringRequest: FilteringRequest
-    ): Response<List<String>>
+    ): Response<FilteringResponse>
+
+    @POST("/cafes/favorites")
+    suspend fun getFavCafes(
+        @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
+        @Body filteringRequest: FilteringRequest
+    ): Response<FilteringResponse>
 
 }
