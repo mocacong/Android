@@ -45,7 +45,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1000
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -114,11 +113,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
 
         binding.refreshBtn.setOnClickListener {
-            //현 지도에서 검색 클릭 시 카메라 시점 기반 500m 카페 검색
-            //최대 15개
             refreshMarkerList()
         }
-
     }
 
     private fun filterMarkers(type: String) {
