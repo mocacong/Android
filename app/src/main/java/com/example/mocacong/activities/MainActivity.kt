@@ -11,6 +11,7 @@ import com.example.mocacong.data.response.Place
 import com.example.mocacong.databinding.ActivityMainBinding
 import com.example.mocacong.fragments.HomeFragment
 import com.example.mocacong.fragments.MypageFragment
+import com.example.mocacong.fragments.SettingsFragment
 import java.io.Serializable
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         setBottomNav()
     }
@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.menu_settings -> {
                     //해야됨
+                    showFragment(SettingsFragment())
                     true
                 }
                 else -> false
