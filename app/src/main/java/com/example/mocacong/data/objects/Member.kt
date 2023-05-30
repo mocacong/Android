@@ -1,8 +1,21 @@
 package com.example.mocacong.data.objects
 
-object Member{
+object Member {
 
-    private var authToken: String? = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqc3NoaW4wMDAxMDdAbmF2ZXIuY29tIiwiaWF0IjoxNjgyMDgwNDA2LCJleHAiOjE2ODIxNjY4MDZ9.vYKDnDIa8dbT8fW37FeyEZioBofpf5iGwGRMGXROe5g"
+    private var authToken: String? = null
+    var email: String? = null
+    var nickname: String? = ""
+    var phone: String? = ""
+    var imgUrl: String? = null
+
+    fun deleteInfo(){
+        authToken = null
+        email = null
+        nickname = null
+        phone = null
+        imgUrl = null
+    }
+
     fun setAuthToken(token: String) {
         authToken = token
     }
