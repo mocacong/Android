@@ -16,7 +16,7 @@ class MypageReviewsAdapter(
         fun bind(cafe: Cafe) {
             binding.cafe.text = cafe.name
 
-            val score = cafe.mergedScore.toFloat()
+            val score = cafe.mergedScore
             if (score == 0f) binding.scoreImgs.visibility = View.INVISIBLE
             else {
                 binding.scoreImgs.visibility = View.VISIBLE

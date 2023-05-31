@@ -8,10 +8,10 @@ data class MypageCafesResponse(
 data class Cafe(
     val name: String,
     val mapId : String,
-    val myScore: Int?,
-    val score: Int?,
+    val myScore: Float?,
+    val score: Float?,
     val comment : String?
 ) {
-    val mergedScore: Int
-        get() = score ?: myScore ?: 0
+    val mergedScore: Float
+        get() = score ?: myScore ?: 0f
 }
