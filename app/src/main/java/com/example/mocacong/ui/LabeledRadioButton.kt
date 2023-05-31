@@ -36,16 +36,17 @@ class LabeledRadioButton(context: Context, attrs: AttributeSet) :
             buttonDrawable?.draw(it)
         }
 
-        val x = 0
-        val y = btnY + buttonDrawable!!.intrinsicHeight + labelView.height / 2 + dpToPx(15)
+        val textWidth = labelView.paint.measureText(labelView.text.toString())
+        val x = (width - textWidth) / 2
+        val y = btnY + buttonDrawable!!.intrinsicHeight + labelView.height / 2 + dpToPx(20)
 
-        canvas?.drawText(labelView.text.toString(), x.toFloat(), y.toFloat(), labelView.paint)
+        canvas?.drawText(labelView.text.toString(), x, y.toFloat(), labelView.paint)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         labelView.measure(widthMeasureSpec, heightMeasureSpec)
-        setMeasuredDimension(labelView.measuredWidth, measuredHeight + labelView.measuredHeight + dpToPx(12))
+        setMeasuredDimension(labelView.measuredWidth, measuredHeight + labelView.measuredHeight + dpToPx(25))
     }
 
     private fun dpToPx(dp: Int): Int {
