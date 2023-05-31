@@ -47,7 +47,6 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
     private fun setLayout() {
         setEditImgBtn()
         setMemberInfo()
-//        setLogoutBtn()
 //        setEditPwBtn()
 
         binding.completeBtn.setOnClickListener {
@@ -55,6 +54,10 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
         }
         binding.cancelBtn.setOnClickListener {
             onBackPressed()
+        }
+
+        binding.logoutBtn.setOnClickListener {
+            setLogoutBtn()
         }
 
     }

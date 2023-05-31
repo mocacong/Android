@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.mocacong.activities.EditProfileActivity
+import com.example.mocacong.activities.SignInActivity
+import com.example.mocacong.data.objects.Member
 import com.example.mocacong.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -30,13 +32,17 @@ class SettingsFragment : Fragment() {
     private fun setLayout() {
         binding.apply {
             editProfileBtn.setOnClickListener {
-                //editprofiteActivity로
                 val intent = Intent(requireContext(), EditProfileActivity::class.java)
                 startActivity(intent)
 
             }
+
             logoutBtn.setOnClickListener {
                 //멤버초기화하고 로그인액티비티로
+                Member.deleteInfo()
+                val intent = Intent(requireContext(), SignInActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
             }
 
             withdrawBtn.setOnClickListener {

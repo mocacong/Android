@@ -6,16 +6,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.data.request.SignInRequest
 import com.example.mocacong.databinding.ActivitySignInBinding
 import com.example.mocacong.controllers.SignInController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInBinding
     private lateinit var controller: SignInController
+    private var backButtonPressedOnce = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +27,7 @@ class SignInActivity : AppCompatActivity() {
         setContentView(binding.root)
         controller = SignInController()
         layoutInit()
-
+        setBackBtn()
     }
 
 
@@ -58,7 +61,6 @@ class SignInActivity : AppCompatActivity() {
         startActivity(intent)
         //post하기
         //회원가입-로그인 처리
-
     }
 
 
@@ -69,8 +71,24 @@ class SignInActivity : AppCompatActivity() {
             Log.d("signIn", "signInResponseMSG : $toastMsg")
             Toast.makeText(applicationContext, toastMsg, Toast.LENGTH_SHORT).show()
         }
+    }
 
+    private fun setBackBtn() {
+        val onBackPressedCallback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if(backButtonPressedOnce) finish()
+                else{
+                    backButtonPressedOnce = true
+                    Toast.makeText(this@SignInActivity, "한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
+                    lifecycleScope.launch {
+                        delay(2000)
+                        backButtonPressedOnce = false
+                    }
+                }
+            }
+        }
 
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
 }
