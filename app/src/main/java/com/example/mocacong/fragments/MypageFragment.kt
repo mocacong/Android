@@ -1,7 +1,6 @@
 package com.example.mocacong.fragments
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.mocacong.R
 import com.example.mocacong.activities.EditProfileActivity
+import com.example.mocacong.data.objects.Member
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.response.ProfileResponse
 import com.example.mocacong.databinding.FragmentMypageBinding
@@ -23,7 +23,6 @@ class MypageFragment : Fragment() {
 
     private var _binding: FragmentMypageBinding? = null
     private val binding get() = _binding!!
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,8 +50,18 @@ class MypageFragment : Fragment() {
             val response = getProfile()
             response?.let {
                 binding.nickNameText.text = it.nickname
-                if(it.imgUrl == null) binding.profileImg.setImageResource(R.drawable.profile_no_image)
-                else Glide.with(this@MypageFragment).load(it.imgUrl).into(binding.profileImg)
+                Member.nickname = it.nickname
+                Member.phone = it.phone
+                Member.email = it.email
+
+                if(it.imgUrl == null) {
+                    binding.profileImg.setImageResource(R.drawable.profile_no_image)
+                    Member.imgUrl = null
+                }
+                else {
+                    Glide.with(this@MypageFragment).load(it.imgUrl).into(binding.profileImg)
+                    Member.imgUrl = it.imgUrl
+                }
             }
         }
     }

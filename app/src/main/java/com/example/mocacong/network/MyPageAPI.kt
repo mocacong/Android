@@ -45,9 +45,4 @@ interface MyPageAPI {
         @Part file: MultipartBody.Part
     ): Response<Void>
 
-    @GET("/members/info")
-    suspend fun getMyProfileInfo(
-        @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}"
-    ): Response<ProfileResponse>
-
 }

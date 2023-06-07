@@ -8,7 +8,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.example.mocacong.R
 import com.example.mocacong.controllers.ImageController
 import com.example.mocacong.data.objects.Member
 import com.example.mocacong.data.objects.RetrofitClient
@@ -64,18 +63,23 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
 
     private fun completeBtnClicked() {
         lifecycleScope.launch {
-            body?.let { sendImage(it) }
+            body?.let {
+                sendImage(it)
+            }
+            putInfo()
             val intent = Intent(this@EditProfileActivity, MainActivity::class.java)
             intent.putExtra("tabNumber", 1)
             startActivity(intent)
         }
+    }
+
+    private fun putInfo() {
 
     }
 
-
     private fun setEditImgBtn() {
         binding.editImageBtn.setOnClickListener {
-            imgController.selectGallery()
+            imgController.launchGallery()
             binding.profileImg.setImageURI(imgController.getImageUrl())
         }
     }
@@ -90,7 +94,7 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
 
     private fun setMemberInfo() {
         lifecycleScope.launch {
-            if(Member.email == null) {
+            if (Member.email == null) {
                 val profile = async { getProfileInfo() }.await()
                 Member.email = profile.email
                 Member.nickname = profile.nickname
@@ -102,7 +106,7 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
                 binding.profileImg.setImageURI(Uri.parse(it))
             }
 
-            if(Member.imgUrl!=null)
+            if (Member.imgUrl != null)
                 Glide.with(this@EditProfileActivity).load(Member.imgUrl).into(binding.profileImg)
             binding.emailText.text = Member.email
             binding.nameText.setText(Member.nickname)

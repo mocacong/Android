@@ -18,10 +18,10 @@ interface CafeImagesAPI {
 
     @Multipart
     @POST("/cafes/{cafeId}/img")
-    suspend fun postCafeImage(
+    suspend fun postCafeImages(
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Header("header") header: String = "MULTIPART_FORM_DATA_VALUE",
         @Path("cafeId") cafeId : String,
-        @Part file: MultipartBody.Part
+        @Part files: List<MultipartBody.Part>
     ): Response<Void>
 }

@@ -1,14 +1,11 @@
 package com.example.mocacong.activities
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.mocacong.adapter.ImageAdapter
 import com.example.mocacong.controllers.ImageController
 import com.example.mocacong.data.objects.RetrofitClient
@@ -19,7 +16,7 @@ import com.example.mocacong.network.CafeImagesAPI
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
-class CafeImagesActivity : AppCompatActivity(),ImageController.ImageSelectedListener {
+class CafeImagesActivity : AppCompatActivity(), ImageController.ImageSelectedListener {
 
     lateinit var binding: ActivityCafeImagesBinding
 
@@ -56,7 +53,7 @@ class CafeImagesActivity : AppCompatActivity(),ImageController.ImageSelectedList
                 isEnd = response.isEnd
                 adapter = ImageAdapter(imageUriList)
                 binding.recyclerView.adapter = adapter
-                binding.recyclerView.layoutManager = GridLayoutManager(this@CafeImagesActivity,3)
+                binding.recyclerView.layoutManager = GridLayoutManager(this@CafeImagesActivity, 3)
             }
         }
 
@@ -78,16 +75,21 @@ class CafeImagesActivity : AppCompatActivity(),ImageController.ImageSelectedList
 
     private fun addImage() {
         // 이미지 선택
-        imageController.selectGallery()
+        imageController.launchMultipleGallery()
     }
 
 
-    private suspend fun postCafeImage(body: MultipartBody.Part) {
-        val response = api.postCafeImage(cafeId = cafeId, file = body)
+    private suspend fun postCafeImage(body: List<MultipartBody.Part>) {
+        val response = api.postCafeImages(cafeId = cafeId, files = body)
+
+        Log.d("CafeImage", "이미지 보낸다 : ${response.raw().request().body()}")
         if (response.isSuccessful) {
             Log.d("CafeImage", "이미지 포스트 성공")
         } else {
-            Log.d("CafeImage", "이미지 포스트 실패 : ${response.errorBody()?.string()}")
+            Log.d(
+                "CafeImage",
+                "이미지 포스트 실패 : ${response.errorBody()?.string()} , ${response.code()}"
+            )
         }
     }
 
@@ -122,10 +124,10 @@ class CafeImagesActivity : AppCompatActivity(),ImageController.ImageSelectedList
         }
     }
 
-    override fun onImageSelected(body: MultipartBody.Part?) {
-        if (body != null) {
+    override fun onImageSelected(imageParts: List<MultipartBody.Part>) {
+        if (imageParts != null) {
             lifecycleScope.launch {
-                postCafeImage(body)
+                postCafeImage(imageParts)
                 imageUriList.clear()
                 currentPage = 0
                 val response = getCafeImages(page = currentPage++)
@@ -137,10 +139,6 @@ class CafeImagesActivity : AppCompatActivity(),ImageController.ImageSelectedList
                 }
             }
         }
-    }
-
-    override fun onImageSelected(imageUri: Uri) {
-        //uriget
     }
 
 }

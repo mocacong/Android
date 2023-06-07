@@ -16,5 +16,6 @@
     <color name="pblue">#303B9F</color>
     <color name="skyBlue">#86A1FF</color>
     <color name="stroke">#F0F0F0</color>
+    <color name="red">#FF7474</color>
     <color name="ssook">#A2B091</color>
 </resources>
