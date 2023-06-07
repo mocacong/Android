@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.controllers.SignUpController
+import com.example.mocacong.data.request.SignInRequest
 import com.example.mocacong.data.request.SignUpRequest
 import com.example.mocacong.databinding.ActivitySignUpBinding
 import com.example.mocacong.ui.MessageDialog
@@ -175,6 +176,17 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+    private fun signInEvent(member: SignInRequest) {
+        lifecycleScope.launch {
+            val msg = async { controller.signIn(member) }.await()
+            MessageDialog(msg).show(supportFragmentManager, "MessageDialog")
+            if(msg == "로그인 성공"){
+                val intent = Intent(this@SignUpActivity, MainActivity::class.java)
+                startActivity(intent)
+            }
+        }
+    }
+
     private fun signUpEvent(member: SignUpRequest) {
         var code = 0
         lifecycleScope.launch {
@@ -184,10 +196,7 @@ class SignUpActivity : AppCompatActivity() {
 
         when (code) {
             200 -> {
-                val intent = Intent(this, SignInActivity::class.java)
-                intent.putExtra("id", binding.emailText.text.toString())
-                intent.putExtra("pw", binding.emailText.text.toString())
-                startActivity(intent)
+                signInEvent(SignInRequest(member.email, member.password))
             }
         }
 

@@ -145,6 +145,7 @@
             android:backgroundTint="@color/mocaBrown"
             android:inputType="text"
             android:maxLines="1"
+            android:textColor="@color/darkBrown"
             app:layout_constraintBaseline_toBottomOf="@id/nicknameOk"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
@@ -193,6 +194,8 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/mocaBrown"
                 android:inputType="textPassword"
+                android:textColor="@color/darkBrown"
+                android:foregroundTint="@color/mocaBrown"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -216,6 +219,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:text="PW확인"
+            android:backgroundTint="@color/mocaBrown"
             android:textColor="@color/darkBrown"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
@@ -226,7 +230,8 @@
             android:id="@+id/pw2Text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/mocaBrown"
+            android:textColor="@color/darkBrown"
             android:inputType="textPassword"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
             app:layout_constraintRight_toRightOf="@id/rightline"
@@ -263,6 +268,7 @@
             android:backgroundTint="@color/mocaBrown"
             android:inputType="phone"
             android:maxLines="1"
+            android:textColor="@color/darkBrown"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
             app:layout_constraintRight_toRightOf="@id/rightline"
             app:layout_constraintTop_toBottomOf="@id/phone" />

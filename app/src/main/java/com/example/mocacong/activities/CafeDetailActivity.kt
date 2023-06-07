@@ -20,6 +20,7 @@ import com.example.mocacong.data.response.*
 import com.example.mocacong.databinding.ActivityCafeDetailBinding
 import com.example.mocacong.fragments.EditReviewFragment
 import com.example.mocacong.fragments.WriteCommentFragment
+import com.example.mocacong.ui.MessageDialog
 import kotlinx.coroutines.launch
 import java.io.Serializable
 
@@ -133,7 +134,8 @@ class CafeDetailActivity : AppCompatActivity() {
         if (commentsCount > 3) {
             binding.commentMoreBtn.visibility = View.VISIBLE
             binding.commentMoreBtn.setOnClickListener {
-                //todo:댓글 더보기 기능
+                val popup = MessageDialog("서비스 준비 중입니다")
+                popup.show(supportFragmentManager, popup.tag)
             }
         }
 

@@ -10,6 +10,7 @@ import com.example.mocacong.activities.EditProfileActivity
 import com.example.mocacong.activities.SignInActivity
 import com.example.mocacong.data.objects.Member
 import com.example.mocacong.databinding.FragmentSettingsBinding
+import com.example.mocacong.ui.MessageDialog
 
 class SettingsFragment : Fragment() {
 
@@ -48,8 +49,7 @@ class SettingsFragment : Fragment() {
             withdrawBtn.setOnClickListener {
                 //계정탈퇴하기
                 //1. 비번 확인 2. 맞으면 탈퇴 틀리면 오류
-
-
+                MessageDialog("서비스 준비 중입니다").show(childFragmentManager, "MessageDialog")
             }
 
         }

@@ -2,8 +2,11 @@ package com.example.mocacong.controllers
 
 import android.util.Log
 import android.view.View
+import com.example.mocacong.data.objects.Member
 import com.example.mocacong.data.objects.RetrofitClient
+import com.example.mocacong.data.request.SignInRequest
 import com.example.mocacong.data.request.SignUpRequest
+import com.example.mocacong.network.SignInAPI
 import com.example.mocacong.network.SignUpAPI
 import org.json.JSONObject
 
@@ -49,6 +52,28 @@ class SignUpController() {
             throw java.lang.Exception("닉네임 중복체크 실패!")
         }
     }
+
+    suspend fun signIn(signInRequest: SignInRequest) : String{
+        val response = RetrofitClient.create(SignInAPI::class.java).signIn(signInRequest)
+        if(response.isSuccessful){
+            //로그인 성공
+            try {
+                Member.setAuthToken(response.body()!!.token)
+            }catch (e: NullPointerException){
+                Log.d("signIn", "성공했는데 responseBody 없음")
+            }
+            return "로그인 성공";
+        }
+        else{
+            //로그인 실패
+            val json = JSONObject(response.errorBody()?.string())
+            val code = json.getInt("code")
+            val msg = json.getString("message")
+            Log.d("signIn", "Error: $msg Code: $code")
+            return msg
+        }
+    }
+
 
 
     fun passwordRegex(password: String): Boolean {

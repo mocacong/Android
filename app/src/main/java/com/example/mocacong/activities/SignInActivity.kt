@@ -2,16 +2,16 @@ package com.example.mocacong.activities
 
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.mocacong.controllers.SignInController
 import com.example.mocacong.data.request.SignInRequest
 import com.example.mocacong.databinding.ActivitySignInBinding
-import com.example.mocacong.controllers.SignInController
 import com.example.mocacong.ui.MessageDialog
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -47,9 +47,9 @@ class SignInActivity : AppCompatActivity() {
         }
 
         binding.findBtn.setOnClickListener {
-            val msg = "서비스 업데이트 예정입니다"
+            val msg = "서비스 준비 중입니다"
             val dialog = MessageDialog(msg)
-            dialog.show(supportFragmentManager,"MessageDialog")
+            dialog.show(supportFragmentManager, "MessageDialog")
         }
 
         binding.kakaoBtn.setOnClickListener {
@@ -61,27 +61,28 @@ class SignInActivity : AppCompatActivity() {
     private fun kakaoLogin() {
         val intent = Intent(this, KakaoLoginActivity::class.java)
         startActivity(intent)
-        //post하기
-        //회원가입-로그인 처리
     }
 
 
     private fun signInEvent(member: SignInRequest) {
-        var toastMsg: String
         lifecycleScope.launch {
-            toastMsg = controller.signIn(member)
-            Log.d("signIn", "signInResponseMSG : $toastMsg")
-            Toast.makeText(applicationContext, toastMsg, Toast.LENGTH_SHORT).show()
+            val msg = async { controller.signIn(member) }.await()
+            MessageDialog(msg).show(supportFragmentManager, "MessageDialog")
+            if(msg == "로그인 성공"){
+                val intent = Intent(this@SignInActivity, MainActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
     private fun setBackBtn() {
-        val onBackPressedCallback = object : OnBackPressedCallback(true){
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if(backButtonPressedOnce) finish()
-                else{
+                if (backButtonPressedOnce) finish()
+                else {
                     backButtonPressedOnce = true
-                    Toast.makeText(this@SignInActivity, "한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@SignInActivity, "한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT)
+                        .show()
                     lifecycleScope.launch {
                         delay(2000)
                         backButtonPressedOnce = false
