@@ -69,6 +69,8 @@ class SignUpActivity : AppCompatActivity() {
 
         }
 
+
+
         //비밀번호 형식 검증
         binding.pwText.addTextChangedListener {
             if (controller.passwordRegex(binding.pwText.text.toString())) {
@@ -79,6 +81,7 @@ class SignUpActivity : AppCompatActivity() {
                 binding.pwConfirmText.visibility = View.VISIBLE
             }
         }
+
 
         //비밀번호 일치 검증
         binding.pw2Text.addTextChangedListener {

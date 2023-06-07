@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mocaBrown"
+    android:background="@color/white"
     tools:context=".activities.SignUpActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,18 +32,17 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.1" />
 
-        <TextView
+        <ImageView
             android:id="@+id/logoText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mocacong"
-            android:textColor="@color/white"
-            android:textSize="40sp"
-            android:textStyle="bold"
+            android:layout_width="244dp"
+            android:layout_height="66dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
             app:layout_constraintRight_toRightOf="@id/rightline"
-            app:layout_constraintTop_toTopOf="@id/topline" />
+            app:layout_constraintTop_toBottomOf="@id/topline"
+            app:layout_constraintWidth_percent="0.6" />
 
         <TextView
             android:id="@+id/startText"
@@ -88,8 +87,9 @@
             android:id="@+id/emailText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/mocaBrown"
             android:inputType="textEmailAddress"
+            android:textColor="@color/darkBrown"
             android:maxLines="1"
             app:layout_constraintBaseline_toBottomOf="@id/emailOk"
             app:layout_constraintHorizontal_bias="0"
@@ -142,7 +142,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/mocaBrown"
             android:inputType="text"
             android:maxLines="1"
             app:layout_constraintBaseline_toBottomOf="@id/nicknameOk"
@@ -178,16 +178,24 @@
             app:layout_constraintRight_toRightOf="@id/rightline"
             app:layout_constraintTop_toBottomOf="@id/nicknameText" />
 
-        <EditText
-            android:id="@+id/pwText"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/pwLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:inputType="textPassword"
-            android:maxLines="1"
+            app:passwordToggleEnabled="true"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
             app:layout_constraintRight_toRightOf="@id/rightline"
-            app:layout_constraintTop_toBottomOf="@id/pw" />
+            app:layout_constraintTop_toBottomOf="@id/pw"
+            >
+            <EditText
+                android:id="@+id/pwText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/mocaBrown"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <TextView
             android:id="@+id/pwConfirmText"
@@ -199,7 +207,7 @@
             android:visibility="invisible"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
             app:layout_constraintRight_toRightOf="@id/rightline"
-            app:layout_constraintTop_toBottomOf="@id/pwText" />
+            app:layout_constraintTop_toBottomOf="@id/pwLayout" />
 
 
         <TextView
@@ -212,7 +220,7 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
             app:layout_constraintRight_toRightOf="@id/rightline"
-            app:layout_constraintTop_toBottomOf="@id/pwText" />
+            app:layout_constraintTop_toBottomOf="@id/pwLayout" />
 
         <EditText
             android:id="@+id/pw2Text"
@@ -252,11 +260,10 @@
             android:id="@+id/phoneText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/mocaBrown"
             android:inputType="phone"
             android:maxLines="1"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
-
             app:layout_constraintRight_toRightOf="@id/rightline"
             app:layout_constraintTop_toBottomOf="@id/phone" />
 

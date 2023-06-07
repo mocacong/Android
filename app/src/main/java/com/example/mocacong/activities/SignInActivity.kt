@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.data.request.SignInRequest
 import com.example.mocacong.databinding.ActivitySignInBinding
 import com.example.mocacong.controllers.SignInController
+import com.example.mocacong.ui.MessageDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -46,14 +47,15 @@ class SignInActivity : AppCompatActivity() {
         }
 
         binding.findBtn.setOnClickListener {
+            val msg = "서비스 업데이트 예정입니다"
+            val dialog = MessageDialog(msg)
+            dialog.show(supportFragmentManager,"MessageDialog")
         }
 
         binding.kakaoBtn.setOnClickListener {
             kakaoLogin()
         }
 
-        binding.naverBtn.setOnClickListener {
-        }
     }
 
     private fun kakaoLogin() {
