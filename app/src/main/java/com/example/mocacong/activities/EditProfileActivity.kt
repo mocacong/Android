@@ -79,7 +79,7 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
 
     private fun setEditImgBtn() {
         binding.editImageBtn.setOnClickListener {
-            imgController.launchGallery()
+            imgController.launchMultipleGallery()
             binding.profileImg.setImageURI(imgController.getImageUrl())
         }
     }

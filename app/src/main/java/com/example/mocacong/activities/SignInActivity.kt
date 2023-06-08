@@ -67,11 +67,12 @@ class SignInActivity : AppCompatActivity() {
     private fun signInEvent(member: SignInRequest) {
         lifecycleScope.launch {
             val msg = async { controller.signIn(member) }.await()
-            MessageDialog(msg).show(supportFragmentManager, "MessageDialog")
             if(msg == "로그인 성공"){
+                Toast.makeText(this@SignInActivity, "로그인 성공. 환영합니다", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this@SignInActivity, MainActivity::class.java)
                 startActivity(intent)
-            }
+            }else
+                MessageDialog(msg).show(supportFragmentManager, "MessageDialog")
         }
     }
 

@@ -14,19 +14,18 @@ class SignUpController() {
 
     val api = RetrofitClient.create(SignUpAPI::class.java)
 
-    suspend fun signUp(member: SignUpRequest): Int {
+    suspend fun signUp(member: SignUpRequest): String {
         Log.d("dd", "signupfun called")
         //회원 가입 로직 처리 함수
         val response = api.signUp(member)
         return if (response.isSuccessful) {
-            200
             Log.d("signUp", "signUp SUCCESSED : ${response.code()}")
+            "성공"
         } else {
             val json = JSONObject(response.errorBody()?.string())
-            val code = json.getInt("code")
             val msg = json.getString("message")
-            Log.d("signUp", "Err MSG: $msg, code: $code")
-            code
+            Log.d("signUp", "Err MSG: $msg")
+            msg
         }
 
     }

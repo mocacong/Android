@@ -27,6 +27,8 @@ class KakaoLoginActivity : AppCompatActivity() {
 
     private val REST_API_KEY = "0c5797613ead2a6d69354f77254c6a25"
     private val REDIRECT_URI = "http://3.37.64.38:8080/login/kakao"
+
+//    private val REDIRECT_URI = "http://localhost:8080/login/kakao"
     private lateinit var authCode: String
     private lateinit var responseBody: KakaoLoginResponse
 

@@ -145,7 +145,9 @@ class CafeDetailActivity : AppCompatActivity() {
             cmtViews[i].setComment(comments[i].content)
             cmtViews[i].setMyComment(comments[i].isMe)
             cmtViews[i].setNickname(comments[i].nickname)
-            cmtViews[i].setProfileImage(Uri.parse(comments[i].imgUrl))
+            comments[i].imgUrl?.let {
+                cmtViews[i].setProfileImage(Uri.parse(it))
+            }
         }
     }
 

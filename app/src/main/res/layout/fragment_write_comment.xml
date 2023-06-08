@@ -50,4 +50,15 @@
         android:id="@+id/content"
         />
 
+    <TextView
+        android:id="@+id/warning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/content"
+        app:layout_constraintLeft_toLeftOf="@id/content"
+        android:text="   !! 코멘트는 200자를 넘을 수 없습니다"
+        android:textColor="@color/darkBrown"
+        android:visibility="gone"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

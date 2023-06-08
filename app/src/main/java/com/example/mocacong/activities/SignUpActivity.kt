@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
@@ -50,6 +51,7 @@ class SignUpActivity : AppCompatActivity() {
                     isEmailChecked = false
                     View.VISIBLE
                 }
+            isEmailChecked = false
         }
 
         //닉네임 확인 버튼 클릭 이벤트
@@ -67,7 +69,7 @@ class SignUpActivity : AppCompatActivity() {
                     isNicknameChecked = false
                     View.VISIBLE
                 }
-
+            isNicknameChecked = false
         }
 
 
@@ -179,27 +181,27 @@ class SignUpActivity : AppCompatActivity() {
     private fun signInEvent(member: SignInRequest) {
         lifecycleScope.launch {
             val msg = async { controller.signIn(member) }.await()
-            MessageDialog(msg).show(supportFragmentManager, "MessageDialog")
             if(msg == "로그인 성공"){
+                Toast.makeText(this@SignUpActivity, "가입 성공. 환영합니다!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this@SignUpActivity, MainActivity::class.java)
                 startActivity(intent)
+            }else{
+                MessageDialog(msg).show(supportFragmentManager, "MessageDialog")
             }
         }
     }
 
     private fun signUpEvent(member: SignUpRequest) {
-        var code = 0
+        var msg : String
         lifecycleScope.launch {
-            code = controller.signUp(member)
-            Log.d("signUp", "signUpResponseCode : $code")
-        }
-
-        when (code) {
-            200 -> {
+            msg = async {  controller.signUp(member) }.await()
+            Log.d("signUp", "signUpResponse")
+            if(msg =="성공") {
                 signInEvent(SignInRequest(member.email, member.password))
+            }else{
+                MessageDialog(msg).show(supportFragmentManager, "MessageDialog")
             }
         }
-
     }
 
 

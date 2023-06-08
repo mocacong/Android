@@ -139,10 +139,9 @@ class ImageController(private val activity: AppCompatActivity, private val liste
             )
         } else {
             Log.d("CafeImage","멀티플 인텐트 보낸당")
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-
+//            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             imageLauncher.launch(Intent.createChooser(intent, "Select Image"))
 
         }

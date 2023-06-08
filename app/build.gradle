@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+
+
 android {
     namespace 'com.example.mocacong'
     compileSdk 33
@@ -15,6 +17,22 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+
+        release {
+
+            storeFile file('mocacong.jks') // 기준은 App 폴더 기준이다.
+
+            storePassword "mocacong"
+
+            keyAlias "mocacong"
+
+            keyPassword "mocacong"
+
+        }
+
     }
 
 
