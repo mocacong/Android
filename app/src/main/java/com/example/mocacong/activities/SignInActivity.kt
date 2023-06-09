@@ -8,6 +8,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.controllers.SignInController
+import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.SignInRequest
 import com.example.mocacong.databinding.ActivitySignInBinding
 import com.example.mocacong.ui.MessageDialog
@@ -68,7 +69,7 @@ class SignInActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val msg = async { controller.signIn(member) }.await()
             if(msg == "로그인 성공"){
-                Toast.makeText(this@SignInActivity, "로그인 성공. 환영합니다", Toast.LENGTH_SHORT).show()
+                Utils.showToast(this@SignInActivity,"로그인 성공. 환영합니다")
                 val intent = Intent(this@SignInActivity, MainActivity::class.java)
                 startActivity(intent)
             }else
@@ -82,8 +83,8 @@ class SignInActivity : AppCompatActivity() {
                 if (backButtonPressedOnce) finish()
                 else {
                     backButtonPressedOnce = true
-                    Toast.makeText(this@SignInActivity, "한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT)
-                        .show()
+
+                    Utils.showToast(this@SignInActivity,"한 번 더 누르면 종료됩니다")
                     lifecycleScope.launch {
                         delay(2000)
                         backButtonPressedOnce = false

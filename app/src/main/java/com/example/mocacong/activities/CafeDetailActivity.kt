@@ -6,15 +6,14 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.GridLayout
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.mocacong.R
 import com.example.mocacong.controllers.DetailController
+import com.example.mocacong.data.objects.Utils
+import com.example.mocacong.data.objects.Utils.intentSerializable
 import com.example.mocacong.data.request.CafeDetailRequest
 import com.example.mocacong.data.response.*
 import com.example.mocacong.databinding.ActivityCafeDetailBinding
@@ -72,7 +71,7 @@ class CafeDetailActivity : AppCompatActivity() {
                 if (isFav) controller.deleteFavorite(cafeId) else controller.postFavorite(cafeId)
             //통신 실패 했을 때 핸들링 필요
             isFav = !isFav
-            Toast.makeText(this@CafeDetailActivity, str, Toast.LENGTH_SHORT).show()
+            Utils.showToast(this@CafeDetailActivity, str)
         }
     }
 
@@ -110,7 +109,7 @@ class CafeDetailActivity : AppCompatActivity() {
                 setCommentsLayout(cafeData.comments, cafeData.commentsCount)
                 setCafeImagesView(cafeData.cafeImages)
             } else {
-                Toast.makeText(applicationContext, "카페 정보 불러오기 실패", Toast.LENGTH_SHORT).show()
+                Utils.showToast(this@CafeDetailActivity, "카페 정보 불러오기 실패")
             }
         }
     }
@@ -216,14 +215,6 @@ class CafeDetailActivity : AppCompatActivity() {
         } else {
             this.text = getString(R.string.plzRV)
             this.setTextColor(getColor(R.color.stroke))
-        }
-    }
-
-    private fun <T : Serializable> Intent.intentSerializable(key: String, clazz: Class<T>): T? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            this.getSerializableExtra(key, clazz)
-        } else {
-            this.getSerializableExtra(key) as T?
         }
     }
 

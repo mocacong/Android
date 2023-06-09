@@ -10,36 +10,35 @@ class DetailController {
     val api = RetrofitClient.create(CafeDetailAPI::class.java)
 
     suspend fun postCafe(cafe: CafeDetailRequest) {
-
         val response = api.postCafe(cafe)
         Log.d("POST cafe", "${response.raw()}")
     }
 
-    suspend fun getCafeDetail(id: String) :CafeResponse? {
+    suspend fun getCafeDetail(id: String): CafeResponse? {
         val response = api.getCafeResponse(cafeId = id)
-        return if(response.isSuccessful)
+        return if (response.isSuccessful)
             response.body()
-        else{
+        else {
             Log.d("Detail", "GET Error : ${response.errorBody()?.string()}")
             null
         }
     }
 
-    suspend fun postFavorite(id : String) : String{
+    suspend fun postFavorite(id: String): String {
         val response = api.postFavorite(cafeId = id)
-        return if(response.isSuccessful)
+        return if (response.isSuccessful)
             "즐겨찾기에 등록되었습니다"
-        else{
+        else {
             Log.d("Detail", "즐찾등록에러 : ${response.errorBody()?.string()}")
             "서버 오류"
         }
     }
 
-    suspend fun deleteFavorite(id : String) : String{
+    suspend fun deleteFavorite(id: String): String {
         val response = api.deleteFavorite(cafeId = id)
-        return if(response.isSuccessful)
+        return if (response.isSuccessful)
             "즐겨찾기에서 해제되었습니다"
-        else{
+        else {
             Log.d("Detail", "즐찾삭제에러 : ${response.errorBody()?.string()}")
             "서버 오류"
         }

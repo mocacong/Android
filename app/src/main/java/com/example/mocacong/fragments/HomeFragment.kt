@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
@@ -16,6 +15,7 @@ import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.activities.SearchActivity
 import com.example.mocacong.controllers.SearchController
 import com.example.mocacong.data.objects.RetrofitClient
+import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.FilteringRequest
 import com.example.mocacong.data.response.FilteringResponse
 import com.example.mocacong.data.response.Place
@@ -131,13 +131,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             }
             val filteredIds =
                 async { getFilteredIds(type, nonFilteredPlaces.keys.toList()) }.await()?.mapIds
-            if(filteredIds?.size==0) {
-                val msg = if(type=="solo") "혼카콩" else "모카콩"
-                Toast.makeText(
-                    requireContext(),
-                    "현재 지도 반경 500m 내 ${msg} 카페가 없습니다",
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (filteredIds?.size == 0) {
+                val msg = if (type == "solo") "혼카콩" else "모카콩"
+                Utils.showToast(requireContext(), "현재 지도 반경 500m 내 ${msg} 카페가 없습니다")
             }
             filteredIds?.forEach {
                 addMarker(nonFilteredPlaces[it])
@@ -157,7 +153,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             }
             val filteredIds =
                 async { getFavFilteredIds(nonFilteredPlaces.keys.toList()) }.await()?.mapIds
-            if(filteredIds?.size==0) Toast.makeText(requireContext(), "현재 지도 반경 500m 내 즐겨찾기 결과가 없습니다", Toast.LENGTH_SHORT).show()
+            if (filteredIds?.size == 0)
+                Utils.showToast(requireContext(), "현재 지도 반경 500m 내 즐겨찾기 결과가 없습니다")
             filteredIds?.forEach {
                 addMarker(nonFilteredPlaces[it])
             }

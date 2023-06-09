@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.controllers.SignUpController
+import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.SignInRequest
 import com.example.mocacong.data.request.SignUpRequest
 import com.example.mocacong.databinding.ActivitySignUpBinding
@@ -182,7 +183,7 @@ class SignUpActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val msg = async { controller.signIn(member) }.await()
             if(msg == "로그인 성공"){
-                Toast.makeText(this@SignUpActivity, "가입 성공. 환영합니다!", Toast.LENGTH_SHORT).show()
+                Utils.showToast(this@SignUpActivity,"가입 성공. 환영합니다!")
                 val intent = Intent(this@SignUpActivity, MainActivity::class.java)
                 startActivity(intent)
             }else{

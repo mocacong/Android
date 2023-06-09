@@ -1,6 +1,7 @@
 package com.example.mocacong.network
 
 import com.example.mocacong.data.objects.Member
+import com.example.mocacong.data.request.EditProfileRequest
 import com.example.mocacong.data.response.MypageCafesResponse
 import com.example.mocacong.data.response.ProfileResponse
 import okhttp3.MultipartBody
@@ -36,7 +37,11 @@ interface MyPageAPI {
         @Query("count") count: Int = 20
     ): Response<MypageCafesResponse>
 
-
+    @PUT("/members")
+    suspend fun editProfileInfo(
+        @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
+        @Body info : EditProfileRequest
+    ) : Response<Void>
     @Multipart
     @PUT("/members/mypage/img")
     suspend fun putMyProfileImage(

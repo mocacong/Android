@@ -2,27 +2,32 @@ package com.example.mocacong.activities
 
 
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.example.mocacong.controllers.ImageController
 import com.example.mocacong.data.objects.Member
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.response.ProfileResponse
 import com.example.mocacong.databinding.ActivityEditProfileBinding
 import com.example.mocacong.network.MyPageAPI
+import com.example.mocacong.ui.MessageDialog
+import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 
-class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedListener {
+class EditProfileActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityEditProfileBinding
     private val api = RetrofitClient.create(MyPageAPI::class.java)
-    lateinit var imgController: ImageController
     private var body: MultipartBody.Part? = null
 
 
@@ -37,7 +42,6 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
-        imgController = ImageController(this, this)
 
         setLayout()
         setContentView(binding.root)
@@ -50,6 +54,7 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
 
         binding.completeBtn.setOnClickListener {
             completeBtnClicked()
+            finish()
         }
         binding.cancelBtn.setOnClickListener {
             onBackPressed()
@@ -57,6 +62,10 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
 
         binding.logoutBtn.setOnClickListener {
             setLogoutBtn()
+        }
+
+        binding.gotoEditPasswordBtn.setOnClickListener {
+            MessageDialog("서비스 준비 중입니다.").show(supportFragmentManager, "MessageDialog")
         }
 
     }
@@ -69,18 +78,44 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
             putInfo()
             val intent = Intent(this@EditProfileActivity, MainActivity::class.java)
             intent.putExtra("tabNumber", 1)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
     }
 
     private fun putInfo() {
-
+//        lifecycleScope.launch {
+//            val message = async {
+//                val response = api.editProfileInfo()
+//                if(response.isSuccessful){
+//                    //로그인 성공
+//                    try {
+//                        Member.setAuthToken(response.body()!!.token)
+//                    }catch (e: NullPointerException){
+//                        Log.d("signIn", "성공했는데 responseBody 없음")
+//                    }
+//                    return "로그인 성공";
+//                }
+//                else{
+//                    //로그인 실패
+//                    val json = JSONObject(response.errorBody()?.string())
+//                    val code = json.getInt("code")
+//                    val msg = json.getString("message")
+//                    Log.d("signIn", "Error: $msg Code: $code")
+//                    return msg
+//                }
+//            }
+//        }
     }
 
     private fun setEditImgBtn() {
         binding.editImageBtn.setOnClickListener {
-            imgController.launchMultipleGallery()
-            binding.profileImg.setImageURI(imgController.getImageUrl())
+            TedImagePicker.with(this).start {
+                binding.profileImg.setImageURI(it)
+                val file = File(absolutePath(it))
+                val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
+                body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+            }
         }
     }
 
@@ -126,13 +161,16 @@ class EditProfileActivity : AppCompatActivity(), ImageController.ImageSelectedLi
         }
     }
 
+    private fun absolutePath(uri: Uri?): String {
+        val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        val c: Cursor? = contentResolver.query(uri!!, proj, null, null, null)
+        val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c?.moveToFirst()
 
-    override fun onImageSelected(body: MultipartBody.Part?) {
-        this.body = body
-    }
+        val result = c?.getString(index!!)
+        c?.close()
 
-    override fun onImageSelected(imageUri: Uri) {
-        binding.profileImg.setImageURI(imageUri)
+        return result!!
     }
 
 

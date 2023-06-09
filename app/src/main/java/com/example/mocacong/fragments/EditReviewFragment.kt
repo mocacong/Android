@@ -14,6 +14,7 @@ import com.example.mocacong.R
 import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.adapter.EditListAdapter
 import com.example.mocacong.data.objects.RetrofitClient
+import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.ReviewRequest
 import com.example.mocacong.data.response.MyReviewResponse
 import com.example.mocacong.data.response.ReviewResponse
@@ -21,6 +22,7 @@ import com.example.mocacong.databinding.FragmentEditReviewBinding
 import com.example.mocacong.network.CafeDetailAPI
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EditReviewFragment : BottomSheetDialogFragment() {
 
@@ -79,7 +81,7 @@ class EditReviewFragment : BottomSheetDialogFragment() {
 
     private fun setRecyclerLayout(myReview: MyReviewResponse?) {
         if (myReview == null) {
-            Toast.makeText(requireActivity(), "리뷰 정보 가져오기 실패", Toast.LENGTH_SHORT).show()
+            Utils.showToast(requireContext(),"리뷰 정보 가져오기 실패")
             setRecyclerLayout()
             return
         }

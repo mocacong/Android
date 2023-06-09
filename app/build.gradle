@@ -9,6 +9,14 @@ android {
     namespace 'com.example.mocacong'
     compileSdk 33
 
+    viewBinding {
+        enabled = true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.example.mocacong"
         minSdk 25
@@ -35,10 +43,6 @@ android {
 
     }
 
-
-    viewBinding {
-        enabled = true
-    }
 
     buildTypes {
         release {
@@ -86,4 +90,7 @@ dependencies {
 
     //이미지 변환
     implementation 'com.github.bumptech.glide:glide:4.15.1'
+
+    //이미지 피커
+    implementation 'io.github.ParkSangGwon:tedimagepicker:1.4.2'
 }

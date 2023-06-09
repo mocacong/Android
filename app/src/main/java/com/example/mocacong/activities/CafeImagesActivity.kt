@@ -1,28 +1,34 @@
 package com.example.mocacong.activities
 
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.mocacong.adapter.ImageAdapter
-import com.example.mocacong.controllers.ImageController
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.response.CafeImage
 import com.example.mocacong.data.response.CafeImageResponse
 import com.example.mocacong.databinding.ActivityCafeImagesBinding
 import com.example.mocacong.network.CafeImagesAPI
+import gun0912.tedimagepicker.builder.TedImagePicker
+import gun0912.tedimagepicker.builder.type.MediaType
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 
-class CafeImagesActivity : AppCompatActivity(), ImageController.ImageSelectedListener {
+class CafeImagesActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityCafeImagesBinding
 
     private lateinit var adapter: ImageAdapter
     private lateinit var cafeId: String
-    private lateinit var imageController: ImageController
     private val imageUriList = mutableListOf<CafeImage>()
     private var currentPage = 0
     private var isEnd = false
@@ -33,7 +39,6 @@ class CafeImagesActivity : AppCompatActivity(), ImageController.ImageSelectedLis
         super.onCreate(savedInstanceState)
 
         binding = ActivityCafeImagesBinding.inflate(layoutInflater)
-        imageController = ImageController(this, this)
 
         getCafeId()
         setLayout()
@@ -47,9 +52,10 @@ class CafeImagesActivity : AppCompatActivity(), ImageController.ImageSelectedLis
 
     private fun setLayout() {
         lifecycleScope.launch {
-            val response = getCafeImages(page = currentPage++)
+            val response = async { getCafeImages(page = currentPage++) }.await()
             if (response != null) {
                 imageUriList.addAll(response.cafeImages)
+
                 isEnd = response.isEnd
                 adapter = ImageAdapter(imageUriList)
                 binding.recyclerView.adapter = adapter
@@ -75,7 +81,22 @@ class CafeImagesActivity : AppCompatActivity(), ImageController.ImageSelectedLis
 
     private fun addImage() {
         // 이미지 선택
-        imageController.launchMultipleGallery()
+//        imageController.launchMultipleGallery()
+        val picker = TedImagePicker.with(this)
+        picker.apply {
+            mediaType(MediaType.IMAGE)
+            max(3, "이미지는 최대 3장까지 선택 가능합니다.")
+        }.startMultiImage { selectedImages ->
+
+            val parts = selectedImages.map { uri ->
+                Log.d("CafeImage", "uri : $uri")
+                val file = File(absolutePath(uri))
+                val requestFile = RequestBody.create(okhttp3.MediaType.parse("image/*"), file)
+                Log.d("Image", "files에 추가됐따!!!!!!!!!!!!!!!!!! ${file.name}")
+                MultipartBody.Part.createFormData("files", file.name, requestFile)
+            }
+            onImageSelected(parts)
+        }
     }
 
 
@@ -124,22 +145,33 @@ class CafeImagesActivity : AppCompatActivity(), ImageController.ImageSelectedLis
         }
     }
 
-    override fun onImageSelected(imageParts: List<MultipartBody.Part>) {
-        if (imageParts != null) {
-            lifecycleScope.launch {
-                postCafeImage(imageParts)
-                imageUriList.clear()
-                currentPage = 0
-                val response = getCafeImages(page = currentPage++)
-                if (response != null) {
-                    imageUriList.addAll(response.cafeImages)
-                    adapter.notifyDataSetChanged()
-                    isEnd = response.isEnd
-                    binding.progressBar.visibility = View.GONE
-                }
+    private fun onImageSelected(imageParts: List<MultipartBody.Part>) {
+        lifecycleScope.launch {
+            async { postCafeImage(imageParts) }.await()
+            imageUriList.clear()
+            currentPage = 0
+            val response = async { getCafeImages(page = currentPage++) }.await()
+            if (response != null) {
+                imageUriList.addAll(response.cafeImages)
+                adapter.notifyDataSetChanged()
+                isEnd = response.isEnd
+                binding.progressBar.visibility = View.GONE
             }
         }
     }
+
+    private fun absolutePath(uri: Uri?): String {
+        val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        val c: Cursor? = contentResolver.query(uri!!, proj, null, null, null)
+        val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c?.moveToFirst()
+
+        val result = c?.getString(index!!)
+        c?.close()
+
+        return result!!
+    }
+
 
 }
 
