@@ -10,13 +10,12 @@
     <TextView
         android:id="@+id/labelText"
         style="@style/textStyle"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="30dp"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.3"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/radioGroup"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup

@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
-import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.activities.SearchActivity
 import com.example.mocacong.controllers.SearchController
 import com.example.mocacong.data.objects.RetrofitClient
@@ -20,7 +19,7 @@ import com.example.mocacong.data.request.FilteringRequest
 import com.example.mocacong.data.response.FilteringResponse
 import com.example.mocacong.data.response.Place
 import com.example.mocacong.databinding.FragmentHomeBinding
-import com.example.mocacong.network.MapFilteringAPI
+import com.example.mocacong.network.MapApi
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
@@ -161,8 +160,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+
     private suspend fun getFilteredIds(type: String, ids: List<String>): FilteringResponse? {
-        val filteringApi = RetrofitClient.create(MapFilteringAPI::class.java)
+        val filteringApi = RetrofitClient.create(MapApi::class.java)
         val req = FilteringRequest(ids)
         Log.d("filtering", "필터링 보낸다 나 stt : $type, req : $req")
         val response = filteringApi.getFilteredCafes(studyType = type, filteringRequest = req)
@@ -176,7 +176,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private suspend fun getFavFilteredIds(ids: List<String>): FilteringResponse? {
-        val filteringApi = RetrofitClient.create(MapFilteringAPI::class.java)
+        val filteringApi = RetrofitClient.create(MapApi::class.java)
         val req = FilteringRequest(ids)
         Log.d("filtering", "필터링 보낸다 나 stt :  req : $req")
         val response = filteringApi.getFavCafes(filteringRequest = req)
@@ -243,7 +243,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         gotoSearchedPlace()
     }
 
-    private fun revertMarker() {
+    fun revertMarker() {
         if (clickedMarker != null) {
             clickedMarker!!.icon = markerImg
             clickedMarker!!.captionColor = Color.BLACK
@@ -279,11 +279,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             marker.setOnClickListener {
                 if (marker.tag == 0) {
                     markerFirstClicked(marker)
+                    createPreview(place)
                     //마커 한 번 클릭
-                } else {
-                    //두 번 클릭
-                    revertMarker()
-                    gotoDetailActivity(place)
                 }
                 true
             }
@@ -306,11 +303,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             marker.setOnClickListener {
                 if (marker.tag == 0) {
                     markerFirstClicked(marker)
+                    createPreview(place)
                     //마커 한 번 클릭
-                } else {
-                    //두 번 클릭
-                    revertMarker()
-                    gotoDetailActivity(place)
                 }
                 true
             }
@@ -318,18 +312,19 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun createPreview(cafe: Place) {
+        val previewFragment = CafePreviewFragment.newInstance(cafe)
+        previewFragment.show(childFragmentManager, "CafePreviewFragment")
+    }
+
+
     private fun markerFirstClicked(marker: Marker) {
         revertMarker()
         clickedMarker = marker
         marker.captionColor = Color.GREEN
         marker.icon = Marker.DEFAULT_ICON
         marker.tag = 1
-    }
 
-    private fun gotoDetailActivity(cafe: Place) {
-        val intent = Intent(activity, CafeDetailActivity::class.java)
-        intent.putExtra("cafe", cafe)
-        startActivity(intent)
     }
 
 

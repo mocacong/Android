@@ -2,6 +2,8 @@ package com.example.mocacong.activities
 
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
@@ -41,6 +43,16 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
         }
+
+        binding.searchText.setOnKeyListener { _, code, keyEvent ->
+            if((keyEvent.action == KeyEvent.ACTION_DOWN) && (code == KeyEvent.KEYCODE_ENTER)){
+                (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(binding.searchText.windowToken, 0)
+                true
+            }
+            false
+        }
+
+        binding.searchText.performClick()
     }
 
 

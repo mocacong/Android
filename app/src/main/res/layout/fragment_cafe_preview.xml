@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppBottomSheetDialogTheme"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_bottom_sheet"
+    android:padding="20dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    tools:context=".fragments.CafePreviewFragment">
+
+    <TextView
+        android:id="@+id/cafeNameText"
+        style="@style/textStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="250dp"
+        android:gravity="left|center"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/congImg"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/true_cong"
+        app:layout_constraintBottom_toBottomOf="@id/cafeNameText"
+        app:layout_constraintLeft_toRightOf="@id/cafeNameText"
+        app:layout_constraintTop_toTopOf="@id/cafeNameText" />
+
+    <TextView
+        android:id="@+id/scoreText"
+        style="@style/textStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" x 0.0"
+        app:layout_constraintBottom_toBottomOf="@id/congImg"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintLeft_toRightOf="@id/congImg"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/congImg" />
+
+    <TextView
+        android:id="@+id/reviewCountText"
+        style="@style/textStyle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_circle"
+        android:backgroundTint="@color/stroke"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/cafeNameText"
+        app:layout_constraintTop_toBottomOf="@id/cafeNameText" />
+
+    <ImageView
+        android:id="@+id/studyTypeIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/shape_circle"
+        android:backgroundTint="@color/stroke"
+        app:layout_constraintBottom_toBottomOf="@id/reviewCountText"
+        app:layout_constraintLeft_toRightOf="@id/reviewCountText"
+        app:layout_constraintTop_toTopOf="@id/reviewCountText" />
+
+    <ImageView
+        android:id="@+id/favIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:src="@drawable/preview_icon_empty_heart"
+        app:layout_constraintBottom_toBottomOf="@id/studyTypeIcon"
+        app:layout_constraintLeft_toRightOf="@id/studyTypeIcon"
+        app:layout_constraintTop_toTopOf="@id/studyTypeIcon" />
+
+    <TextView
+        style="@style/textStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="reviews"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toLeftOf="@id/reviewCountText"
+        app:layout_constraintRight_toRightOf="@id/reviewCountText"
+        app:layout_constraintTop_toBottomOf="@id/reviewCountText" />
+
+    <TextView
+        android:id="@+id/studyTypeText"
+        style="@style/textStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="group &amp; solo\ncoding"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toLeftOf="@id/studyTypeIcon"
+        app:layout_constraintRight_toRightOf="@id/studyTypeIcon"
+        app:layout_constraintTop_toBottomOf="@id/studyTypeIcon" />
+
+    <TextView
+        style="@style/textStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="favorite"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toLeftOf="@id/favIcon"
+        app:layout_constraintRight_toRightOf="@id/favIcon"
+        app:layout_constraintTop_toBottomOf="@id/favIcon" />
+
+
+    <ImageView
+        android:id="@+id/locIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/detail_location"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/studyTypeText"
+        app:tint="@color/darkBrown" />
+
+    <TextView
+        android:id="@+id/addressText"
+        style="@style/textStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="주소 정보 없음"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/locIcon"
+        app:layout_constraintLeft_toRightOf="@id/locIcon"
+        app:layout_constraintTop_toTopOf="@id/locIcon" />
+
+
+    <ImageView
+        android:id="@+id/callIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/detail_call"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locIcon"
+        app:tint="@color/darkBrown" />
+
+    <TextView
+        android:id="@+id/callText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="전화번호 정보 없음"
+        android:textColor="@color/darkBrown"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/callIcon"
+        app:layout_constraintLeft_toLeftOf="@id/addressText"
+        app:layout_constraintTop_toTopOf="@id/callIcon" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

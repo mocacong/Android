@@ -7,12 +7,12 @@ object CafeDetailData {
     val levels : HashMap<String, Array<String>> = HashMap()
 
     init {
-        labels["wifi"] = "와이파이는"
-        labels["parking"] = "주차장은"
-        labels["toilet"] = "화장실은"
-        labels["desk"] = "책상은"
-        labels["power"] = "콘센트는"
-        labels["sound"] = "분위기는"
+        labels["wifi"] =    "와이파이는"
+        labels["parking"] = " 주차장은 "
+        labels["toilet"] =  " 화장실은 "
+        labels["desk"] =    "  책상은  "
+        labels["power"] =   " 콘센트는 "
+        labels["sound"] =   " 분위기는 "
 
         levels["wifi"] = arrayOf("빵빵해요", "적당해요", "느려요")
         levels["parking"] = arrayOf("여유로워요", "협소해요", "없어요")

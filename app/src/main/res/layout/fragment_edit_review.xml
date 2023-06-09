@@ -36,12 +36,12 @@
         <TextView
             android:id="@+id/score"
             style="@style/textStyle"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="평점"
+            android:text="*평점*"
+            android:layout_marginLeft="30dp"
             app:layout_constraintBottom_toBottomOf="@id/ratingBar"
-            app:layout_constraintLeft_toLeftOf="@id/typeLabel"
-            app:layout_constraintRight_toRightOf="@id/typeLabel"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/ratingBar" />
 
         <com.willy.ratingbar.ScaleRatingBar
@@ -70,14 +70,13 @@
         <TextView
             android:id="@+id/typeLabel"
             style="@style/textStyle"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="코딩 타입"
+            android:text="*코딩 타입*"
             app:layout_constraintBaseline_toBaselineOf="@id/soloBtn"
-            app:layout_constraintHorizontal_bias="0"
+            android:layout_marginLeft="30dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/soloBtn"
-            app:layout_constraintWidth_percent="0.3" />
+            />
 
         <com.example.mocacong.ui.CustomButton
             android:id="@+id/soloBtn"

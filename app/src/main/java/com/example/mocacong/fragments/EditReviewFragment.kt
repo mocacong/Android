@@ -5,12 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mocacong.R
 import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.adapter.EditListAdapter
 import com.example.mocacong.data.objects.RetrofitClient
@@ -20,7 +16,9 @@ import com.example.mocacong.data.response.MyReviewResponse
 import com.example.mocacong.data.response.ReviewResponse
 import com.example.mocacong.databinding.FragmentEditReviewBinding
 import com.example.mocacong.network.CafeDetailAPI
+import com.example.mocacong.ui.MessageDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -32,11 +30,8 @@ class EditReviewFragment : BottomSheetDialogFragment() {
 
     private val api = RetrofitClient.create(CafeDetailAPI::class.java)
 
-    lateinit var cafeId: String
-    var isFirst = true
-    var soloClicked = false
-    var groupClicked = false
-
+    private lateinit var cafeId: String
+    private var isFirst = true
 
 
     override fun onCreateView(
@@ -53,18 +48,17 @@ class EditReviewFragment : BottomSheetDialogFragment() {
 
     private fun setLayout() {
         lifecycleScope.launch {
-            val myReview = getMyReview()
+            val myReview =
+                withContext(Dispatchers.Default) { getMyReview() }
             if (myReview != null) {
-                Log.d("Cafe","리뷰 정보 가져오기 성공 : ${myReview}")
+                Log.d("Cafe", "리뷰 정보 가져오기 성공 : ${myReview}")
                 setRecyclerLayout(myReview)
             } else {
-                Log.d("Cafe","등록된 리뷰 없음")
+                Log.d("Cafe", "등록된 리뷰 없음")
                 setRecyclerLayout()
             }
         }
-
     }
-
 
 
     private suspend fun getMyReview(): MyReviewResponse? {
@@ -81,7 +75,7 @@ class EditReviewFragment : BottomSheetDialogFragment() {
 
     private fun setRecyclerLayout(myReview: MyReviewResponse?) {
         if (myReview == null) {
-            Utils.showToast(requireContext(),"리뷰 정보 가져오기 실패")
+            Utils.showToast(requireContext(), "리뷰 정보 가져오기 실패")
             setRecyclerLayout()
             return
         }
@@ -91,14 +85,14 @@ class EditReviewFragment : BottomSheetDialogFragment() {
         binding.ratingBar.rating = myReview.myScore
 
         //혼자같이
-        when(myReview.myStudyType){
-            "solo"->{
+        when (myReview.myStudyType) {
+            "solo" -> {
                 binding.soloBtn.performClick()
             }
-            "group"->{
+            "group" -> {
                 binding.withBtn.performClick()
             }
-            "both"->{
+            "both" -> {
                 binding.soloBtn.performClick()
                 binding.withBtn.performClick()
             }
@@ -117,7 +111,7 @@ class EditReviewFragment : BottomSheetDialogFragment() {
         binding.editRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.editRecyclerView.adapter = adapter
-        Log.d("Cafe","어댑터 부착 완료")
+        Log.d("Cafe", "어댑터 부착 완료")
 
     }
 
@@ -132,8 +126,15 @@ class EditReviewFragment : BottomSheetDialogFragment() {
         binding.completeBtn.setOnClickListener {
             //post
             lifecycleScope.launch {
+                if(binding.ratingBar.rating==0f) {
+                    MessageDialog("평점은 1~5점으로 남겨주세요!").show(childFragmentManager, "MessageDialog")
+                    return@launch
+                }
+                if(getStudyType()==""){
+                    MessageDialog("코딩 타입을 남겨주세요!").show(childFragmentManager, "MessageDialog")
+                    return@launch
+                }
                 val refreshData = if (isFirst) postReview() else putReview()
-
                 (activity as CafeDetailActivity).refreshDetailInfo(refreshData)
                 dismiss()
             }
@@ -142,6 +143,7 @@ class EditReviewFragment : BottomSheetDialogFragment() {
         binding.cancelBtn.setOnClickListener {
             dismiss()
         }
+
 
     }
 
@@ -167,15 +169,15 @@ class EditReviewFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun getStudyType() : String {
-        if(binding.soloBtn.isButtonClicked() && binding.withBtn.isButtonClicked()){
-            return "both"
-        }else if(binding.soloBtn.isButtonClicked()){
-            return "solo"
-        }else if(binding.withBtn.isButtonClicked()){
-            return "group"
-        }else
-            return ""
+    private fun getStudyType(): String {
+        return if (binding.soloBtn.isButtonClicked() && binding.withBtn.isButtonClicked()) {
+            "both"
+        } else if (binding.soloBtn.isButtonClicked()) {
+            "solo"
+        } else if (binding.withBtn.isButtonClicked()) {
+            "group"
+        } else
+            ""
     }
 
 

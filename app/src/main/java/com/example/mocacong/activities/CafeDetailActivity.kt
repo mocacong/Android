@@ -143,7 +143,7 @@ class CafeDetailActivity : AppCompatActivity() {
             cmtViews[i].visibility = View.VISIBLE
             cmtViews[i].setComment(comments[i].content)
             cmtViews[i].setMyComment(comments[i].isMe)
-            cmtViews[i].setNickname(comments[i].nickname)
+            comments[i].nickname?.let { cmtViews[i].setNickname(it) }
             comments[i].imgUrl?.let {
                 cmtViews[i].setProfileImage(Uri.parse(it))
             }
