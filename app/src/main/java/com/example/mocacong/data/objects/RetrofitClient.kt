@@ -1,5 +1,9 @@
 package com.example.mocacong.data.objects
 
+import android.util.Log
+import com.google.gson.GsonBuilder
+import okhttp3.*
+import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -10,15 +14,42 @@ object RetrofitClient {
 //    private const val BASE_URL = "http://localhost:8080/"
 //    private const val BASE_URL = "http://mocacong.com/"
 
-    // Retrofit 객체 생성
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
+    //interceptor 생성
+    private val interceptorClient = OkHttpClient().newBuilder()
+        .addInterceptor(ResponseInterceptor())
         .build()
+
+    // Retrofit 객체 생성
+    val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .client(interceptorClient)
+        .addConverterFactory(GsonConverterFactory.create(
+            GsonBuilder()
+            .setLenient()
+            .create()))
+        .build()
+
 
     // API 인터페이스 반환
     fun <T> create(service: Class<T>): T {
         return retrofit.create(service)
+    }
+}
+
+class ResponseInterceptor : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request()
+        val response = chain.proceed(request)
+
+        return if (response.isSuccessful) response
+        else {
+            val errorJson = JSONObject(response.peekBody(2048).string())
+            val code = errorJson.getInt("code")
+            val message = errorJson.getString("message")
+            Log.d("interceptor", "Network Error 발생! code = $code, message = $message")
+
+            response
+        }
     }
 
 }

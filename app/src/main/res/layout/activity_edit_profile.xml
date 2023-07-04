@@ -150,29 +150,6 @@
             app:layout_constraintLeft_toRightOf="@id/guideline"
             app:layout_constraintRight_toRightOf="parent" />
 
-        <TextView
-            android:id="@+id/phoneLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="40dp"
-            android:text="전화번호"
-            android:textColor="@color/black"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emailLabel" />
-
-        <EditText
-            android:id="@+id/phoneText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:backgroundTint="@color/jingray"
-            android:inputType="phone"
-            android:textColor="@color/black"
-            app:layout_constraintBaseline_toBaselineOf="@id/phoneLabel"
-            app:layout_constraintLeft_toRightOf="@id/guideline"
-            app:layout_constraintRight_toRightOf="parent" />
-
 
         <Button
             android:id="@+id/gotoEditPasswordBtn"
@@ -183,7 +160,7 @@
             android:background="@drawable/selector_btn"
             android:text="비밀번호 변경"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/phoneLabel" />
+            app:layout_constraintTop_toBottomOf="@id/emailLabel" />
 
         <Button
             android:id="@+id/logoutBtn"

@@ -249,42 +249,6 @@
             app:layout_constraintRight_toRightOf="@id/rightline"
             app:layout_constraintTop_toBottomOf="@id/pw2Text" />
 
-        <TextView
-            android:id="@+id/phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Phone"
-            android:textColor="@color/darkBrown"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintLeft_toLeftOf="@id/leftline"
-            app:layout_constraintRight_toRightOf="@id/rightline"
-            app:layout_constraintTop_toBottomOf="@id/pw2Text" />
-
-        <EditText
-            android:id="@+id/phoneText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/mocaBrown"
-            android:inputType="phone"
-            android:maxLines="1"
-            android:textColor="@color/darkBrown"
-            app:layout_constraintLeft_toLeftOf="@id/leftline"
-            app:layout_constraintRight_toRightOf="@id/rightline"
-            app:layout_constraintTop_toBottomOf="@id/phone" />
-
-        <TextView
-            android:id="@+id/phoneConfirmText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="전화번호 형식에 맞게 입력해주세요"
-            android:textColor="@color/red"
-            android:textSize="13sp"
-            android:visibility="invisible"
-            app:layout_constraintLeft_toLeftOf="@id/leftline"
-            app:layout_constraintRight_toRightOf="@id/rightline"
-            app:layout_constraintTop_toBottomOf="@id/phoneText" />
-
 
         <Button
             android:id="@+id/registerBtn"
@@ -296,7 +260,7 @@
             android:textColor="@color/white"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
             app:layout_constraintRight_toLeftOf="@id/rightline"
-            app:layout_constraintTop_toBottomOf="@id/phoneText" />
+            app:layout_constraintTop_toBottomOf="@id/pw2Text" />
 
         <Button
             android:id="@+id/cancelBtn"

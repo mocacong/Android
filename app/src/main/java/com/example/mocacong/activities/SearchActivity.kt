@@ -25,8 +25,8 @@ class SearchActivity : AppCompatActivity() {
 
         controller = SearchController()
         adapter = SearchCafeAdapter()
-        layoutInit()
 
+        layoutInit()
     }
 
     private fun layoutInit() {

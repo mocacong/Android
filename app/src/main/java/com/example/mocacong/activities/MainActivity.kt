@@ -14,6 +14,8 @@ import com.example.mocacong.databinding.ActivityMainBinding
 import com.example.mocacong.fragments.HomeFragment
 import com.example.mocacong.fragments.MypageFragment
 import com.example.mocacong.fragments.SettingsFragment
+import com.example.mocacong.network.ServerNetworkException
+import com.example.mocacong.ui.MessageDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -28,8 +30,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setBackBtn()
-        setBottomNav()
+        try {
+            setBackBtn()
+            setBottomNav()
+        } catch (e: ServerNetworkException) {
+            MessageDialog(e.responseMessage)
+        }
     }
 
     private fun setBackBtn() {

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +12,7 @@ import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.SignInRequest
 import com.example.mocacong.data.request.SignUpRequest
 import com.example.mocacong.databinding.ActivitySignUpBinding
+import com.example.mocacong.network.ServerNetworkException
 import com.example.mocacong.ui.MessageDialog
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -25,7 +25,6 @@ class SignUpActivity : AppCompatActivity() {
     private var isNicknameChecked = false
     private var isPasswordChecked = false
     private var isPasswordEqual = false
-    private var isPhoneChecked = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +32,12 @@ class SignUpActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         controller = SignUpController()
-        initLayout()
+
+        try {
+            initLayout()
+        }catch (e: ServerNetworkException){
+            MessageDialog(e.responseMessage)
+        }
     }
 
     private fun initLayout() {
@@ -99,24 +103,12 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
 
-        binding.phoneText.addTextChangedListener {
-            binding.phoneConfirmText.visibility =
-                if (controller.phoneRegex(binding.phoneText.text.toString())) {
-                    isPhoneChecked = true
-                    View.INVISIBLE
-                } else {
-                    isPhoneChecked = false
-                    View.VISIBLE
-                }
-        }
-
         //가입하기 버튼 클릭 이벤트
         binding.registerBtn.setOnClickListener {
             val msg = checkInputText()
             if (msg == "") {
                 val member = SignUpRequest(
                     binding.emailText.text.toString(),
-                    binding.phoneText.text.toString(),
                     binding.pwText.text.toString(),
                     binding.nicknameText.text.toString()
                 )
@@ -138,7 +130,6 @@ class SignUpActivity : AppCompatActivity() {
         if (!isNicknameChecked) return "닉네임을 확인해주세요"
         if (!isPasswordChecked) return "비밀번호 형식을 확인해주세요"
         if (!isPasswordEqual) return "비밀번호를 확인해주세요"
-        if (!isPhoneChecked) return "전화번호를 확인해주세요"
         return ""
     }
 
@@ -146,7 +137,9 @@ class SignUpActivity : AppCompatActivity() {
     private fun checkEmail(email: String) {
         lifecycleScope.launch {
             binding.progressBar.visibility = View.VISIBLE
-            val isDuplicated = async { controller.emailConfirm(email) }.await()
+            val isDuplicated = async {
+                controller.emailConfirm(email)
+            }.await()
             binding.progressBar.visibility = View.GONE
             val message =
                 if (isDuplicated) {

@@ -16,6 +16,8 @@ import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.response.ProfileResponse
 import com.example.mocacong.databinding.FragmentMypageBinding
 import com.example.mocacong.network.MyPageAPI
+import com.example.mocacong.network.ServerNetworkException
+import com.example.mocacong.ui.MessageDialog
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 
@@ -30,6 +32,7 @@ class MypageFragment : Fragment() {
     ): View {
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
 
+
         setInitialFragment()
         setTabLayout()
         setLayout()
@@ -42,23 +45,29 @@ class MypageFragment : Fragment() {
             val intent = Intent(requireContext(), EditProfileActivity::class.java)
             startActivity(intent)
         }
-        setProfileInfo()
     }
 
-    private fun setProfileInfo(){
+    override fun onResume() {
+        super.onResume()
+        try {
+            setProfileInfo()
+        } catch (e: ServerNetworkException) {
+            MessageDialog(e.responseMessage)
+        }
+    }
+
+    private fun setProfileInfo() {
         lifecycleScope.launch {
             val response = getProfile()
             response?.let {
                 binding.nickNameText.text = it.nickname
                 Member.nickname = it.nickname
-                Member.phone = it.phone
                 Member.email = it.email
 
-                if(it.imgUrl == null) {
+                if (it.imgUrl == null) {
                     binding.profileImg.setImageResource(R.drawable.profile_no_image)
                     Member.imgUrl = null
-                }
-                else {
+                } else {
                     Glide.with(this@MypageFragment).load(it.imgUrl).into(binding.profileImg)
                     Member.imgUrl = it.imgUrl
                 }
@@ -73,7 +82,6 @@ class MypageFragment : Fragment() {
             Log.d("myPage", "프로필 조회 성공 : ${response.body()}")
             response.body()
         } else {
-            Log.d("myPage", "프로필 조회 실패 : ${response.errorBody()?.string()}")
             null
         }
     }
@@ -113,10 +121,8 @@ class MypageFragment : Fragment() {
     }
 
 
-
-
     private fun getFragment(position: Int): Fragment {
-        Log.d("Mypage","getFragment $position")
+        Log.d("Mypage", "getFragment $position")
         return when (position) {
             0 -> MyFavoritesFragment()
             1 -> MyReviewsFragment()

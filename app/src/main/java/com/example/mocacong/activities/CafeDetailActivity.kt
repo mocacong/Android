@@ -2,40 +2,47 @@ package com.example.mocacong.activities
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import com.bumptech.glide.Glide
 import com.example.mocacong.R
-import com.example.mocacong.controllers.DetailController
+import com.example.mocacong.data.objects.Member
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.objects.Utils.intentSerializable
-import com.example.mocacong.data.request.CafeDetailRequest
 import com.example.mocacong.data.response.*
+import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.databinding.ActivityCafeDetailBinding
 import com.example.mocacong.fragments.EditReviewFragment
 import com.example.mocacong.fragments.WriteCommentFragment
+import com.example.mocacong.repositories.CafeDetailRepository
 import com.example.mocacong.ui.MessageDialog
+import com.example.mocacong.viewmodels.CafeDetailViewModel
 import kotlinx.coroutines.launch
-import java.io.Serializable
 
 class CafeDetailActivity : AppCompatActivity() {
+    private val TAG = this.javaClass.simpleName
 
-    private val controller: DetailController = DetailController()
     private lateinit var binding: ActivityCafeDetailBinding
     private lateinit var cafeId: String
     private lateinit var cafe: Place
     private var isFirst: Boolean = false
     private var isFav = false
+    private var isFavLoading = false
+
+    private lateinit var viewModel: CafeDetailViewModel
+    private lateinit var viewModelFactory: CafeDetailViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCafeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModelFactory = CafeDetailViewModelFactory(CafeDetailRepository())
+        viewModel = ViewModelProvider(this, viewModelFactory)[CafeDetailViewModel::class.java]
 
         getCafeInfo()
         setLayout()
@@ -66,12 +73,39 @@ class CafeDetailActivity : AppCompatActivity() {
     }
 
     private fun favoriteClicked() {
+        if (isFavLoading)
+            return
         lifecycleScope.launch {
-            val str =
-                if (isFav) controller.deleteFavorite(cafeId) else controller.postFavorite(cafeId)
-            //통신 실패 했을 때 핸들링 필요
-            isFav = !isFav
-            Utils.showToast(this@CafeDetailActivity, str)
+            isFavLoading = true
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                viewModel.apply {
+                    requestFavoritePost(cafeId, !isFav)
+                    postFavoriteFlow.collect {
+                        when (it) {
+                            is ApiState.Success -> {
+                                val msg = if (isFav) "즐겨찾기에서 해제되었습니다." else "즐겨찾기에 등록되었습니다"
+                                Utils.showToast(this@CafeDetailActivity, msg)
+                                isFav = !isFav
+
+                                isFavLoading = false
+                                return@collect
+                            }
+                            is ApiState.Error -> {
+                                it.errorResponse?.let { er ->
+                                    handleTokenException(er)
+                                    Log.e(TAG, er.message)
+                                }
+                                mPostFavoriteFlow.value = ApiState.Loading()
+                                isFavLoading = false
+                                return@collect
+                            }
+                            is ApiState.Loading -> {
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -91,34 +125,79 @@ class CafeDetailActivity : AppCompatActivity() {
     private fun getCafeInfo() {
         cafe = intent.intentSerializable("cafe", Place::class.java)!!
         cafeId = cafe.id
+        setBasicInfo(cafe)
 
         Log.d("cafe", "cafeID = $cafeId")
 
-        val postRequest = CafeDetailRequest(cafeId, cafe.place_name)
         lifecycleScope.launch {
-            controller.postCafe(postRequest)
-            val cafeData = controller.getCafeDetail(cafe.id)
-
-            setBasicInfo(cafe)
-
-            if (cafeData != null) {
-                Log.d("Detail", cafeData.toString())
-                if (cafeData.myScore == 0) isFirst = true
-                isFav = cafeData.favorite
-                setDetailInfoLayout(cafeData)
-                setCommentsLayout(cafeData.comments, cafeData.commentsCount)
-                setCafeImagesView(cafeData.cafeImages)
-            } else {
-                Utils.showToast(this@CafeDetailActivity, "카페 정보 불러오기 실패")
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.apply {
+                    requestCafeDetailInfo(cafeId)
+                    cafeDatailInfoFlow.collect {
+                        when (it) {
+                            is ApiState.Success -> {
+                                Log.d(TAG, "Cafe Detail get 성공")
+                                it.data?.let { cafeData ->
+                                    if (cafeData.myScore == 0) isFirst = true
+                                    isFav = cafeData.favorite
+                                    setDetailInfoLayout(cafeData)
+                                    setCommentsLayout(cafeData.comments, cafeData.commentsCount)
+                                    setCafeImagesView(cafeData.cafeImages)
+                                }
+                                return@collect
+                            }
+                            is ApiState.Error -> {
+                                it.errorResponse?.let { errorResponse ->
+                                    handleTokenException(errorResponse)
+                                    Log.e(TAG, errorResponse.message)
+                                }
+                                mCafeDetailInfosFlow.value = ApiState.Loading()
+                            }
+                            is ApiState.Loading -> {}
+                        }
+                    }
+                }
             }
         }
     }
 
+    private fun handleTokenException(errorResponse: ErrorResponse) {
+        when (errorResponse.code) {
+            1013 -> {
+                Utils.showConfirmDialog(this@CafeDetailActivity,
+                    "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?",
+                    confirmAction = {
+                        gotoSignInActivity()
+                    },
+                    cancelAction = {
+
+                    }
+                )
+            }
+            1014 or 1015 -> {
+                Utils.showConfirmDialog(this@CafeDetailActivity,
+                    errorResponse.message,
+                    confirmAction = {
+                        gotoSignInActivity()
+                    },
+                    cancelAction = {
+
+                    }
+                )
+            }
+        }
+    }
+
+    private fun gotoSignInActivity() {
+        val intent = Intent(this, SignInActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+    }
+
     private fun setCafeImagesView(cafeImages: List<CafeImage>) {
         val grid = binding.imagesGridLayout
-
-        if(cafeImages.isEmpty()) return
-
+        if (cafeImages.isEmpty()) return
         val uri = Uri.parse(cafeImages[0].imageUrl)
         if (uri == null) grid.setImageResource(R.drawable.profile_no_image)
         else Glide.with(this).load(uri).into(grid)
@@ -218,5 +297,18 @@ class CafeDetailActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
+
 }
 
+class CafeDetailViewModelFactory(private val cafeDetailRepository: CafeDetailRepository) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return modelClass.getConstructor(cafeDetailRepository::class.java)
+            .newInstance(cafeDetailRepository)
+    }
+}

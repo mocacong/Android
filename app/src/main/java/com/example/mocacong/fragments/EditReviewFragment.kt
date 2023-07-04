@@ -16,6 +16,7 @@ import com.example.mocacong.data.response.MyReviewResponse
 import com.example.mocacong.data.response.ReviewResponse
 import com.example.mocacong.databinding.FragmentEditReviewBinding
 import com.example.mocacong.network.CafeDetailAPI
+import com.example.mocacong.network.ServerNetworkException
 import com.example.mocacong.ui.MessageDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.Dispatchers
@@ -40,8 +41,13 @@ class EditReviewFragment : BottomSheetDialogFragment() {
         _binding = FragmentEditReviewBinding.inflate(inflater, container, false)
 
         cafeId = arguments?.getString("cafeId")!!
-        setLayout()
-        setListeners()
+
+        try {
+            setLayout()
+            setListeners()
+        } catch (e: ServerNetworkException) {
+            MessageDialog(e.responseMessage)
+        }
 
         return binding.root
     }
@@ -67,7 +73,6 @@ class EditReviewFragment : BottomSheetDialogFragment() {
             Log.d("Cafe", "리뷰 겟 성공 : ${response.body()}")
             return response.body()
         } else {
-            Log.d("Cafe", "나의리뷰 GET ERROR : ${response.errorBody()?.string()}")
             return null
         }
     }
@@ -126,11 +131,11 @@ class EditReviewFragment : BottomSheetDialogFragment() {
         binding.completeBtn.setOnClickListener {
             //post
             lifecycleScope.launch {
-                if(binding.ratingBar.rating==0f) {
+                if (binding.ratingBar.rating == 0f) {
                     MessageDialog("평점은 1~5점으로 남겨주세요!").show(childFragmentManager, "MessageDialog")
                     return@launch
                 }
-                if(getStudyType()==""){
+                if (getStudyType() == "") {
                     MessageDialog("코딩 타입을 남겨주세요!").show(childFragmentManager, "MessageDialog")
                     return@launch
                 }
@@ -164,7 +169,6 @@ class EditReviewFragment : BottomSheetDialogFragment() {
             Log.d("EditReview", "리뷰수정성공 : ${response.body()}")
             response.body()
         } else {
-            Log.d("EditReview", "리뷰수정실패 : ${response.errorBody()?.string()}")
             null
         }
     }
@@ -198,7 +202,6 @@ class EditReviewFragment : BottomSheetDialogFragment() {
             Log.d("EditReview", "review POST Success : ${response.body()}")
             return response.body()
         } else {
-            Log.d("EditReview", "review POST Failed : ${response.errorBody()?.string()}")
             return null
         }
     }

@@ -15,10 +15,14 @@ import com.example.mocacong.data.response.CafeImage
 import com.example.mocacong.data.response.CafeImageResponse
 import com.example.mocacong.databinding.ActivityCafeImagesBinding
 import com.example.mocacong.network.CafeImagesAPI
+import com.example.mocacong.network.ServerNetworkException
+import com.example.mocacong.ui.MessageDialog
 import gun0912.tedimagepicker.builder.TedImagePicker
 import gun0912.tedimagepicker.builder.type.MediaType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -42,6 +46,7 @@ class CafeImagesActivity : AppCompatActivity() {
 
         getCafeId()
         setLayout()
+
         setContentView(binding.root)
     }
 
@@ -52,7 +57,16 @@ class CafeImagesActivity : AppCompatActivity() {
 
     private fun setLayout() {
         lifecycleScope.launch {
-            val response = async { getCafeImages(page = currentPage++) }.await()
+            val response: CafeImageResponse? = try {
+                withContext(Dispatchers.Default) {
+                    getCafeImages(
+                        page = currentPage++
+                    )
+                }
+            } catch (e: ServerNetworkException) {
+                MessageDialog(e.responseMessage).show(supportFragmentManager, "MessgaeDialog")
+                null
+            }
             if (response != null) {
                 imageUriList.addAll(response.cafeImages)
 
@@ -107,10 +121,7 @@ class CafeImagesActivity : AppCompatActivity() {
         if (response.isSuccessful) {
             Log.d("CafeImage", "이미지 포스트 성공")
         } else {
-            Log.d(
-                "CafeImage",
-                "이미지 포스트 실패 : ${response.errorBody()?.string()} , ${response.code()}"
-            )
+
         }
     }
 
@@ -121,7 +132,6 @@ class CafeImagesActivity : AppCompatActivity() {
             Log.d("CafeImage", "카페이미지 get : ${response.body()}")
             response.body()
         } else {
-            Log.d("CafeImage", "카페이미지 GET 실패!!! ${response.errorBody()?.string()}")
             null
         }
     }
@@ -132,15 +142,19 @@ class CafeImagesActivity : AppCompatActivity() {
 
         // 다음 페이지 가져옴
         lifecycleScope.launch {
-            val response = getCafeImages(page = currentPage++)
-            if (response != null) {
-                imageUriList.addAll(response.cafeImages)
-                adapter.notifyItemRangeInserted(
-                    imageUriList.size - response.cafeImages.size,
-                    response.cafeImages.size
-                )
-                isEnd = response.isEnd
-                binding.progressBar.visibility = View.GONE
+            try {
+                val response = getCafeImages(page = currentPage++)
+                if (response != null) {
+                    imageUriList.addAll(response.cafeImages)
+                    adapter.notifyItemRangeInserted(
+                        imageUriList.size - response.cafeImages.size,
+                        response.cafeImages.size
+                    )
+                    isEnd = response.isEnd
+                    binding.progressBar.visibility = View.GONE
+                }
+            } catch (e: ServerNetworkException) {
+
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.example.mocacong.data.request
 
 data class EditProfileRequest(
-    val nickname: String?,
-    val phone: String?
+    val nickname: String?
 )

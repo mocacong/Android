@@ -35,6 +35,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.8"
         android:id="@+id/nickEditText"
+        android:textColor="@color/darkBrown"
         app:layout_constraintTop_toBottomOf="@id/nickLabel"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

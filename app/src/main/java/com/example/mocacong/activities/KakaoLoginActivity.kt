@@ -16,6 +16,7 @@ import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.OAuthRequest
 import com.example.mocacong.data.response.KakaoLoginResponse
 import com.example.mocacong.databinding.ActivityKakaoLoginBinding
+import com.example.mocacong.network.ServerNetworkException
 import com.example.mocacong.network.SignInAPI
 import com.example.mocacong.network.SignUpAPI
 import com.example.mocacong.ui.MessageDialog
@@ -41,8 +42,12 @@ class KakaoLoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //카카오서버에서 인가코드 받기
-        kakaoOAuthLogin()
-        setListener()
+        try {
+            kakaoOAuthLogin()
+            setListener()
+        } catch (e: ServerNetworkException) {
+            MessageDialog(e.responseMessage)
+        }
     }
 
     private fun setListener() {
@@ -75,14 +80,19 @@ class KakaoLoginActivity : AppCompatActivity() {
                         Utils.showToast(this@KakaoLoginActivity, "회원가입 성공")
                         kakaoOAuthLogin()
                     } else {
-                        Log.d("kakaoOauth", "모카콩 서버 회원가입 실패 : ${signUpResponse.errorBody()?.string()}")
-                        MessageDialog("죄송합니다. 가입에 실패하였습니다.").show(supportFragmentManager, "MessageDialog")
+                        Log.d(
+                            "kakaoOauth",
+                            "모카콩 서버 회원가입 실패 : ${signUpResponse.errorBody()?.string()}"
+                        )
+                        MessageDialog("죄송합니다. 가입에 실패하였습니다.").show(
+                            supportFragmentManager,
+                            "MessageDialog"
+                        )
                     }
                 }
             }
         }
     }
-
 
 
     private fun kakaoOAuthLogin() {

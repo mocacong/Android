@@ -14,6 +14,8 @@ import com.example.mocacong.data.response.Cafe
 import com.example.mocacong.data.response.MypageCafesResponse
 import com.example.mocacong.databinding.FragmentMyFavoritesBinding
 import com.example.mocacong.network.MyPageAPI
+import com.example.mocacong.network.ServerNetworkException
+import com.example.mocacong.ui.MessageDialog
 import kotlinx.coroutines.launch
 
 class MyFavoritesFragment : Fragment() {
@@ -28,7 +30,11 @@ class MyFavoritesFragment : Fragment() {
     ): View {
         _binding = FragmentMyFavoritesBinding.inflate(inflater, container, false)
 
-        setLayout()
+        try {
+            setLayout()
+        } catch (e: ServerNetworkException) {
+            MessageDialog(e.responseMessage)
+        }
         return binding.root
     }
 
@@ -52,7 +58,7 @@ class MyFavoritesFragment : Fragment() {
         }
 
         binding.recyclerView.setOnScrollChangeListener { view, _, _, _, _ ->
-            if(!view.canScrollVertically(1) && !isEnd)
+            if (!view.canScrollVertically(1) && !isEnd)
                 loadNextPage()
         }
     }
@@ -65,7 +71,6 @@ class MyFavoritesFragment : Fragment() {
             Log.d("Mypage", "즐겨찾기 get : ${response.body()}")
             response.body()
         } else {
-            Log.d("Mypage", "즐겨찾기GET 실패!!! ${response.errorBody()?.string()}")
             null
         }
     }

@@ -37,7 +37,7 @@ interface MyPageAPI {
         @Query("count") count: Int = 20
     ): Response<MypageCafesResponse>
 
-    @PUT("/members")
+    @PUT("/members/info")
     suspend fun editProfileInfo(
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Body info : EditProfileRequest

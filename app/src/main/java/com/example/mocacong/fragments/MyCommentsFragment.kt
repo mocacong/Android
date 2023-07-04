@@ -9,12 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mocacong.adapter.MypageCommentsAdapter
-import com.example.mocacong.adapter.MypageReviewsAdapter
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.response.Cafe
 import com.example.mocacong.data.response.MypageCafesResponse
 import com.example.mocacong.databinding.FragmentMyCommentsBinding
 import com.example.mocacong.network.MyPageAPI
+import com.example.mocacong.network.ServerNetworkException
+import com.example.mocacong.ui.MessageDialog
 import kotlinx.coroutines.launch
 
 class MyCommentsFragment : Fragment() {
@@ -28,7 +29,11 @@ class MyCommentsFragment : Fragment() {
     ): View {
         _binding = FragmentMyCommentsBinding.inflate(inflater, container, false)
 
-        setLayout()
+        try {
+            setLayout()
+        } catch (e: ServerNetworkException) {
+            MessageDialog(e.responseMessage)
+        }
         return binding.root
     }
 
@@ -52,7 +57,7 @@ class MyCommentsFragment : Fragment() {
         }
 
         binding.recyclerView.setOnScrollChangeListener { view, _, _, _, _ ->
-            if(!view.canScrollVertically(1) && !isEnd)
+            if (!view.canScrollVertically(1) && !isEnd)
                 loadNextPage()
         }
     }
@@ -65,7 +70,6 @@ class MyCommentsFragment : Fragment() {
             Log.d("Mypage", "작성댓글 get : ${response.body()}")
             response.body()
         } else {
-            Log.d("Mypage", "즐겨찾기GET 실패!!! ${response.errorBody()?.string()}")
             null
         }
     }
@@ -84,7 +88,10 @@ class MyCommentsFragment : Fragment() {
             val response = getMyComments(page = currentPage++)
             if (response != null) {
                 cafes.addAll(response.cafes)
-                adapter.notifyItemRangeInserted(cafes.size-response.cafes.size, response.cafes.size)
+                adapter.notifyItemRangeInserted(
+                    cafes.size - response.cafes.size,
+                    response.cafes.size
+                )
                 isEnd = response.isEnd
                 binding.progressBar.visibility = View.GONE
             }

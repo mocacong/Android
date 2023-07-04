@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
 import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.data.objects.RetrofitClient
+import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.objects.Utils.bundleSerializable
 import com.example.mocacong.data.request.CafeDetailRequest
 import com.example.mocacong.data.response.CafePreviewResponse
@@ -42,11 +43,13 @@ class CafePreviewFragment : BottomSheetDialogFragment() {
     ): View {
         _binding = FragmentCafePreviewBinding.inflate(inflater, container, false)
         lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 postCafe()
             }
+
+            setLayout()
+
         }
-        setLayout()
         return binding.root
     }
 
@@ -116,20 +119,21 @@ class CafePreviewFragment : BottomSheetDialogFragment() {
         super.onDestroy()
     }
 
-    private suspend fun getPreviewInfo(id: String): CafePreviewResponse {
+    private suspend fun getPreviewInfo(id: String): CafePreviewResponse? {
         val filteringApi = RetrofitClient.create(MapApi::class.java)
         Log.d("preview", "id: $id")
         val response = filteringApi.getPreview(cafeId = id)
         if (response.isSuccessful) return response.body()!!
         else {
-            Log.d("preview", "미리보기 정보 get 실패 ${response.errorBody()?.string()}")
-            throw java.lang.Exception("카페 미리보기 정보 불러오기 실패")
+            Utils.showToast(requireContext(), response.message())
+            return null
         }
     }
 
     private suspend fun postCafe() {
         val api = RetrofitClient.create(CafeDetailAPI::class.java)
-        api.postCafe(CafeDetailRequest(cafe.id, cafe.place_name))
+        val postResponse = api.postCafe(CafeDetailRequest(cafe.id, cafe.place_name))
+        if (postResponse.isSuccessful) return
     }
 
     companion object {

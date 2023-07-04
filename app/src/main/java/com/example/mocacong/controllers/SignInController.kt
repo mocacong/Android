@@ -21,16 +21,7 @@ class SignInController {
             return "로그인 성공";
         }
         else{
-            //로그인 실패
-            val json = JSONObject(response.errorBody()?.string())
-            val code = json.getInt("code")
-            val msg = json.getString("message")
-            Log.d("signIn", "Error: $msg Code: $code")
-            return msg
+            return response.message()
         }
     }
-
-
-
-
 }

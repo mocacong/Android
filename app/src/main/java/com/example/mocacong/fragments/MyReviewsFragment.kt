@@ -14,6 +14,8 @@ import com.example.mocacong.data.response.Cafe
 import com.example.mocacong.data.response.MypageCafesResponse
 import com.example.mocacong.databinding.FragmentMyReviewsBinding
 import com.example.mocacong.network.MyPageAPI
+import com.example.mocacong.network.ServerNetworkException
+import com.example.mocacong.ui.MessageDialog
 import kotlinx.coroutines.launch
 
 class MyReviewsFragment : Fragment() {
@@ -33,7 +35,11 @@ class MyReviewsFragment : Fragment() {
 
         Log.d("Mypage", "oncreated 나의리뷰 프래그먼트")
         _binding = FragmentMyReviewsBinding.inflate(inflater, container, false)
-        setLayout()
+        try {
+            setLayout()
+        } catch (e: ServerNetworkException) {
+            MessageDialog(e.responseMessage)
+        }
         return binding.root
     }
 
@@ -51,7 +57,7 @@ class MyReviewsFragment : Fragment() {
         }
 
         binding.recyclerView.setOnScrollChangeListener { view, _, _, _, _ ->
-            if(!view.canScrollVertically(1) && !isEnd)
+            if (!view.canScrollVertically(1) && !isEnd)
                 loadNextPage()
         }
     }
@@ -64,7 +70,6 @@ class MyReviewsFragment : Fragment() {
             Log.d("Mypage", "나의리뷰 get : ${response.body()}")
             response.body()
         } else {
-            Log.d("Mypage", "나의리뷰GET 실패!!! ${response.errorBody()?.string()}")
             null
         }
     }

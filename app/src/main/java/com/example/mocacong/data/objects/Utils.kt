@@ -1,15 +1,33 @@
 package com.example.mocacong.data.objects
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import java.io.Serializable
-import java.security.AccessController.getContext
 
 object Utils {
     private var toast: Toast? = null
+
+    fun showConfirmDialog(context: Context, msg: String, confirmAction: () -> Unit, cancelAction: () -> Unit) {
+        AlertDialog.Builder(context).apply {
+            setCancelable(false)
+            setMessage(msg)
+            setPositiveButton("확인") { _: DialogInterface, _: Int ->
+                confirmAction()
+            }
+            setNegativeButton("취소") { _: DialogInterface, _: Int ->
+                cancelAction()
+            }
+            create()
+        }.show()
+    }
+
+
+
 
     fun showToast(context: Context, msg: String) {
         toast?.cancel()

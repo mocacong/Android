@@ -1,7 +1,6 @@
 package com.example.mocacong.controllers
 
 import android.util.Log
-import android.view.View
 import com.example.mocacong.data.objects.Member
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.request.SignInRequest
@@ -22,10 +21,7 @@ class SignUpController() {
             Log.d("signUp", "signUp SUCCESSED : ${response.code()}")
             "성공"
         } else {
-            val json = JSONObject(response.errorBody()?.string())
-            val msg = json.getString("message")
-            Log.d("signUp", "Err MSG: $msg")
-            msg
+            throw Exception("회원가입 에러!!")
         }
 
     }
@@ -36,7 +32,6 @@ class SignUpController() {
         if (response.isSuccessful) {
             return response.body()!!.result
         } else {
-            Log.e("hi", "이메일 중복체크 실패 이유 ${response.errorBody()?.string()}")
             throw java.lang.Exception("이메일 중복체크 실패!")
         }
     }
@@ -47,32 +42,25 @@ class SignUpController() {
         if (response.isSuccessful) {
             return response.body()!!.result
         } else {
-            Log.e("hi", "닉네임 중복체크 실패 이유 ${response.errorBody()?.string()}")
             throw java.lang.Exception("닉네임 중복체크 실패!")
         }
     }
 
-    suspend fun signIn(signInRequest: SignInRequest) : String{
+    suspend fun signIn(signInRequest: SignInRequest): String {
         val response = RetrofitClient.create(SignInAPI::class.java).signIn(signInRequest)
-        if(response.isSuccessful){
+        if (response.isSuccessful) {
             //로그인 성공
             try {
                 Member.setAuthToken(response.body()!!.token)
-            }catch (e: NullPointerException){
+            } catch (e: NullPointerException) {
                 Log.d("signIn", "성공했는데 responseBody 없음")
             }
             return "로그인 성공";
-        }
-        else{
+        } else {
             //로그인 실패
-            val json = JSONObject(response.errorBody()?.string())
-            val code = json.getInt("code")
-            val msg = json.getString("message")
-            Log.d("signIn", "Error: $msg Code: $code")
-            return msg
+            return response.message()
         }
     }
-
 
 
     fun passwordRegex(password: String): Boolean {
@@ -87,13 +75,6 @@ class SignUpController() {
     fun emailRegex(email: String): Boolean {
         val pattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
         return email.matches(pattern)
-    }
-
-    fun phoneRegex(phone: String): Boolean {
-        val pattern1 = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}\$".toRegex()
-        val pattern2 = "^01(?:0|1|[6-9])(?:\\d{3}|\\d{4})\\d{4}\$".toRegex()
-
-        return phone.matches(pattern1) or phone.matches(pattern2)
     }
 
 }

@@ -1,6 +1,8 @@
 package com.example.mocacong.fragments
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -8,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
@@ -20,13 +23,17 @@ import com.example.mocacong.data.response.FilteringResponse
 import com.example.mocacong.data.response.Place
 import com.example.mocacong.databinding.FragmentHomeBinding
 import com.example.mocacong.network.MapApi
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.Serializable
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
@@ -36,12 +43,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var naverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var searchController: SearchController
 
 
     private val markers = HashMap<Place, Marker>()
     private lateinit var markerImg: OverlayImage
     private var clickedMarker: Marker? = null
+
+    private var isSoloClicked = false
+    private var isGroupClicked = false
+    private var isFavClicked = false
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1000
 
@@ -56,15 +68,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         return binding.root
     }
 
-
-    private fun <T : Serializable> Intent.intentSerializable(key: String, clazz: Class<T>): T? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            this.getSerializableExtra(key, clazz)
-        } else {
-            this.getSerializableExtra(key) as T?
-        }
-    }
-
     private fun <T : Serializable> Bundle.argSerializable(key: String, clazz: Class<T>): T? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             this.getSerializable(key, clazz)
@@ -76,7 +79,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun gotoSearchedPlace() {
         val searchedPlace = arguments?.argSerializable("searchedPlace", Place::class.java)
         if (searchedPlace != null) {
-            Log.d("search", "searched 받았음 : ${searchedPlace}")
+            Log.d("search", "searched 받았음 : $searchedPlace")
 
             val cameraUpdate = CameraUpdate.scrollTo(
                 LatLng(
@@ -129,7 +132,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 nonFilteredPlaces[it.id] = it
             }
             val filteredIds =
-                async { getFilteredIds(type, nonFilteredPlaces.keys.toList()) }.await()?.mapIds
+                withContext(Dispatchers.Default) {
+                    getFilteredIds(
+                        type,
+                        nonFilteredPlaces.keys.toList()
+                    )
+                }?.mapIds
             if (filteredIds?.size == 0) {
                 val msg = if (type == "solo") "혼카콩" else "모카콩"
                 Utils.showToast(requireContext(), "현재 지도 반경 500m 내 ${msg} 카페가 없습니다")
@@ -170,8 +178,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             Log.d("filtering", "filtering response 성공 : ${response.body()}")
             response.body()
         } else {
-            Log.d("filtering", "filtering response 실패 : ${response.errorBody()?.string()}")
-            throw Exception("필터링 싫패!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            null
         }
     }
 
@@ -184,8 +191,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             Log.d("filtering", "fav filtering response 성공 : ${response.body()}")
             response.body()
         } else {
-            Log.d("filtering", "fav filtering response 실패 : ${response.errorBody()?.string()}")
-            throw Exception("즐찾 필터링 싫패!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            null
         }
     }
 
@@ -226,13 +232,19 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             isZoomControlEnabled = false
             isLocationButtonEnabled = true
         }
-
+        naverMap.cameraPosition = CameraPosition(
+            LatLng(37.5666102, 126.9783881),
+            16.0
+        )
         naverMap.locationSource = locationSource
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireContext())
+        setCurrentLocation()
 
         markerImg = OverlayImage.fromResource(R.drawable.custom_marker)
 
-        naverMap.addOnCameraChangeListener { _, _ ->
-            binding.refreshBtn.visibility = View.VISIBLE
+        naverMap.addOnCameraIdleListener {
+            refreshMarkerList()
         }
 
         naverMap.setOnMapClickListener { _, _ ->
@@ -241,6 +253,34 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         setLayout()
         gotoSearchedPlace()
+    }
+
+    private fun setCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationProviderClient.lastLocation
+            .addOnSuccessListener { loc ->
+                if (loc != null) {
+                    val cameraUpdate = CameraUpdate.scrollTo(
+                        LatLng(
+                            loc.latitude, loc.longitude
+                        )
+                    )
+                    naverMap.moveCamera(cameraUpdate)
+                } else {
+                    Utils.showToast(requireContext(), "현재 위치 정보를 가져올 수 없습니다")
+                }
+            }.addOnFailureListener { e ->
+                Log.d("TAG", "위치정보 못가져옴 ${e.message}")
+            }
     }
 
     fun revertMarker() {

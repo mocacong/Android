@@ -24,21 +24,18 @@ android {
         versionCode 1
         versionName "1.0"
 
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
 
         release {
-
-            storeFile file('mocacong.jks') // 기준은 App 폴더 기준이다.
-
+            storeFile file('C:\\Users\\jsshi\\AndroidStudioProjects\\Mocacong\\app\\mocacong.jks')
+// 기준은 App 폴더 기준이다.
             storePassword "mocacong"
-
             keyAlias "mocacong"
-
             keyPassword "mocacong"
-
         }
 
     }
@@ -50,6 +47,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
