@@ -5,17 +5,21 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.objects.Utils.intentSerializable
 import com.example.mocacong.data.response.Place
+import com.example.mocacong.data.util.ViewModelFactory
 import com.example.mocacong.databinding.ActivityMainBinding
 import com.example.mocacong.fragments.HomeFragment
 import com.example.mocacong.fragments.MypageFragment
 import com.example.mocacong.fragments.SettingsFragment
-import com.example.mocacong.network.ServerNetworkException
-import com.example.mocacong.ui.MessageDialog
+import com.example.mocacong.repositories.CafeDetailRepository
+import com.example.mocacong.repositories.MapRepository
+import com.example.mocacong.viewmodels.CafeDetailViewModel
+import com.example.mocacong.viewmodels.MapViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -25,17 +29,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var homeFragment: HomeFragment
     private var backButtonPressedOnce = false
 
+    private lateinit var mapViewModel: MapViewModel
+    private lateinit var mapViewModelFactory: ViewModelFactory<MapRepository>
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        try {
-            setBackBtn()
-            setBottomNav()
-        } catch (e: ServerNetworkException) {
-            MessageDialog(e.responseMessage)
-        }
+        mapViewModelFactory = ViewModelFactory(MapRepository())
+        mapViewModel = ViewModelProvider(this, mapViewModelFactory)[MapViewModel::class.java]
+
+        setBackBtn()
+        setBottomNav()
     }
 
     private fun setBackBtn() {

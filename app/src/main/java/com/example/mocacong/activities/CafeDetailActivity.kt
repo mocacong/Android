@@ -15,6 +15,7 @@ import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.objects.Utils.intentSerializable
 import com.example.mocacong.data.response.*
 import com.example.mocacong.data.util.ApiState
+import com.example.mocacong.data.util.ViewModelFactory
 import com.example.mocacong.databinding.ActivityCafeDetailBinding
 import com.example.mocacong.fragments.EditReviewFragment
 import com.example.mocacong.fragments.WriteCommentFragment
@@ -34,14 +35,14 @@ class CafeDetailActivity : AppCompatActivity() {
     private var isFavLoading = false
 
     private lateinit var viewModel: CafeDetailViewModel
-    private lateinit var viewModelFactory: CafeDetailViewModelFactory
+    private lateinit var viewModelFactory: ViewModelFactory<CafeDetailRepository>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCafeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModelFactory = CafeDetailViewModelFactory(CafeDetailRepository())
+        viewModelFactory = ViewModelFactory(CafeDetailRepository())
         viewModel = ViewModelProvider(this, viewModelFactory)[CafeDetailViewModel::class.java]
 
         getCafeInfo()
@@ -305,10 +306,4 @@ class CafeDetailActivity : AppCompatActivity() {
 
 }
 
-class CafeDetailViewModelFactory(private val cafeDetailRepository: CafeDetailRepository) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(cafeDetailRepository::class.java)
-            .newInstance(cafeDetailRepository)
-    }
-}
+

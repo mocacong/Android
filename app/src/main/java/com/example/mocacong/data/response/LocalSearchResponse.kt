@@ -20,7 +20,19 @@ data class Place(
     val road_address_name: String?,
     val x: String,
     val y: String
-) : Serializable
+) : Serializable {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Place
+        if (id != other.id) return false
+        return true
+    }
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+}
+
 
 data class Meta(
     val is_end: Boolean,

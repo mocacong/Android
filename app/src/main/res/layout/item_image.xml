@@ -16,7 +16,7 @@
     <TextView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/fav_btn_img"
+        android:background="@drawable/filtering_fav_fill"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="10dp"

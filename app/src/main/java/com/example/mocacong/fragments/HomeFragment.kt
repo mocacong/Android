@@ -12,48 +12,47 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
-import com.example.mocacong.activities.SearchActivity
-import com.example.mocacong.controllers.SearchController
-import com.example.mocacong.data.objects.RetrofitClient
+import com.example.mocacong.activities.SignInActivity
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.FilteringRequest
-import com.example.mocacong.data.response.FilteringResponse
+import com.example.mocacong.data.response.ErrorResponse
 import com.example.mocacong.data.response.Place
+import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.databinding.FragmentHomeBinding
-import com.example.mocacong.network.MapApi
+import com.example.mocacong.viewmodels.MapViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.Serializable
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private val TAG = "Map"
+
+    private val mapViewModel: MapViewModel by activityViewModels()
 
     private lateinit var naverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var searchController: SearchController
-
 
     private val markers = HashMap<Place, Marker>()
     private lateinit var markerImg: OverlayImage
+    private lateinit var markerFavImg: OverlayImage
+
     private var clickedMarker: Marker? = null
 
-    private var isSoloClicked = false
-    private var isGroupClicked = false
-    private var isFavClicked = false
+    private var isLoading = false
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1000
 
@@ -62,9 +61,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
-        searchController = SearchController()
         getMapFragment()
-
         return binding.root
     }
 
@@ -83,117 +80,136 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
             val cameraUpdate = CameraUpdate.scrollTo(
                 LatLng(
-                    searchedPlace.y.toDouble(),
-                    searchedPlace.x.toDouble()
+                    searchedPlace.y.toDouble(), searchedPlace.x.toDouble()
                 )
-            )
-                .animate(CameraAnimation.Easing)
-                .finishCallback {
-                    setMarkers(listOf(searchedPlace))
-                    markers[searchedPlace]?.performClick()
-                }
-
+            ).animate(CameraAnimation.Easing).finishCallback {
+                addMarker(searchedPlace)
+                markers[searchedPlace]?.performClick()
+            }
             naverMap.moveCamera(cameraUpdate)
         }
     }
 
     private fun setLayout() {
         binding.searchBar.setOnClickListener {
-            val intent = Intent(activity, SearchActivity::class.java)
-            startActivity(intent)
+            childFragmentManager.beginTransaction().replace(binding.root.id, SearchFragment())
+                .commit()
         }
 
         binding.filteringSoloBtn.setOnClickListener {
-            filterMarkers("solo")
+            it.isSelected = !it.isSelected
+            refreshMarkerList()
         }
 
         binding.filteringGroupBtn.setOnClickListener {
-            filterMarkers("group")
-        }
-
-        binding.favBtn.setOnClickListener {
-            filterFavs()
-        }
-
-        binding.refreshBtn.setOnClickListener {
+            it.isSelected = !it.isSelected
             refreshMarkerList()
         }
+
     }
 
-    private fun filterMarkers(type: String) {
-        delMarkers()
-        val y = naverMap.cameraPosition.target.latitude.toString()
-        val x = naverMap.cameraPosition.target.longitude.toString()
+    private fun requestFiltering() {
+        val isGroupClicked = binding.filteringGroupBtn.isSelected
+        val isSoloClicked = binding.filteringSoloBtn.isSelected
+        when {
+            isSoloClicked && isGroupClicked -> {
+                filterMarkers("both")
+            }
+            isSoloClicked -> {
+                filterMarkers("solo")
+            }
+            isGroupClicked -> {
+                filterMarkers("group")
+            }
+            else -> {
+
+            }
+        }
+    }
+
+    private fun filterMarkers(type: String) =
         lifecycleScope.launch {
-            val response = async { searchController.searchByXY(x, y) }.await()
-
-            val nonFilteredPlaces = HashMap<String, Place>()
-            response?.documents?.forEach {
-                nonFilteredPlaces[it.id] = it
-            }
-            val filteredIds =
-                withContext(Dispatchers.Default) {
-                    getFilteredIds(
-                        type,
-                        nonFilteredPlaces.keys.toList()
-                    )
-                }?.mapIds
-            if (filteredIds?.size == 0) {
-                val msg = if (type == "solo") "혼카콩" else "모카콩"
-                Utils.showToast(requireContext(), "현재 지도 반경 500m 내 ${msg} 카페가 없습니다")
-            }
-            filteredIds?.forEach {
-                addMarker(nonFilteredPlaces[it])
+            mapViewModel.apply {
+                val requestIds = FilteringRequest(markers.keys.map { it.id })
+                requestFilterStudyType(type, requestIds).join()
+                when (val apiState = filteredCafesFlow.value) {
+                    is ApiState.Success -> {
+                        apiState.data?.let { response ->
+                            if (response.mapIds.isEmpty()) {
+                                val msg = when (type) {
+                                    "solo" -> {
+                                        "혼카콩"
+                                    }
+                                    "group" -> {
+                                        "모카콩"
+                                    }
+                                    else -> {
+                                        "혼카콩/모카콩"
+                                    }
+                                }
+                                Utils.showToast(
+                                    requireContext(),
+                                    "현재 지도 반경 500m 내 ${msg} 카페가 없습니다"
+                                )
+                            }
+                            markers.forEach { (place, marker) ->
+                                if (response.mapIds.contains(place.id)) {
+                                    marker.alpha = 1F
+                                    marker.setOnClickListener {
+                                        if (marker.tag == 0) {
+                                            markerFirstClicked(marker)
+                                            createPreview(place)
+                                            //마커 한 번 클릭
+                                        }
+                                        true
+                                    }
+                                } else {
+                                    marker.alpha = 0.15f
+                                    marker.setOnClickListener { true }
+                                }
+                            }
+                        }
+                    }
+                    is ApiState.Error -> {
+                        apiState.errorResponse?.let { er ->
+                            handleTokenException(er)
+                            Log.e(TAG, er.message)
+                        }
+                        mFilteredCafesFlow.value = ApiState.Loading()
+                    }
+                    is ApiState.Loading -> {}
+                }
             }
         }
-    }
 
-    private fun filterFavs() {
-        delMarkers()
-        val y = naverMap.cameraPosition.target.latitude.toString()
-        val x = naverMap.cameraPosition.target.longitude.toString()
+
+    private fun filterFavs() =
         lifecycleScope.launch {
-            val response = async { searchController.searchByXY(x, y) }.await()
-            val nonFilteredPlaces = HashMap<String, Place>()
-            response?.documents?.forEach {
-                nonFilteredPlaces[it.id] = it
+            mapViewModel.apply {
+                val requestIds = FilteringRequest(markers.keys.map { it.id })
+                requestFavorites(requestIds).join()
+                when (val apiState = favoriteFlow.value) {
+                    is ApiState.Success -> {
+                        apiState.data?.let { response ->
+                            markers.forEach { place, marker ->
+                                if (response.mapIds.contains(place.id)) {
+                                    marker.icon = markerFavImg
+                                }
+                            }
+                        }
+                    }
+                    is ApiState.Error -> {
+                        apiState.errorResponse?.let { er ->
+                            handleTokenException(er)
+                            Log.e(TAG, er.message)
+                        }
+                        mfavoriteFlow.value = ApiState.Loading()
+                    }
+                    is ApiState.Loading -> {}
+                }
             }
-            val filteredIds =
-                async { getFavFilteredIds(nonFilteredPlaces.keys.toList()) }.await()?.mapIds
-            if (filteredIds?.size == 0)
-                Utils.showToast(requireContext(), "현재 지도 반경 500m 내 즐겨찾기 결과가 없습니다")
-            filteredIds?.forEach {
-                addMarker(nonFilteredPlaces[it])
-            }
         }
-    }
 
-
-    private suspend fun getFilteredIds(type: String, ids: List<String>): FilteringResponse? {
-        val filteringApi = RetrofitClient.create(MapApi::class.java)
-        val req = FilteringRequest(ids)
-        Log.d("filtering", "필터링 보낸다 나 stt : $type, req : $req")
-        val response = filteringApi.getFilteredCafes(studyType = type, filteringRequest = req)
-        return if (response.isSuccessful) {
-            Log.d("filtering", "filtering response 성공 : ${response.body()}")
-            response.body()
-        } else {
-            null
-        }
-    }
-
-    private suspend fun getFavFilteredIds(ids: List<String>): FilteringResponse? {
-        val filteringApi = RetrofitClient.create(MapApi::class.java)
-        val req = FilteringRequest(ids)
-        Log.d("filtering", "필터링 보낸다 나 stt :  req : $req")
-        val response = filteringApi.getFavCafes(filteringRequest = req)
-        return if (response.isSuccessful) {
-            Log.d("filtering", "fav filtering response 성공 : ${response.body()}")
-            response.body()
-        } else {
-            null
-        }
-    }
 
     //위치 권한 요청
     override fun onRequestPermissionsResult(
@@ -233,15 +249,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             isLocationButtonEnabled = true
         }
         naverMap.cameraPosition = CameraPosition(
-            LatLng(37.5666102, 126.9783881),
-            16.0
+            LatLng(37.5666102, 126.9783881), 16.0
         )
         naverMap.locationSource = locationSource
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
         setCurrentLocation()
 
-        markerImg = OverlayImage.fromResource(R.drawable.custom_marker)
+        markerImg = OverlayImage.fromResource(R.drawable.marker_origin)
+        markerFavImg = OverlayImage.fromResource(R.drawable.marker_fav)
 
         naverMap.addOnCameraIdleListener {
             refreshMarkerList()
@@ -253,34 +269,33 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         setLayout()
         gotoSearchedPlace()
+
+
     }
 
     private fun setCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             return
         }
-        fusedLocationProviderClient.lastLocation
-            .addOnSuccessListener { loc ->
-                if (loc != null) {
-                    val cameraUpdate = CameraUpdate.scrollTo(
-                        LatLng(
-                            loc.latitude, loc.longitude
-                        )
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener { loc ->
+            if (loc != null) {
+                val cameraUpdate = CameraUpdate.scrollTo(
+                    LatLng(
+                        loc.latitude, loc.longitude
                     )
-                    naverMap.moveCamera(cameraUpdate)
-                } else {
-                    Utils.showToast(requireContext(), "현재 위치 정보를 가져올 수 없습니다")
-                }
-            }.addOnFailureListener { e ->
-                Log.d("TAG", "위치정보 못가져옴 ${e.message}")
+                )
+                naverMap.moveCamera(cameraUpdate)
+            } else {
+                Utils.showToast(requireContext(), "현재 위치 정보를 가져올 수 없습니다")
             }
+        }.addOnFailureListener { e ->
+            Log.d("TAG", "위치정보 못가져옴 ${e.message}")
+        }
     }
 
     fun revertMarker() {
@@ -293,20 +308,44 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun refreshMarkerList() {
+        if (isLoading) return
+        //마커 45개 이상 시 전부 삭제
         delMarkers()
-        binding.refreshBtn.visibility = View.INVISIBLE
         val y = naverMap.cameraPosition.target.latitude.toString()
         val x = naverMap.cameraPosition.target.longitude.toString()
         lifecycleScope.launch {
-            val response = searchController.searchByXY(x, y)
-            if (response != null) {
-                setMarkers(response.documents)
+            isLoading = true
+            mapViewModel.apply {
+                requestMapCafeLists(x, y).join()
+                when (val state = placeByLocation.value) {
+                    is ApiState.Success -> {
+                        state.data?.let {
+                            it.documents.forEach { place ->
+                                //없으면 추가하기
+                                if (!markers.containsKey(place)) addMarker(place)
+                            }
+                            isLoading = false
+                            filterFavs()
+                            requestFiltering()
+                        }
+                    }
+                    is ApiState.Error -> {
+                        state.errorResponse?.let { er ->
+                            handleTokenException(er)
+                            Log.e(TAG, er.message)
+                        }
+                        mPlaceByLocation.value = ApiState.Loading()
+                    }
+                    is ApiState.Loading -> {
+                    }
+                }
             }
         }
     }
 
     private fun addMarker(place: Place?) {
         place?.let {
+            Log.d(TAG, "addMarker 호출 place = ${place.place_name}")
             val marker = Marker()
             markers[place] = marker
             marker.tag = 0
@@ -328,29 +367,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-
-    private fun setMarkers(places: List<Place>) {
-        places.forEach { place ->
-            val marker = Marker()
-            markers[place] = marker
-            marker.tag = 0
-            marker.position = LatLng(place.y.toDouble(), place.x.toDouble())
-            marker.captionText = place.place_name
-            marker.captionMinZoom = 9.0
-            marker.icon = markerImg
-            marker.isHideCollidedSymbols = true
-
-            marker.setOnClickListener {
-                if (marker.tag == 0) {
-                    markerFirstClicked(marker)
-                    createPreview(place)
-                    //마커 한 번 클릭
-                }
-                true
-            }
-            marker.map = naverMap
-        }
-    }
 
     private fun createPreview(cafe: Place) {
         val previewFragment = CafePreviewFragment.newInstance(cafe)
@@ -364,14 +380,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         marker.captionColor = Color.GREEN
         marker.icon = Marker.DEFAULT_ICON
         marker.tag = 1
-
     }
 
 
     private fun delMarkers() {
-        if (markers.isEmpty()) return
-        markers.forEach {
-            it.value.map = null
+        markers.forEach { (_, marker) ->
+            marker.map = null
         }
         markers.clear()
     }
@@ -381,5 +395,33 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         super.onDestroyView()
         _binding = null
     }
+
+
+    private fun handleTokenException(errorResponse: ErrorResponse) {
+        when (errorResponse.code) {
+            1013 -> {
+                Utils.showConfirmDialog(requireContext(),
+                    "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?",
+                    confirmAction = {
+                        gotoSignInActivity()
+                    },
+                    cancelAction = {})
+            }
+            1014 or 1015 -> {
+                Utils.showConfirmDialog(requireContext(), errorResponse.message, confirmAction = {
+                    gotoSignInActivity()
+                }, cancelAction = {
+
+                })
+            }
+        }
+    }
+
+    private fun gotoSignInActivity() {
+        val intent = Intent(requireContext(), SignInActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+    }
+
 
 }
