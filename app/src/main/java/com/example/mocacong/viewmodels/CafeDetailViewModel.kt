@@ -3,12 +3,11 @@ package com.example.mocacong.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mocacong.data.response.CafeResponse
-import com.example.mocacong.data.response.ErrorResponse
 import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.repositories.CafeDetailRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository) : ViewModel() {
@@ -23,38 +22,18 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
     var postFavoriteFlow: StateFlow<ApiState<Void>> = mPostFavoriteFlow
 
 
-    fun requestCafeDetailInfo(cafeId: String) = viewModelScope.launch {
+    fun requestCafeDetailInfo(cafeId: String) = viewModelScope.launch(Dispatchers.IO) {
         mCafeDetailInfosFlow.value = ApiState.Loading()
-        cafeDetailRepository.getCafeDetailInfo(cafeId)
-            .catch { error ->
-                mCafeDetailInfosFlow.value =
-                    ApiState.Error(ErrorResponse(code = 0, "${error.message}"))
-            }
-            .collect { values ->
-                mCafeDetailInfosFlow.value = values
-            }
+        mCafeDetailInfosFlow.value = cafeDetailRepository.getCafeDetailInfo(cafeId)
     }
 
-    fun requestFavoritePost(cafeId: String, isPost: Boolean) = viewModelScope.launch {
-        mPostFavoriteFlow.value = ApiState.Loading()
-        if (isPost) {
-            cafeDetailRepository.postFavorite(cafeId)
-                .catch {
-                    mPostFavoriteFlow.value =
-                        ApiState.Error(ErrorResponse(code = 0, "${it.message}"))
-                }
-                .collect { values ->
-                    mPostFavoriteFlow.value = values
-                }
-        } else {
-            cafeDetailRepository.deleteFavorite(cafeId)
-                .catch {
-                    mPostFavoriteFlow.value =
-                        ApiState.Error(ErrorResponse(code = 0, "${it.message}"))
-                }
-                .collect { values ->
-                    mPostFavoriteFlow.value = values
-                }
+    fun requestFavoritePost(cafeId: String, isPost: Boolean) =
+        viewModelScope.launch(Dispatchers.IO) {
+            mPostFavoriteFlow.value = ApiState.Loading()
+            if (isPost) {
+                mPostFavoriteFlow.value = cafeDetailRepository.postFavorite(cafeId)
+            } else {
+                mPostFavoriteFlow.value = cafeDetailRepository.deleteFavorite(cafeId)
+            }
         }
-    }
 }

@@ -7,11 +7,9 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import androidx.lifecycle.*
-import com.bumptech.glide.Glide
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
-import com.example.mocacong.data.objects.Member
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.objects.Utils.intentSerializable
 import com.example.mocacong.data.response.*
@@ -70,31 +68,26 @@ class CafeDetailActivity : AppCompatActivity() {
             return
         lifecycleScope.launch {
             isFavLoading = true
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.apply {
-                    requestFavoritePost(cafeId, !isFav)
-                    postFavoriteFlow.collect {
-                        when (it) {
-                            is ApiState.Success -> {
-                                val msg = if (isFav) "즐겨찾기에서 해제되었습니다." else "즐겨찾기에 등록되었습니다"
-                                Utils.showToast(this@CafeDetailActivity, msg)
-                                isFav = !isFav
-                                binding.favBtn.isSelected = isFav
-                                isFavLoading = false
-                                return@collect
-                            }
-                            is ApiState.Error -> {
-                                it.errorResponse?.let { er ->
-                                    handleTokenException(er)
-                                    Log.e(TAG, er.message)
-                                }
-                                mPostFavoriteFlow.value = ApiState.Loading()
-                                isFavLoading = false
-                                return@collect
-                            }
-                            is ApiState.Loading -> {
-                            }
+            viewModel.apply {
+                requestFavoritePost(cafeId, !isFav).join()
+
+                when (val apiState = postFavoriteFlow.value) {
+                    is ApiState.Success -> {
+                        val msg = if (isFav) "즐겨찾기에서 해제되었습니다." else "즐겨찾기에 등록되었습니다"
+                        Utils.showToast(this@CafeDetailActivity, msg)
+                        isFav = !isFav
+                        binding.favBtn.isSelected = isFav
+                        isFavLoading = false
+                    }
+                    is ApiState.Error -> {
+                        apiState.errorResponse?.let { er ->
+                            handleTokenException(er)
+                            Log.e(TAG, er.message)
                         }
+                        mPostFavoriteFlow.value = ApiState.Loading()
+                        isFavLoading = false
+                    }
+                    is ApiState.Loading -> {
                     }
                 }
             }
@@ -120,37 +113,34 @@ class CafeDetailActivity : AppCompatActivity() {
         setBasicInfo(cafe)
 
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.apply {
-                    requestCafeDetailInfo(cafeId)
-                    cafeDatailInfoFlow.collect {
-                        when (it) {
-                            is ApiState.Success -> {
-                                Log.d(TAG, "Cafe Detail get 성공")
-                                it.data?.let { cafeData ->
-                                    if (cafeData.myScore == 0) isFirst = true
-                                    isFav = cafeData.favorite
-                                    binding.favBtn.isSelected = isFav
-                                    setDetailInfoLayout(cafeData)
-                                    setCommentsLayout(cafeData.comments, cafeData.commentsCount)
-                                    setCafeImagesView(cafeData.cafeImages)
-                                }
-                                return@collect
-                            }
-                            is ApiState.Error -> {
-                                it.errorResponse?.let { errorResponse ->
-                                    handleTokenException(errorResponse)
-                                    Log.e(TAG, errorResponse.message)
-                                }
-                                mCafeDetailInfosFlow.value = ApiState.Loading()
-                            }
-                            is ApiState.Loading -> {}
+            viewModel.apply {
+                requestCafeDetailInfo(cafeId).join()
+                when (val apiState = cafeDatailInfoFlow.value) {
+                    is ApiState.Success -> {
+                        Log.d(TAG, "Cafe Detail get 성공")
+                        apiState.data?.let { cafeData ->
+                            if (cafeData.myScore == 0) isFirst = true
+                            isFav = cafeData.favorite
+                            binding.favBtn.isSelected = isFav
+                            setDetailInfoLayout(cafeData)
+                            setCommentsLayout(cafeData.comments, cafeData.commentsCount)
+                            setCafeImagesView(cafeData.cafeImages)
                         }
                     }
+                    is ApiState.Error -> {
+                        apiState.errorResponse?.let { errorResponse ->
+                            handleTokenException(errorResponse)
+                            Log.e(TAG, errorResponse.message)
+                        }
+                        mCafeDetailInfosFlow.value = ApiState.Loading()
+                    }
+                    is ApiState.Loading -> {}
                 }
+
             }
         }
     }
+
 
     private fun handleTokenException(errorResponse: ErrorResponse) {
         when (errorResponse.code) {
@@ -238,9 +228,10 @@ class CafeDetailActivity : AppCompatActivity() {
 
     private fun setBasicInfo(cafe: Place) {
         binding.apply {
-            addressText.text = cafe.road_address_name
             cafeName.text = cafe.place_name
             if (cafe.phone != "") callText.text = cafe.phone
+            if (cafe.road_address_name != "")
+                addressText.text = cafe.road_address_name
         }
     }
 
@@ -292,8 +283,6 @@ class CafeDetailActivity : AppCompatActivity() {
         super.onBackPressed()
         finish()
     }
-
-
 }
 
 

@@ -336,7 +336,6 @@
             android:id="@+id/commentsLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="parent"
