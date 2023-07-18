@@ -4,20 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/darkBrown"
+    android:background="@color/white"
     android:padding="10dp"
     >
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/profile_no_image"
+        android:src="@drawable/comment_profile"
         android:id="@+id/profileImage"
-
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-
         android:layout_margin="5dp"
         />
 
@@ -39,8 +37,8 @@
         android:id="@+id/nicknameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:text="(알 수 없음)"
-        android:textStyle="bold"
         app:layout_constraintLeft_toRightOf = "@id/profileImage"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/commentTextView"
@@ -51,6 +49,7 @@
         android:id="@+id/commentTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:text="Comment text"
         android:maxLines="1"
         android:ellipsize="end"

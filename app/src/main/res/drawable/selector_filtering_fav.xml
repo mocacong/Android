@@ -5,5 +5,4 @@
 
     <item android:drawable="@drawable/filtering_fav_empty" android:state_selected="false" />
 
-
 </selector>

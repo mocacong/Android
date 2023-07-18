@@ -327,6 +327,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                             isLoading = false
                             filterFavs()
                             requestFiltering()
+                            addMarkersToMap()
                         }
                     }
                     is ApiState.Error -> {
@@ -340,6 +341,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
             }
+        }
+    }
+
+    private fun addMarkersToMap() {
+        markers.forEach{
+            it.value.map = naverMap
         }
     }
 
@@ -363,7 +370,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 }
                 true
             }
-            marker.map = naverMap
         }
     }
 

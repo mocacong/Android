@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.lifecycle.*
 import com.bumptech.glide.Glide
 import com.example.mocacong.R
@@ -54,10 +55,6 @@ class CafeDetailActivity : AppCompatActivity() {
             makeEditPopUp()
         }
 
-        binding.writeCommentBtn.setOnClickListener {
-            makeCommentPopup()
-        }
-
         binding.commentMoreBtn.setOnClickListener {
             //todo:댓글 더보기 기능
         }
@@ -66,11 +63,6 @@ class CafeDetailActivity : AppCompatActivity() {
             favoriteClicked()
         }
 
-        binding.imagesGridLayout.setOnClickListener {
-            val intent = Intent(this, CafeImagesActivity::class.java)
-            intent.putExtra("cafeId", cafeId)
-            startActivity(intent)
-        }
     }
 
     private fun favoriteClicked() {
@@ -79,7 +71,6 @@ class CafeDetailActivity : AppCompatActivity() {
         lifecycleScope.launch {
             isFavLoading = true
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-
                 viewModel.apply {
                     requestFavoritePost(cafeId, !isFav)
                     postFavoriteFlow.collect {
@@ -88,7 +79,7 @@ class CafeDetailActivity : AppCompatActivity() {
                                 val msg = if (isFav) "즐겨찾기에서 해제되었습니다." else "즐겨찾기에 등록되었습니다"
                                 Utils.showToast(this@CafeDetailActivity, msg)
                                 isFav = !isFav
-
+                                binding.favBtn.isSelected = isFav
                                 isFavLoading = false
                                 return@collect
                             }
@@ -128,8 +119,6 @@ class CafeDetailActivity : AppCompatActivity() {
         cafeId = cafe.id
         setBasicInfo(cafe)
 
-        Log.d("cafe", "cafeID = $cafeId")
-
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.apply {
@@ -141,6 +130,7 @@ class CafeDetailActivity : AppCompatActivity() {
                                 it.data?.let { cafeData ->
                                     if (cafeData.myScore == 0) isFirst = true
                                     isFav = cafeData.favorite
+                                    binding.favBtn.isSelected = isFav
                                     setDetailInfoLayout(cafeData)
                                     setCommentsLayout(cafeData.comments, cafeData.commentsCount)
                                     setCafeImagesView(cafeData.cafeImages)
@@ -197,11 +187,11 @@ class CafeDetailActivity : AppCompatActivity() {
     }
 
     private fun setCafeImagesView(cafeImages: List<CafeImage>) {
-        val grid = binding.imagesGridLayout
-        if (cafeImages.isEmpty()) return
-        val uri = Uri.parse(cafeImages[0].imageUrl)
-        if (uri == null) grid.setImageResource(R.drawable.profile_no_image)
-        else Glide.with(this).load(uri).into(grid)
+//        val grid = binding.imagesGridLayout
+//        if (cafeImages.isEmpty()) return
+//        val uri = Uri.parse(cafeImages[0].imageUrl)
+//        for(i in cafeImages.indices){
+//        }
 
     }
 
