@@ -15,10 +15,9 @@ import com.example.mocacong.data.util.ViewModelFactory
 import com.example.mocacong.databinding.ActivityMainBinding
 import com.example.mocacong.fragments.HomeFragment
 import com.example.mocacong.fragments.MypageFragment
+import com.example.mocacong.fragments.SearchFragment
 import com.example.mocacong.fragments.SettingsFragment
-import com.example.mocacong.repositories.CafeDetailRepository
 import com.example.mocacong.repositories.MapRepository
-import com.example.mocacong.viewmodels.CafeDetailViewModel
 import com.example.mocacong.viewmodels.MapViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,8 +30,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mapViewModel: MapViewModel
     private lateinit var mapViewModelFactory: ViewModelFactory<MapRepository>
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -111,5 +108,10 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    fun addFragment(fragment: Fragment){
+        supportFragmentManager.beginTransaction()
+            .add(binding.frameLayout.id, fragment)
+            .commit()
+    }
 
 }

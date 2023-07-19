@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mocacong.data.request.FilteringRequest
 import com.example.mocacong.data.response.CafePreviewResponse
-import com.example.mocacong.data.response.ErrorResponse
 import com.example.mocacong.data.response.FilteringResponse
 import com.example.mocacong.data.response.LocalSearchResponse
 import com.example.mocacong.data.util.ApiState
@@ -13,7 +12,6 @@ import com.example.mocacong.repositories.MapRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
@@ -44,7 +42,6 @@ class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
         MutableStateFlow(ApiState.Loading())
     var previewInfo: StateFlow<ApiState<CafePreviewResponse>> = mPreviewInfo
 
-
     fun requestFilterStudyType(type: String, filteringRequest: FilteringRequest) =
         viewModelScope.launch(Dispatchers.IO) {
             mFilteredCafesFlow.value = ApiState.Loading()
@@ -52,18 +49,14 @@ class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
             mFilteredCafesFlow.value = result
         }
 
-
     fun requestFavorites(filteringRequest: FilteringRequest) =
         viewModelScope.launch(Dispatchers.IO) {
             mfavoriteFlow.value = ApiState.Loading()
             val result = mapRepository.getFavorites(filteringRequest)
             mfavoriteFlow.value = result
-
         }
 
-
     fun requestMapCafeLists(mapx: String, mapy: String) = viewModelScope.launch(Dispatchers.IO) {
-        Log.d(TAG, "requestMapCafeLists 호출됨")
         mPlaceByLocation.value = ApiState.Loading()
         val result = mapRepository.getLocationBasedCafes(mapx, mapy)
         mPlaceByLocation.value = result
@@ -71,25 +64,12 @@ class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
 
     fun requestKeyCafeLists(query: String) = viewModelScope.launch(Dispatchers.IO) {
         mPlaceByKeyword.value = ApiState.Loading()
-        mapRepository.getKeywordBasedCafes(query)
-            .catch {
-                mPlaceByKeyword.value = ApiState.Error(ErrorResponse(code = 0, "${it.message}"))
-            }
-            .collect {
-                mPlaceByKeyword.value = it
-            }
+        mPlaceByKeyword.value = mapRepository.getKeywordBasedCafes(query)
     }
 
     fun requestPreviewInfo(cafeId: String) = viewModelScope.launch(Dispatchers.IO) {
         mPreviewInfo.value = ApiState.Loading()
-        mapRepository.getPreviewInfo(cafeId = cafeId)
-            .catch {
-                mPreviewInfo.value = ApiState.Error(ErrorResponse(code = 0, "${it.message}"))
-            }
-            .collect {
-                mPreviewInfo.value = it
-            }
+        mPreviewInfo.value = mapRepository.getPreviewInfo(cafeId = cafeId)
     }
-
 
 }

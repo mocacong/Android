@@ -10,7 +10,6 @@ import com.example.mocacong.controllers.SignInController
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.SignInRequest
 import com.example.mocacong.databinding.ActivitySignInBinding
-import com.example.mocacong.network.ServerNetworkException
 import com.example.mocacong.ui.MessageDialog
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -22,18 +21,13 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var controller: SignInController
     private var backButtonPressedOnce = false
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
         controller = SignInController()
-        try {
-            layoutInit()
-            setBackBtn()
-        } catch (e: ServerNetworkException) {
-            MessageDialog(e.responseMessage)
-        }
+        layoutInit()
+        setBackBtn()
     }
 
 

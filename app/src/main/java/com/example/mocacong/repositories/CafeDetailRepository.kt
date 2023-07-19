@@ -2,17 +2,12 @@ package com.example.mocacong.repositories
 
 import com.example.mocacong.data.objects.NetworkUtil
 import com.example.mocacong.data.objects.RetrofitClient
-import com.example.mocacong.data.response.BaseFlowResponse
 import com.example.mocacong.data.response.CafeResponse
-import com.example.mocacong.data.response.Comment
 import com.example.mocacong.data.response.CommentsResponse
 import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.network.CafeDetailAPI
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
-class CafeDetailRepository : BaseFlowResponse() {
-    //flow를 생성하고 서버에 데이터 요청
+class CafeDetailRepository  {
 
     private val api = RetrofitClient.create(CafeDetailAPI::class.java)
 

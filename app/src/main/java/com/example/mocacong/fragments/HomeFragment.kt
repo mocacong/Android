@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
+import com.example.mocacong.activities.MainActivity
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.FilteringRequest
 import com.example.mocacong.data.response.Place
@@ -89,8 +90,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun setLayout() {
         binding.searchBar.setOnClickListener {
-            childFragmentManager.beginTransaction().replace(binding.root.id, SearchFragment())
-                .commit()
+            val activity = requireActivity()
+            if(activity is MainActivity){
+                activity.addFragment(SearchFragment())
+            }
         }
 
         binding.filteringSoloBtn.setOnClickListener {

@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class MapRepository : BaseFlowResponse() {
+class MapRepository {
 
     private val api = RetrofitClient.create(MapApi::class.java)
     private val kakaoApi = KakaoLocalClient.create(KakaoSearchAPI::class.java)
@@ -54,12 +54,24 @@ class MapRepository : BaseFlowResponse() {
         }
     }
 
-    suspend fun getKeywordBasedCafes(query: String): Flow<ApiState<LocalSearchResponse>> = flow {
-        emit(flowCall { kakaoApi.getKeywordSearchResponse(query = query) })
-    }.flowOn(Dispatchers.IO)
+    suspend fun getKeywordBasedCafes(query: String): ApiState<LocalSearchResponse>  {
+        val response =  kakaoApi.getKeywordSearchResponse(query = query)
+        return if (response.isSuccessful) {
+            ApiState.Success(response.body())
+        } else {
+            val errorResponse = NetworkUtil.getErrorResponse(response.errorBody()!!)
+            ApiState.Error(errorResponse = errorResponse!!)
+        }
+    }
 
-    suspend fun getPreviewInfo(cafeId: String): Flow<ApiState<CafePreviewResponse>> = flow {
-        emit(flowCall { api.getPreview(cafeId = cafeId) })
-    }.flowOn(Dispatchers.IO)
+    suspend fun getPreviewInfo(cafeId: String): ApiState<CafePreviewResponse> {
+       val response = api.getPreview(cafeId = cafeId)
+        return if (response.isSuccessful) {
+            ApiState.Success(response.body())
+        } else {
+            val errorResponse = NetworkUtil.getErrorResponse(response.errorBody()!!)
+            ApiState.Error(errorResponse = errorResponse!!)
+        }
+    }
 
 }
