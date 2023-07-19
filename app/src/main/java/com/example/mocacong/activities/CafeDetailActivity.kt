@@ -1,5 +1,6 @@
 package com.example.mocacong.activities
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.mocacong.R
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.objects.Utils.intentSerializable
@@ -16,8 +18,8 @@ import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.data.util.TokenExceptionHandler
 import com.example.mocacong.data.util.ViewModelFactory
 import com.example.mocacong.databinding.ActivityCafeDetailBinding
-import com.example.mocacong.fragments.EditReviewFragment
 import com.example.mocacong.fragments.CafeCommentsFragment
+import com.example.mocacong.fragments.EditReviewFragment
 import com.example.mocacong.repositories.CafeDetailRepository
 import com.example.mocacong.viewmodels.CafeDetailViewModel
 import kotlinx.coroutines.launch
@@ -41,7 +43,8 @@ class CafeDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         cafeViewModelFactory = ViewModelFactory(CafeDetailRepository())
-        cafeViewModel = ViewModelProvider(this, cafeViewModelFactory)[CafeDetailViewModel::class.java]
+        cafeViewModel =
+            ViewModelProvider(this, cafeViewModelFactory)[CafeDetailViewModel::class.java]
 
         getCafeInfo()
         setLayout()
@@ -58,6 +61,12 @@ class CafeDetailActivity : AppCompatActivity() {
 
         binding.commentPlusBar.setOnClickListener {
             makeCommentPopup()
+        }
+
+        binding.cafeImagePlusBtn.setOnClickListener {
+            val intent = Intent(this, CafeImagesActivity::class.java)
+            intent.putExtra("cafeId",cafeId)
+            startActivity(intent)
         }
 
     }
@@ -128,7 +137,10 @@ class CafeDetailActivity : AppCompatActivity() {
                     }
                     is ApiState.Error -> {
                         apiState.errorResponse?.let { errorResponse ->
-                            TokenExceptionHandler.handleTokenException(this@CafeDetailActivity, errorResponse)
+                            TokenExceptionHandler.handleTokenException(
+                                this@CafeDetailActivity,
+                                errorResponse
+                            )
                             Log.e(TAG, errorResponse.message)
                         }
                         mCafeDetailInfosFlow.value = ApiState.Loading()
@@ -141,12 +153,18 @@ class CafeDetailActivity : AppCompatActivity() {
     }
 
     private fun setCafeImagesView(cafeImages: List<CafeImage>) {
-//        val grid = binding.imagesGridLayout
-//        if (cafeImages.isEmpty()) return
-//        val uri = Uri.parse(cafeImages[0].imageUrl)
-//        for(i in cafeImages.indices){
-//        }
+        val imageViews = listOf(
+            binding.cafeImage1,
+            binding.cafeImage2,
+            binding.cafeImage3,
+            binding.cafeImage4,
+            binding.cafeImage5
+        )
 
+        cafeImages.forEachIndexed { index, cafeImage ->
+            imageViews[index]
+            Glide.with(this).load(cafeImage.imageUrl).into(imageViews[index])
+        }
     }
 
     private fun setCommentsLayout(comments: List<Comment>, commentsCount: Int) {

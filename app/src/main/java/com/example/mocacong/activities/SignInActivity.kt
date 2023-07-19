@@ -32,7 +32,6 @@ class SignInActivity : AppCompatActivity() {
 
 
     private fun layoutInit() {
-
         binding.signInBtn.setOnClickListener {
             val emailID = binding.emailText.text.toString()
             val pwText = binding.pwText.text.toString()
