@@ -22,10 +22,3 @@ data class CafeImage(
     val imageUrl : String?,
     val isMe: Boolean
 )
-
-data class Comment(
-    val imgUrl: String?,
-    val nickname: String?,
-    val content: String,
-    val isMe: Boolean
-)

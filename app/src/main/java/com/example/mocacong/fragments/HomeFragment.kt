@@ -1,7 +1,6 @@
 package com.example.mocacong.fragments
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
@@ -15,12 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
-import com.example.mocacong.activities.SignInActivity
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.FilteringRequest
-import com.example.mocacong.data.response.ErrorResponse
 import com.example.mocacong.data.response.Place
 import com.example.mocacong.data.util.ApiState
+import com.example.mocacong.data.util.TokenExceptionHandler
 import com.example.mocacong.databinding.FragmentHomeBinding
 import com.example.mocacong.viewmodels.MapViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -28,7 +26,6 @@ import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.coroutines.launch
@@ -172,7 +169,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     }
                     is ApiState.Error -> {
                         apiState.errorResponse?.let { er ->
-                            handleTokenException(er)
+                            TokenExceptionHandler.handleTokenException(requireContext(), er)
                             Log.e(TAG, er.message)
                         }
                         mFilteredCafesFlow.value = ApiState.Loading()
@@ -200,7 +197,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     }
                     is ApiState.Error -> {
                         apiState.errorResponse?.let { er ->
-                            handleTokenException(er)
+                            TokenExceptionHandler.handleTokenException(requireContext(), er)
                             Log.e(TAG, er.message)
                         }
                         mfavoriteFlow.value = ApiState.Loading()
@@ -332,7 +329,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     }
                     is ApiState.Error -> {
                         state.errorResponse?.let { er ->
-                            handleTokenException(er)
+                            TokenExceptionHandler.handleTokenException(requireContext(), er)
                             Log.e(TAG, er.message)
                         }
                         mPlaceByLocation.value = ApiState.Loading()
@@ -400,33 +397,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-
-    private fun handleTokenException(errorResponse: ErrorResponse) {
-        when (errorResponse.code) {
-            1013 -> {
-                Utils.showConfirmDialog(requireContext(),
-                    "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?",
-                    confirmAction = {
-                        gotoSignInActivity()
-                    },
-                    cancelAction = {})
-            }
-            1014 or 1015 -> {
-                Utils.showConfirmDialog(requireContext(), errorResponse.message, confirmAction = {
-                    gotoSignInActivity()
-                }, cancelAction = {
-
-                })
-            }
-        }
-    }
-
-    private fun gotoSignInActivity() {
-        val intent = Intent(requireContext(), SignInActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
     }
 
 

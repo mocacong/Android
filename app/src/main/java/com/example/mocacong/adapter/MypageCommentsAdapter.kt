@@ -1,11 +1,9 @@
 package com.example.mocacong.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mocacong.data.response.Cafe
-import com.example.mocacong.databinding.ItemMyCafesBinding
 import com.example.mocacong.databinding.ItemMyCommentsBinding
 
 class MypageCommentsAdapter(
@@ -13,7 +11,6 @@ class MypageCommentsAdapter(
 ) : RecyclerView.Adapter<MypageCommentsAdapter.MyViewHolder>() {
     inner class MyViewHolder(private val binding: ItemMyCommentsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(cafe: Cafe) {
             binding.cafe.text = cafe.name
             binding.commentText.text = cafe.comment

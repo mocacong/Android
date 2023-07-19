@@ -1,6 +1,5 @@
 package com.example.mocacong.activities
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -14,12 +13,12 @@ import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.objects.Utils.intentSerializable
 import com.example.mocacong.data.response.*
 import com.example.mocacong.data.util.ApiState
+import com.example.mocacong.data.util.TokenExceptionHandler
 import com.example.mocacong.data.util.ViewModelFactory
 import com.example.mocacong.databinding.ActivityCafeDetailBinding
 import com.example.mocacong.fragments.EditReviewFragment
-import com.example.mocacong.fragments.WriteCommentFragment
+import com.example.mocacong.fragments.CafeCommentsFragment
 import com.example.mocacong.repositories.CafeDetailRepository
-import com.example.mocacong.ui.MessageDialog
 import com.example.mocacong.viewmodels.CafeDetailViewModel
 import kotlinx.coroutines.launch
 
@@ -33,16 +32,16 @@ class CafeDetailActivity : AppCompatActivity() {
     private var isFav = false
     private var isFavLoading = false
 
-    private lateinit var viewModel: CafeDetailViewModel
-    private lateinit var viewModelFactory: ViewModelFactory<CafeDetailRepository>
+    private lateinit var cafeViewModel: CafeDetailViewModel
+    private lateinit var cafeViewModelFactory: ViewModelFactory<CafeDetailRepository>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCafeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModelFactory = ViewModelFactory(CafeDetailRepository())
-        viewModel = ViewModelProvider(this, viewModelFactory)[CafeDetailViewModel::class.java]
+        cafeViewModelFactory = ViewModelFactory(CafeDetailRepository())
+        cafeViewModel = ViewModelProvider(this, cafeViewModelFactory)[CafeDetailViewModel::class.java]
 
         getCafeInfo()
         setLayout()
@@ -53,12 +52,12 @@ class CafeDetailActivity : AppCompatActivity() {
             makeEditPopUp()
         }
 
-        binding.commentMoreBtn.setOnClickListener {
-            //todo:댓글 더보기 기능
-        }
-
         binding.favBtn.setOnClickListener {
             favoriteClicked()
+        }
+
+        binding.commentPlusBar.setOnClickListener {
+            makeCommentPopup()
         }
 
     }
@@ -68,7 +67,7 @@ class CafeDetailActivity : AppCompatActivity() {
             return
         lifecycleScope.launch {
             isFavLoading = true
-            viewModel.apply {
+            cafeViewModel.apply {
                 requestFavoritePost(cafeId, !isFav).join()
 
                 when (val apiState = postFavoriteFlow.value) {
@@ -81,7 +80,7 @@ class CafeDetailActivity : AppCompatActivity() {
                     }
                     is ApiState.Error -> {
                         apiState.errorResponse?.let { er ->
-                            handleTokenException(er)
+                            TokenExceptionHandler.handleTokenException(this@CafeDetailActivity, er)
                             Log.e(TAG, er.message)
                         }
                         mPostFavoriteFlow.value = ApiState.Loading()
@@ -113,7 +112,7 @@ class CafeDetailActivity : AppCompatActivity() {
         setBasicInfo(cafe)
 
         lifecycleScope.launch {
-            viewModel.apply {
+            cafeViewModel.apply {
                 requestCafeDetailInfo(cafeId).join()
                 when (val apiState = cafeDatailInfoFlow.value) {
                     is ApiState.Success -> {
@@ -129,7 +128,7 @@ class CafeDetailActivity : AppCompatActivity() {
                     }
                     is ApiState.Error -> {
                         apiState.errorResponse?.let { errorResponse ->
-                            handleTokenException(errorResponse)
+                            TokenExceptionHandler.handleTokenException(this@CafeDetailActivity, errorResponse)
                             Log.e(TAG, errorResponse.message)
                         }
                         mCafeDetailInfosFlow.value = ApiState.Loading()
@@ -139,41 +138,6 @@ class CafeDetailActivity : AppCompatActivity() {
 
             }
         }
-    }
-
-
-    private fun handleTokenException(errorResponse: ErrorResponse) {
-        when (errorResponse.code) {
-            1013 -> {
-                Utils.showConfirmDialog(this@CafeDetailActivity,
-                    "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?",
-                    confirmAction = {
-                        gotoSignInActivity()
-                    },
-                    cancelAction = {
-
-                    }
-                )
-            }
-            1014 or 1015 -> {
-                Utils.showConfirmDialog(this@CafeDetailActivity,
-                    errorResponse.message,
-                    confirmAction = {
-                        gotoSignInActivity()
-                    },
-                    cancelAction = {
-
-                    }
-                )
-            }
-        }
-    }
-
-    private fun gotoSignInActivity() {
-        val intent = Intent(this, SignInActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-        finish()
     }
 
     private fun setCafeImagesView(cafeImages: List<CafeImage>) {
@@ -193,13 +157,12 @@ class CafeDetailActivity : AppCompatActivity() {
         if (commentsCount > 3) {
             binding.commentMoreBtn.visibility = View.VISIBLE
             binding.commentMoreBtn.setOnClickListener {
-                val popup = MessageDialog("서비스 준비 중입니다")
-                popup.show(supportFragmentManager, popup.tag)
+                makeCommentPopup()
             }
         }
+        val cmtViews = arrayOf(binding.comment1, binding.comment2, binding.comment3)
 
         for (i in comments.indices) {
-            val cmtViews = arrayOf(binding.comment1, binding.comment2, binding.comment3)
             cmtViews[i].visibility = View.VISIBLE
             cmtViews[i].setComment(comments[i].content)
             cmtViews[i].setMyComment(comments[i].isMe)
@@ -221,9 +184,9 @@ class CafeDetailActivity : AppCompatActivity() {
     private fun makeCommentPopup() {
         val bundle = Bundle()
         bundle.putString("cafeId", cafeId)
-        val writeCommentFragment = WriteCommentFragment()
-        writeCommentFragment.arguments = bundle
-        writeCommentFragment.show(supportFragmentManager, writeCommentFragment.tag)
+        val cafeCommentsFragment = CafeCommentsFragment()
+        cafeCommentsFragment.arguments = bundle
+        cafeCommentsFragment.show(supportFragmentManager, cafeCommentsFragment.tag)
     }
 
     private fun setBasicInfo(cafe: Place) {

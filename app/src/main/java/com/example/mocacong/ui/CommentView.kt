@@ -1,10 +1,14 @@
 package com.example.mocacong.ui
 
+import OnSwipeTouchListener
 import android.content.Context
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mocacong.R
 import com.example.mocacong.databinding.ItemCommentViewBinding
@@ -22,7 +26,6 @@ class CommentView @JvmOverloads constructor(
         val inflater = LayoutInflater.from(context)
         binding = ItemCommentViewBinding.inflate(inflater, this, true)
     }
-
 
     fun setProfileImage(imgUrl: Uri?) {
         if(imgUrl == null) binding.profileImage.setImageResource(R.drawable.profile_no_image)

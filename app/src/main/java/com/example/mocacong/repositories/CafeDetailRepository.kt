@@ -4,6 +4,8 @@ import com.example.mocacong.data.objects.NetworkUtil
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.response.BaseFlowResponse
 import com.example.mocacong.data.response.CafeResponse
+import com.example.mocacong.data.response.Comment
+import com.example.mocacong.data.response.CommentsResponse
 import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.network.CafeDetailAPI
 import kotlinx.coroutines.flow.Flow
@@ -23,8 +25,8 @@ class CafeDetailRepository : BaseFlowResponse() {
         }
     }
 
-    suspend fun postFavorite(id: String): ApiState<Void> {
-        val response = api.postFavorite(cafeId = id)
+    suspend fun postFavorite(favoriteId: String): ApiState<Void> {
+        val response = api.postFavorite(cafeId = favoriteId)
         return if (response.isSuccessful) ApiState.Success(response.body())
         else {
             val errorResponse = NetworkUtil.getErrorResponse(response.errorBody()!!)
@@ -32,12 +34,31 @@ class CafeDetailRepository : BaseFlowResponse() {
         }
     }
 
-    suspend fun deleteFavorite(id: String): ApiState<Void> {
-        val response = api.deleteFavorite(cafeId = id)
+    suspend fun deleteFavorite(favoriteId: String): ApiState<Void> {
+        val response = api.deleteFavorite(cafeId = favoriteId)
         return if (response.isSuccessful) ApiState.Success(response.body())
         else {
             val errorResponse = NetworkUtil.getErrorResponse(response.errorBody()!!)
             ApiState.Error(errorResponse = errorResponse!!)
         }
     }
+
+    suspend fun getComments(cafeId: String, page: Int): ApiState<CommentsResponse> {
+        val response = api.getCafeComment(cafeId = cafeId, page = page)
+        return if (response.isSuccessful) ApiState.Success(response.body())
+        else {
+            val errorResponse = NetworkUtil.getErrorResponse(response.errorBody()!!)
+            ApiState.Error(errorResponse = errorResponse!!)
+        }
+    }
+
+    suspend fun postComment(cafeId: String, content: String) : ApiState<Void>{
+        val response = api.postCafeComment(cafeId = cafeId, content = content)
+        return if (response.isSuccessful) ApiState.Success(response.body())
+        else {
+            val errorResponse = NetworkUtil.getErrorResponse(response.errorBody()!!)
+            ApiState.Error(errorResponse = errorResponse!!)
+        }
+    }
+
 }

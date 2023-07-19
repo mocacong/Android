@@ -16,7 +16,6 @@ import com.example.mocacong.data.response.MyReviewResponse
 import com.example.mocacong.data.response.ReviewResponse
 import com.example.mocacong.databinding.FragmentEditReviewBinding
 import com.example.mocacong.network.CafeDetailAPI
-import com.example.mocacong.network.ServerNetworkException
 import com.example.mocacong.ui.MessageDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.Dispatchers
@@ -42,12 +41,8 @@ class EditReviewFragment : BottomSheetDialogFragment() {
 
         cafeId = arguments?.getString("cafeId")!!
 
-        try {
-            setLayout()
-            setListeners()
-        } catch (e: ServerNetworkException) {
-            MessageDialog(e.responseMessage)
-        }
+        setLayout()
+        setListeners()
 
         return binding.root
     }

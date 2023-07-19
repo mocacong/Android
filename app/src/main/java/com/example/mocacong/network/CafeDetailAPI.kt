@@ -69,4 +69,6 @@ interface CafeDetailAPI {
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Path("cafeId") cafeId: String
     ) : Response<Void>
+
+
 }
