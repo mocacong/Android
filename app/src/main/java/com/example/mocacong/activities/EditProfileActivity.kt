@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.example.mocacong.R
 import com.example.mocacong.data.objects.Member
 import com.example.mocacong.data.objects.Utils
+import com.example.mocacong.data.objects.Utils.handleEnterKey
 import com.example.mocacong.data.request.EditProfileRequest
 import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.data.util.TokenExceptionHandler
@@ -56,6 +57,8 @@ class EditProfileActivity : AppCompatActivity() {
         setEditImgBtn()
         setMemberInfo()
 //        setEditPwBtn()
+
+        binding.nameText.handleEnterKey()
 
         binding.completeBtn.setOnClickListener {
             completeBtnClicked()
