@@ -6,13 +6,22 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import java.io.Serializable
 
 object Utils {
     private var toast: Toast? = null
 
-    fun showConfirmDialog(context: Context, msg: String, confirmAction: () -> Unit, cancelAction: () -> Unit) {
+    fun showConfirmDialog(
+        context: Context,
+        msg: String,
+        confirmAction: () -> Unit,
+        cancelAction: () -> Unit
+    ) {
         AlertDialog.Builder(context).apply {
             setCancelable(false)
             setMessage(msg)
@@ -26,7 +35,20 @@ object Utils {
         }.show()
     }
 
-
+    fun EditText.handleEnterKey() {
+        val inputMethodManager =
+            ContextCompat.getSystemService(context, InputMethodManager::class.java)
+        this.setOnKeyListener { _, code, keyEvent ->
+            if ((keyEvent.action == KeyEvent.ACTION_DOWN) && (code == KeyEvent.KEYCODE_ENTER)) {
+                (inputMethodManager)?.hideSoftInputFromWindow(
+                    this.windowToken,
+                    0
+                )
+                true
+            }
+            false
+        }
+    }
 
 
     fun showToast(context: Context, msg: String) {

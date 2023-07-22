@@ -3,7 +3,6 @@ package com.example.mocacong.fragments
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -30,7 +29,6 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.coroutines.launch
-import java.io.Serializable
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
@@ -62,36 +60,70 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         getMapFragment()
         return binding.root
     }
+    override fun onMapReady(naverMap: NaverMap) {
+        //지도 객체 세팅
+        Log.d("MAP", "객체 초기화")
+        this.naverMap = naverMap
 
-    private fun <T : Serializable> Bundle.argSerializable(key: String, clazz: Class<T>): T? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            this.getSerializable(key, clazz)
-        } else {
-            this.getSerializable(key) as T?
+        //현위치 버튼 활성 및 줌 버튼 제거
+        naverMap.uiSettings.apply {
+            isZoomControlEnabled = false
+            isLocationButtonEnabled = true
         }
+        naverMap.cameraPosition = CameraPosition(
+            LatLng(37.5666102, 126.9783881), 16.0
+        )
+        naverMap.locationSource = locationSource
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireContext())
+        setCurrentLocation()
+
+        markerImg = OverlayImage.fromResource(R.drawable.marker_origin)
+        markerFavImg = OverlayImage.fromResource(R.drawable.marker_fav)
+
+        naverMap.addOnCameraIdleListener {
+            lifecycleScope.launch {
+                if (!isLoading) {
+                    delMarkers()
+                    refreshMarkerList().join()
+                    mapViewModel.searchedPlaceResult?.let {
+                        markers[it]?.let { marker->
+                            marker.performClick()
+                            Log.d(TAG, "마커클릭됨!")
+                            mapViewModel.searchedPlaceResult = null
+                        }
+                        Log.d(TAG, "searched 들어옴!")
+                    }
+                }
+            }
+        }
+
+        mapViewModel.searchedPlaceResult?.let {
+            gotoSearchedPlace(it)
+        }
+
+        naverMap.setOnMapClickListener { _, _ ->
+            revertMarker()
+        }
+
+        setLayout()
     }
 
-    private fun gotoSearchedPlace() {
-        val searchedPlace = arguments?.argSerializable("searchedPlace", Place::class.java)
-        if (searchedPlace != null) {
-            Log.d("search", "searched 받았음 : $searchedPlace")
 
-            val cameraUpdate = CameraUpdate.scrollTo(
-                LatLng(
-                    searchedPlace.y.toDouble(), searchedPlace.x.toDouble()
-                )
-            ).animate(CameraAnimation.Easing).finishCallback {
-                addMarker(searchedPlace)
-                markers[searchedPlace]?.performClick()
-            }
-            naverMap.moveCamera(cameraUpdate)
-        }
+    private fun gotoSearchedPlace(searchedPlace: Place) {
+        Log.d(TAG, "searched 받았음 : $searchedPlace")
+        val cameraUpdate = CameraUpdate.scrollTo(
+            LatLng(
+                searchedPlace.y.toDouble(), searchedPlace.x.toDouble()
+            )
+        ).animate(CameraAnimation.Easing)
+        naverMap.moveCamera(cameraUpdate)
     }
 
     private fun setLayout() {
         binding.searchBar.setOnClickListener {
             val activity = requireActivity()
-            if(activity is MainActivity){
+            if (activity is MainActivity) {
                 activity.addFragment(SearchFragment())
             }
         }
@@ -238,40 +270,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    override fun onMapReady(naverMap: NaverMap) {
-        //지도 객체 세팅
-        Log.d("MAP", "객체 초기화")
-        this.naverMap = naverMap
-
-        //현위치 버튼 활성 및 줌 버튼 제거
-        naverMap.uiSettings.apply {
-            isZoomControlEnabled = false
-            isLocationButtonEnabled = true
-        }
-        naverMap.cameraPosition = CameraPosition(
-            LatLng(37.5666102, 126.9783881), 16.0
-        )
-        naverMap.locationSource = locationSource
-        fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireContext())
-        setCurrentLocation()
-
-        markerImg = OverlayImage.fromResource(R.drawable.marker_origin)
-        markerFavImg = OverlayImage.fromResource(R.drawable.marker_fav)
-
-        naverMap.addOnCameraIdleListener {
-            refreshMarkerList()
-        }
-
-        naverMap.setOnMapClickListener { _, _ ->
-            revertMarker()
-        }
-
-        setLayout()
-        gotoSearchedPlace()
-
-
-    }
 
     private fun setCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(
@@ -307,14 +305,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun refreshMarkerList() {
-        if (isLoading) return
-        //마커 45개 이상 시 전부 삭제
-        delMarkers()
-        val y = naverMap.cameraPosition.target.latitude.toString()
-        val x = naverMap.cameraPosition.target.longitude.toString()
+    private fun refreshMarkerList() =
         lifecycleScope.launch {
             isLoading = true
+            val y = naverMap.cameraPosition.target.latitude.toString()
+            val x = naverMap.cameraPosition.target.longitude.toString()
             mapViewModel.apply {
                 requestMapCafeLists(x, y).join()
                 when (val state = placeByLocation.value) {
@@ -342,15 +337,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         }
-    }
+
 
     private fun addMarkersToMap() {
-        markers.forEach{
+        markers.forEach {
             it.value.map = naverMap
         }
     }
 
-    private fun addMarker(place: Place?) {
+    private fun addMarker(place: Place?): Marker? {
         place?.let {
             Log.d(TAG, "addMarker 호출 place = ${place.place_name}")
             val marker = Marker()
@@ -370,15 +365,16 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 }
                 true
             }
-        }
-    }
 
+            return marker
+        }
+        return null
+    }
 
     private fun createPreview(cafe: Place) {
         val previewFragment = CafePreviewFragment.newInstance(cafe)
         previewFragment.show(childFragmentManager, "CafePreviewFragment")
     }
-
 
     private fun markerFirstClicked(marker: Marker) {
         revertMarker()
@@ -388,7 +384,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         marker.tag = 1
     }
 
-
     private fun delMarkers() {
         markers.forEach { (_, marker) ->
             marker.map = null
@@ -396,11 +391,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         markers.clear()
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        revertMarker()
     }
-
 
 }

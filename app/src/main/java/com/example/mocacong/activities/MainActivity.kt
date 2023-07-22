@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         btnv.selectedItemId = id
     }
 
-    private fun showFragment(fragment: Fragment) {
+    fun showFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(binding.frameLayout.id, fragment)
             .commit()

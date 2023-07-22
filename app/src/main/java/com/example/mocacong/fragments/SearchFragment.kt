@@ -1,9 +1,7 @@
 package com.example.mocacong.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,18 +12,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mocacong.activities.SignInActivity
+import com.example.mocacong.activities.MainActivity
 import com.example.mocacong.adapter.SearchCafeAdapter
-import com.example.mocacong.data.objects.Utils
-import com.example.mocacong.data.response.ErrorResponse
+import com.example.mocacong.data.objects.Utils.handleEnterKey
+import com.example.mocacong.data.response.Place
 import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.data.util.TokenExceptionHandler
 import com.example.mocacong.databinding.FragmentSearchBinding
 import com.example.mocacong.viewmodels.MapViewModel
 import kotlinx.coroutines.launch
 
-class SearchFragment : Fragment() {
-
+class SearchFragment : Fragment() , SearchCafeAdapter.OnSearchItemClickedListener {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val mapViewModel: MapViewModel by activityViewModels()
@@ -38,24 +35,19 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-
         layoutInit()
         return binding.root
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-
     private fun layoutInit() {
-        adapter = SearchCafeAdapter()
+        adapter = SearchCafeAdapter(this)
         binding.searchRecyclerView.adapter = adapter
         binding.searchRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val inputMethodManager = getSystemService(requireContext(), InputMethodManager::class.java)
-
         binding.searchText.addTextChangedListener {
             lifecycleScope.launch {
                 mapViewModel.apply {
@@ -79,24 +71,15 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-
-        binding.searchText.setOnKeyListener { _, code, keyEvent ->
-            if ((keyEvent.action == KeyEvent.ACTION_DOWN) && (code == KeyEvent.KEYCODE_ENTER)) {
-                (inputMethodManager)?.hideSoftInputFromWindow(
-                    binding.searchText.windowToken,
-                    0
-                )
-                true
-            }
-            false
-        }
+        binding.searchText.handleEnterKey()
     }
 
-
-    private fun gotoSignInActivity() {
-        val intent = Intent(requireContext(), SignInActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+    override fun onItemClicked(place: Place) {
+        mapViewModel.searchedPlaceResult = place
+        val activity = requireActivity()
+        if (activity is MainActivity) {
+            activity.showFragment(HomeFragment())
+        }
     }
 
 }

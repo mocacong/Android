@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mocacong.data.request.FilteringRequest
-import com.example.mocacong.data.response.CafePreviewResponse
-import com.example.mocacong.data.response.FilteringResponse
-import com.example.mocacong.data.response.LocalSearchResponse
-import com.example.mocacong.data.response.ProfileResponse
+import com.example.mocacong.data.response.*
 import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.repositories.MapRepository
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +34,8 @@ class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
     var mPlaceByKeyword: MutableStateFlow<ApiState<LocalSearchResponse>> =
         MutableStateFlow(ApiState.Loading())
     var placeByKeyword: StateFlow<ApiState<LocalSearchResponse>> = mPlaceByKeyword
+
+    var searchedPlaceResult : Place? = null
 
     var mPreviewInfo: MutableStateFlow<ApiState<CafePreviewResponse>> =
         MutableStateFlow(ApiState.Loading())
