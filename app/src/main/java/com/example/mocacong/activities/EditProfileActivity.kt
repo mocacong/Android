@@ -8,20 +8,22 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.mocacong.R
 import com.example.mocacong.data.objects.Member
-import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.EditProfileRequest
-import com.example.mocacong.data.response.ProfileResponse
+import com.example.mocacong.data.util.ApiState
+import com.example.mocacong.data.util.TokenExceptionHandler
+import com.example.mocacong.data.util.ViewModelFactory
 import com.example.mocacong.databinding.ActivityEditProfileBinding
-import com.example.mocacong.network.MyPageAPI
-import com.example.mocacong.network.ServerNetworkException
+import com.example.mocacong.repositories.EditProfileRepository
 import com.example.mocacong.ui.MessageDialog
+import com.example.mocacong.viewmodels.EditProfileViewModel
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
@@ -30,22 +32,23 @@ import okhttp3.RequestBody
 import java.io.File
 
 class EditProfileActivity : AppCompatActivity() {
-
+    val TAG = "EditProfile"
     lateinit var binding: ActivityEditProfileBinding
-    private val api = RetrofitClient.create(MyPageAPI::class.java)
-    private var body: MultipartBody.Part? = null
-    private var changedUri: String? = null
 
+    private var body: MultipartBody.Part? = null
+    private lateinit var firstNickname: String
+
+    private lateinit var profileViewModel: EditProfileViewModel
+    private lateinit var profileViewModelFactory: ViewModelFactory<EditProfileRepository>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
 
-        try {
-            setLayout()
-        } catch (e: ServerNetworkException) {
-            MessageDialog(e.responseMessage)
-        }
+        profileViewModelFactory = ViewModelFactory(EditProfileRepository())
+        profileViewModel =
+            ViewModelProvider(this, profileViewModelFactory)[EditProfileViewModel::class.java]
+        setLayout()
         setContentView(binding.root)
     }
 
@@ -56,7 +59,6 @@ class EditProfileActivity : AppCompatActivity() {
 
         binding.completeBtn.setOnClickListener {
             completeBtnClicked()
-            finish()
         }
         binding.cancelBtn.setOnClickListener {
             onBackPressed()
@@ -69,44 +71,78 @@ class EditProfileActivity : AppCompatActivity() {
         binding.gotoEditPasswordBtn.setOnClickListener {
             MessageDialog("서비스 준비 중입니다.").show(supportFragmentManager, "MessageDialog")
         }
-
     }
 
     private fun completeBtnClicked() {
-        putInfo()
+        //닉네임이 변하지 않았으면 이미지만 send
+        lifecycleScope.launch {
+            val nickname = binding.nameText.text.toString()
+            val isNicknameSuccess =
+                withContext(Dispatchers.IO) { if (nickname != firstNickname) putNickName(nickname) else true }
+            if (isNicknameSuccess) {
+                val isImageSuccess = withContext(Dispatchers.IO) {
+                    if (body != null) {
+                        putProfileImage(body!!)
+                    } else true
+                }
+                if (isImageSuccess) {
+                    Utils.showToast(this@EditProfileActivity, "회원 정보가 변경되었습니다")
+                    val intent = Intent(this@EditProfileActivity, MainActivity::class.java)
+                    intent.putExtra("tabNumber", 1)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                }
+            }
+        }
     }
 
-    private fun putInfo() {
-        lifecycleScope.launch {
-            body?.let {
-                Log.d("EditProfile", "send Image 작업 시작")
-                async { sendImage(it) }.await()
-                Log.d("EditProfile", "send Image 작업 끝")
-            }
-            val nickname = binding.nameText.text.toString()
-            //닉네임이 변하지 않았으면 이미지만 send
-            if (nickname == Member.nickname) return@launch
-
-            val message = try {
-                withContext(Dispatchers.IO) {
-                    val requestInfo = EditProfileRequest(nickname)
-                    val response = api.editProfileInfo(info = requestInfo)
-                    return@withContext ""
+    private suspend fun putProfileImage(body: MultipartBody.Part): Boolean {
+        profileViewModel.apply {
+            putProfileImage(body).join()
+            when (val apiState = profileImagePUTFlow.value) {
+                is ApiState.Success -> {
+                    return true
                 }
-            } catch (e: ServerNetworkException) {
-                e.responseMessage
+                is ApiState.Error -> {
+                    apiState.errorResponse?.let {
+                        TokenExceptionHandler.handleTokenException(this@EditProfileActivity, it)
+                        Log.e(TAG, it.message)
+                    }
+                    return false
+                }
+                is ApiState.Loading -> {
+                    return false
+                }
             }
+        }
+    }
 
-            if (message == "") {
-                Member.nickname = nickname
-
-                Utils.showToast(this@EditProfileActivity, "회원 정보 수정 성공")
-                val intent = Intent(this@EditProfileActivity, MainActivity::class.java)
-                intent.putExtra("tabNumber", 1)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-            } else MessageDialog(message).show(supportFragmentManager, "MessageDialog")
-
+    private suspend fun putNickName(nickname: String): Boolean {
+        profileViewModel.apply {
+            putProfileInfo(EditProfileRequest(nickname)).join()
+            when (val apiState = profileInfoPUTFlow.value) {
+                is ApiState.Success -> {
+                    return true
+                }
+                is ApiState.Error -> {
+                    apiState.errorResponse?.let {
+                        TokenExceptionHandler.handleTokenException(this@EditProfileActivity, it)
+                        Log.e(TAG, it.message)
+                        when(it.code){
+                            1002->{
+                                MessageDialog("닉네임 형식은 영어, 한글 2~6자 입니다").show(supportFragmentManager, "MessageDialog")
+                            }
+                            1004->{
+                                MessageDialog("이미 존재하는 닉네임입니다").show(supportFragmentManager, "MessageDialog")
+                            }
+                        }
+                    }
+                    return false
+                }
+                is ApiState.Loading -> {
+                    return false
+                }
+            }
         }
     }
 
@@ -118,17 +154,10 @@ class EditProfileActivity : AppCompatActivity() {
                 val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
                 body = MultipartBody.Part.createFormData("file", file.name, requestFile)
                 Log.d("editProfile", "body = $body")
-                changedUri = it.toString()
             }
         }
     }
 
-
-    private suspend fun sendImage(body: MultipartBody.Part) {
-        val response = api.putMyProfileImage(file = body)
-        if (response.isSuccessful)
-            Log.d("editProfile", "프로필 이미지 put 성공")
-    }
 
     private fun setLogoutBtn() {
         Member.deleteInfo()
@@ -138,39 +167,35 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
 
-    private fun setMemberInfo() {
+    private fun setMemberInfo() =
         lifecycleScope.launch {
-            if (Member.email == null) {
-                val profile = async { getProfileInfo() }.await()
-                if (profile != null) {
-                    Member.email = profile.email
-                    Member.nickname = profile.nickname
-                    Member.imgUrl = profile.imgUrl
+            profileViewModel.apply {
+                requestProfileInfo().join()
+                when (val apiState = profileGETFlow.value) {
+                    is ApiState.Success -> {
+                        apiState.data?.let { profile ->
+                            firstNickname = profile.nickname
+                            binding.emailText.text = profile.email
+                            binding.nameText.setText(profile.nickname)
+                            if (profile.imgUrl == null) {
+                                binding.profileImg.setImageResource(R.drawable.profile_no_image)
+                            } else {
+                                Glide.with(this@EditProfileActivity).load(profile.imgUrl)
+                                    .into(binding.profileImg)
+                            }
+                        }
+                    }
+                    is ApiState.Error -> {
+                        apiState.errorResponse?.let {
+                            TokenExceptionHandler.handleTokenException(this@EditProfileActivity, it)
+                            Log.e(TAG, it.message)
+                        }
+                    }
+                    is ApiState.Loading -> {}
                 }
             }
-            Member.imgUrl?.let {
-                binding.profileImg.setImageURI(Uri.parse(it))
-            }
-
-            if (Member.imgUrl != null)
-                Glide.with(this@EditProfileActivity).load(Member.imgUrl)
-                    .into(binding.profileImg)
-            binding.emailText.text = Member.email
-            binding.nameText.setText(Member.nickname)
         }
-    }
 
-    private suspend fun getProfileInfo(): ProfileResponse? {
-        val api = RetrofitClient.create(MyPageAPI::class.java)
-        val response = api.getMyProfile()
-        if (response.isSuccessful) {
-            Log.d("editProfile", "프로필 정보 get 성공")
-            return response.body() ?: throw Exception("프로필 정보가 null입니다.")
-        } else {
-            Utils.showToast(this, response.message())
-            return null
-        }
-    }
 
     private fun absolutePath(uri: Uri?): String {
         val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)

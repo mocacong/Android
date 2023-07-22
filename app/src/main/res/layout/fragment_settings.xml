@@ -109,7 +109,7 @@
         android:id="@+id/infoTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:gravity="center|left"
         android:padding="20dp"
         android:text="앱 정보"
@@ -121,10 +121,103 @@
         app:layout_constraintTop_toBottomOf="@id/withdrawBtn" />
 
     <TextView
-        android:id="@+id/whereTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="이용약관"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/termsBtn"
+        app:layout_constraintLeft_toLeftOf="@id/termsBtn"
+        app:layout_constraintTop_toTopOf="@id/termsBtn" />
+
+    <ImageButton
+        android:id="@+id/termsBtn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/transparent"
+        android:elevation="1dp"
+        android:padding="20dp"
+        android:scaleType="fitEnd"
+        android:src="@drawable/btn_go"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/infoTitleText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="위치기반 서비스 이용약관"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/locationTermsBtn"
+        app:layout_constraintLeft_toLeftOf="@id/locationTermsBtn"
+        app:layout_constraintTop_toTopOf="@id/locationTermsBtn" />
+
+    <ImageButton
+        android:id="@+id/locationTermsBtn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/transparent"
+        android:elevation="1dp"
+        android:padding="20dp"
+        android:scaleType="fitEnd"
+        android:src="@drawable/btn_go"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/termsBtn" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="개인정보 처리 방침"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/privacyBtn"
+        app:layout_constraintLeft_toLeftOf="@id/privacyBtn"
+        app:layout_constraintTop_toTopOf="@id/privacyBtn" />
+
+    <ImageButton
+        android:id="@+id/privacyBtn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/transparent"
+        android:elevation="1dp"
+        android:padding="20dp"
+        android:scaleType="fitEnd"
+        android:src="@drawable/btn_go"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locationTermsBtn" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="Q&amp;A"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/qnaBtn"
+        app:layout_constraintLeft_toLeftOf="@id/qnaBtn"
+        app:layout_constraintTop_toTopOf="@id/qnaBtn" />
+
+    <ImageButton
+        android:id="@+id/qnaBtn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/transparent"
+        android:elevation="1dp"
+        android:padding="20dp"
+        android:scaleType="fitEnd"
+        android:src="@drawable/btn_go"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/privacyBtn" />
+
+
+    <TextView
+        android:id="@+id/inquiryTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:gravity="center|left"
         android:padding="20dp"
         android:text="문의처"
@@ -133,6 +226,16 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/infoTitleText" />
+        app:layout_constraintTop_toBottomOf="@id/qnaBtn" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="official.mocacong@gmail.com"
+        android:textColor="@color/textGray"
+        app:layout_constraintLeft_toLeftOf="@id/qnaBtn"
+        app:layout_constraintTop_toBottomOf="@id/inquiryTitleText" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

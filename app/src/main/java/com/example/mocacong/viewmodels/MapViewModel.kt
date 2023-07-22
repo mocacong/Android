@@ -7,6 +7,7 @@ import com.example.mocacong.data.request.FilteringRequest
 import com.example.mocacong.data.response.CafePreviewResponse
 import com.example.mocacong.data.response.FilteringResponse
 import com.example.mocacong.data.response.LocalSearchResponse
+import com.example.mocacong.data.response.ProfileResponse
 import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.repositories.MapRepository
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,6 @@ class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
         MutableStateFlow(ApiState.Loading())
     var filteredCafesFlow: StateFlow<ApiState<FilteringResponse>> = mFilteredCafesFlow
 
-
     var mfavoriteFlow: MutableStateFlow<ApiState<FilteringResponse>> =
         MutableStateFlow(ApiState.Loading())
     var favoriteFlow: StateFlow<ApiState<FilteringResponse>> = mfavoriteFlow
@@ -41,6 +41,11 @@ class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
     var mPreviewInfo: MutableStateFlow<ApiState<CafePreviewResponse>> =
         MutableStateFlow(ApiState.Loading())
     var previewInfo: StateFlow<ApiState<CafePreviewResponse>> = mPreviewInfo
+
+    var mProfileInfo:MutableStateFlow<ApiState<ProfileResponse>> =
+        MutableStateFlow(ApiState.Loading())
+    var profileInfo: StateFlow<ApiState<ProfileResponse>> = mProfileInfo
+
 
     fun requestFilterStudyType(type: String, filteringRequest: FilteringRequest) =
         viewModelScope.launch(Dispatchers.IO) {
@@ -72,4 +77,8 @@ class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
         mPreviewInfo.value = mapRepository.getPreviewInfo(cafeId = cafeId)
     }
 
+    fun requestMemeberProfile() = viewModelScope.launch (Dispatchers.IO){
+        mProfileInfo.value = ApiState.Loading()
+        mProfileInfo.value = mapRepository.getProfileInfo()
+    }
 }
