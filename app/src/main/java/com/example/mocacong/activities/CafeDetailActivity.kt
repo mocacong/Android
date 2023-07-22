@@ -50,6 +50,7 @@ class CafeDetailActivity : AppCompatActivity() {
         setLayout()
     }
 
+
     private fun setLayout() {
         binding.editBtn.setOnClickListener {
             makeEditPopUp()

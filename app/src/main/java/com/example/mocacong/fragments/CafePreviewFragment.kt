@@ -111,6 +111,7 @@ class CafePreviewFragment : BottomSheetDialogFragment() {
         val intent = Intent(activity, CafeDetailActivity::class.java)
         intent.putExtra("cafe", cafe)
         startActivity(intent)
+        this.dismiss()
     }
 
     override fun onDestroy() {
