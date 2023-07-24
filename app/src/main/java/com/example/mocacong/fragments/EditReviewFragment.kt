@@ -135,7 +135,7 @@ class EditReviewFragment : BottomSheetDialogFragment() {
                     return@launch
                 }
                 val refreshData = if (isFirst) postReview() else putReview()
-                (activity as CafeDetailActivity).refreshDetailInfo(refreshData)
+                (activity as CafeDetailActivity).refreshDetailInfo()
                 dismiss()
             }
         }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.adapter.CafeCommentsAdapter
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.response.Comment
@@ -114,8 +115,9 @@ class CafeCommentsFragment : BottomSheetDialogFragment() {
                 is ApiState.Success -> {
                     apiState.data?.let { commentsResponse ->
                         isEnd = commentsResponse.isEnd
+                        val prevSize = comments.size
                         comments.addAll(commentsResponse.comments)
-                        adapter.notifyDataSetChanged()
+                        adapter.notifyItemRangeChanged(prevSize, commentsResponse.comments.size)
                         commentsResponse.count?.let {
                             val str = "댓글 ($it)"
                             binding.commentsCountText.text = str
@@ -136,6 +138,7 @@ class CafeCommentsFragment : BottomSheetDialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        (activity as CafeDetailActivity).refreshDetailInfo()
         _binding = null
     }
 

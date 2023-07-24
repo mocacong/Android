@@ -13,7 +13,10 @@ import com.bumptech.glide.Glide
 import com.example.mocacong.R
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.objects.Utils.intentSerializable
-import com.example.mocacong.data.response.*
+import com.example.mocacong.data.response.CafeImage
+import com.example.mocacong.data.response.CafeResponse
+import com.example.mocacong.data.response.Comment
+import com.example.mocacong.data.response.Place
 import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.data.util.TokenExceptionHandler
 import com.example.mocacong.data.util.ViewModelFactory
@@ -50,7 +53,6 @@ class CafeDetailActivity : AppCompatActivity() {
         setLayout()
     }
 
-
     private fun setLayout() {
         binding.editBtn.setOnClickListener {
             makeEditPopUp()
@@ -66,7 +68,7 @@ class CafeDetailActivity : AppCompatActivity() {
 
         binding.cafeImagePlusBtn.setOnClickListener {
             val intent = Intent(this, CafeImagesActivity::class.java)
-            intent.putExtra("cafeId",cafeId)
+            intent.putExtra("cafeId", cafeId)
             startActivity(intent)
         }
 
@@ -120,37 +122,7 @@ class CafeDetailActivity : AppCompatActivity() {
         cafe = intent.intentSerializable("cafe", Place::class.java)!!
         cafeId = cafe.id
         setBasicInfo(cafe)
-
-        lifecycleScope.launch {
-            cafeViewModel.apply {
-                requestCafeDetailInfo(cafeId).join()
-                when (val apiState = cafeDatailInfoFlow.value) {
-                    is ApiState.Success -> {
-                        Log.d(TAG, "Cafe Detail get 성공")
-                        apiState.data?.let { cafeData ->
-                            if (cafeData.myScore == 0) isFirst = true
-                            isFav = cafeData.favorite
-                            binding.favBtn.isSelected = isFav
-                            setDetailInfoLayout(cafeData)
-                            setCommentsLayout(cafeData.comments, cafeData.commentsCount)
-                            setCafeImagesView(cafeData.cafeImages)
-                        }
-                    }
-                    is ApiState.Error -> {
-                        apiState.errorResponse?.let { errorResponse ->
-                            TokenExceptionHandler.handleTokenException(
-                                this@CafeDetailActivity,
-                                errorResponse
-                            )
-                            Log.e(TAG, errorResponse.message)
-                        }
-                        mCafeDetailInfosFlow.value = ApiState.Loading()
-                    }
-                    is ApiState.Loading -> {}
-                }
-
-            }
-        }
+        refreshDetailInfo()
     }
 
     private fun setCafeImagesView(cafeImages: List<CafeImage>) {
@@ -191,15 +163,6 @@ class CafeDetailActivity : AppCompatActivity() {
             }
         }
     }
-
-    fun commentsAdded(cmts: List<Comment>?) {
-        if (cmts == null)
-            return
-        val cmtCount = binding.commentCountText.text.toString().toInt() + 1
-        binding.commentCountText.text = (cmtCount).toString()
-        setCommentsLayout(cmts, cmtCount)
-    }
-
     private fun makeCommentPopup() {
         val bundle = Bundle()
         bundle.putString("cafeId", cafeId)
@@ -233,22 +196,37 @@ class CafeDetailActivity : AppCompatActivity() {
         }
     }
 
-    fun refreshDetailInfo(data: ReviewResponse?) {
-        binding.apply {
-            data?.let {
-                scoreImgs.rating = data.score
-                val tmp = "${String.format("%.1f", data.score)} / 5.0"
-                scoreText.text = tmp
-                reviewCountText.text = data.reviewsCount.toString()
-                wifiText.setReviewText(data.wifi, getString(R.string.wifi))
-                parkingText.setReviewText(data.parking, getString(R.string.parking))
-                toiletText.setReviewText(data.toilet, getString(R.string.toilet))
-                deskText.setReviewText(data.desk, getString(R.string.desk))
-                powerText.setReviewText(data.power, getString(R.string.power))
-                soundText.setReviewText(data.sound, getString(R.string.sound))
+    fun refreshDetailInfo() = lifecycleScope.launch {
+        cafeViewModel.apply {
+            requestCafeDetailInfo(cafeId).join()
+            when (val apiState = cafeDatailInfoFlow.value) {
+                is ApiState.Success -> {
+                    Log.d(TAG, "Cafe Detail get 성공")
+                    apiState.data?.let { cafeData ->
+                        if (cafeData.myScore == 0) isFirst = true
+                        isFav = cafeData.favorite
+                        binding.favBtn.isSelected = isFav
+                        setDetailInfoLayout(cafeData)
+                        setCommentsLayout(cafeData.comments, cafeData.commentsCount)
+                        setCafeImagesView(cafeData.cafeImages)
+                    }
+                }
+                is ApiState.Error -> {
+                    apiState.errorResponse?.let { errorResponse ->
+                        TokenExceptionHandler.handleTokenException(
+                            this@CafeDetailActivity,
+                            errorResponse
+                        )
+                        Log.e(TAG, errorResponse.message)
+                    }
+                    mCafeDetailInfosFlow.value = ApiState.Loading()
+                }
+                is ApiState.Loading -> {}
             }
+
         }
     }
+
 
     private fun TextView.setReviewText(rev: String?, type: String) {
         if (rev != null) {

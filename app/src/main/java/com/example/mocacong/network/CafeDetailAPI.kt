@@ -42,7 +42,7 @@ interface CafeDetailAPI {
         @Header("Authorization") token : String? = "Bearer ${Member.getAuthToken()}",
         @Path("cafeId") cafeId : String,
         @Query("page") page : Int = 0,
-        @Query("count") count : Int = 3
+        @Query("count") count : Int = 15
     ) : Response<CommentsResponse>
 
     @GET("/cafes/{cafeId}/me")
