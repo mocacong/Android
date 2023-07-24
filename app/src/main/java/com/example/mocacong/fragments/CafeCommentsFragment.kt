@@ -115,9 +115,8 @@ class CafeCommentsFragment : BottomSheetDialogFragment() {
                 is ApiState.Success -> {
                     apiState.data?.let { commentsResponse ->
                         isEnd = commentsResponse.isEnd
-                        val prevSize = comments.size
                         comments.addAll(commentsResponse.comments)
-                        adapter.notifyItemRangeChanged(prevSize, commentsResponse.comments.size)
+                        adapter.notifyDataSetChanged()
                         commentsResponse.count?.let {
                             val str = "댓글 ($it)"
                             binding.commentsCountText.text = str
