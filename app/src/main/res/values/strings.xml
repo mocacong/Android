@@ -1,6 +1,46 @@
 <resources>
     <string name="app_name">Mocacong</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="REST_KEY">0c5797613ead2a6d69354f77254c6a25</string>
+
+    <string-array name="level_wifi">
+        <item>와이파이는</item>
+        <item>빵빵해요</item>
+        <item>적당해요</item>
+        <item>느려요</item>
+    </string-array>
+
+    <string-array name="level_parking">
+        <item>주차장은</item>
+        <item>여유로워요</item>
+        <item>협소해요</item>
+        <item>없어요</item>
+    </string-array>
+
+    <string-array name="level_toilet">
+        <item>화장실은</item>
+        <item>깨끗해요</item>
+        <item>평범해요</item>
+        <item>불편해요</item>
+    </string-array>
+
+    <string-array name="level_desk">
+        <item>책상은</item>
+        <item>편해요</item>
+        <item>보통이에요</item>
+        <item>불편해요</item>
+    </string-array>
+
+    <string-array name="level_power">
+        <item>콘센트는</item>
+        <item>충분해요</item>
+        <item>적당해요</item>
+        <item>없어요</item>
+    </string-array>
+
+    <string-array name="level_sound">
+        <item>분위기는</item>
+        <item>북적북적해요</item>
+        <item>적당해요</item>
+        <item>조용해요</item>
+    </string-array>
 </resources>

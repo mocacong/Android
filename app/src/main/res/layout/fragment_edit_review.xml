@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/AppBottomSheetDialogTheme"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/AppBottomSheetDialogTheme"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,14 +34,23 @@
             app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="*"
+            android:layout_marginRight="3dp"
+            android:textColor="@color/red"
+            app:layout_constraintRight_toLeftOf="@id/score"
+            app:layout_constraintTop_toTopOf="@id/score" />
+
+        <TextView
             android:id="@+id/score"
             style="@style/textStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="*평점*"
-            android:layout_marginLeft="30dp"
+            android:text="평점"
             app:layout_constraintBottom_toBottomOf="@id/ratingBar"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/ratingBar"
             app:layout_constraintTop_toTopOf="@id/ratingBar" />
 
         <com.willy.ratingbar.ScaleRatingBar
@@ -68,15 +77,23 @@
             app:srb_stepSize="1" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="*"
+            android:textColor="@color/red"
+            android:layout_marginRight="3dp"
+            app:layout_constraintRight_toLeftOf="@id/typeLabel"
+            app:layout_constraintTop_toTopOf="@id/typeLabel" />
+
+        <TextView
             android:id="@+id/typeLabel"
             style="@style/textStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="*코딩 타입*"
+            android:text="코딩 타입"
             app:layout_constraintBaseline_toBaselineOf="@id/soloBtn"
-            android:layout_marginLeft="30dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            />
+            app:layout_constraintRight_toLeftOf="@id/soloBtn" />
 
         <com.example.mocacong.ui.CustomButton
             android:id="@+id/soloBtn"
@@ -86,8 +103,6 @@
             android:gravity="center"
             android:paddingVertical="10dp"
             android:text="혼자"
-            app:layout_constraintBottom_toTopOf="@id/edit_recyclerView"
-
             app:layout_constraintLeft_toLeftOf="@id/ratingBar"
             app:layout_constraintRight_toLeftOf="@id/withBtn"
             app:layout_constraintTop_toBottomOf="@id/ratingBar"
@@ -106,15 +121,71 @@
             app:layout_constraintWidth_percent="0.25" />
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/edit_recyclerView"
+        <com.example.mocacong.ui.ReviewButtonGroup
+            android:id="@+id/wifiGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="30dp"
-
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            app:category="wifi"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/soloBtn" />
+            app:layout_constraintTop_toBottomOf="@id/withBtn" />
+
+        <com.example.mocacong.ui.ReviewButtonGroup
+            android:id="@+id/deskGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            app:category="desk"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wifiGroup" />
+
+        <com.example.mocacong.ui.ReviewButtonGroup
+            android:id="@+id/parkingGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            app:category="parking"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deskGroup" />
+
+        <com.example.mocacong.ui.ReviewButtonGroup
+            android:id="@+id/toiletGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            app:category="toilet"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/parkingGroup" />
+
+        <com.example.mocacong.ui.ReviewButtonGroup
+            android:id="@+id/powerGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            app:category="power"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toiletGroup" />
+
+        <com.example.mocacong.ui.ReviewButtonGroup
+            android:id="@+id/soundGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            app:category="sound"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/powerGroup" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

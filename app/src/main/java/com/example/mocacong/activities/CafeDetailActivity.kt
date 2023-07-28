@@ -66,6 +66,10 @@ class CafeDetailActivity : AppCompatActivity() {
             makeCommentPopup()
         }
 
+        binding.commentBtn.setOnClickListener {
+            makeCommentPopup()
+        }
+
         binding.cafeImagePlusBtn.setOnClickListener {
             val intent = Intent(this, CafeImagesActivity::class.java)
             intent.putExtra("cafeId", cafeId)

@@ -1,241 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <TextView
-        android:id="@+id/pageTitleText"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/darkBrown"
-        android:gravity="center"
-        android:padding="20dp"
-        android:text="Settings"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/accountTitleText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center|left"
-        android:padding="20dp"
-        android:text="계정"
-        android:textColor="@color/textGray"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pageTitleText" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="계정 정보"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@id/editProfileBtn"
-        app:layout_constraintLeft_toLeftOf="@id/editProfileBtn"
-        app:layout_constraintTop_toTopOf="@id/editProfileBtn" />
-
-    <ImageButton
-        android:id="@+id/editProfileBtn"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/transparent"
-        android:elevation="1dp"
-        android:padding="20dp"
-        android:scaleType="fitEnd"
-        android:src="@drawable/btn_go"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/accountTitleText" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="로그아웃"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@id/logoutBtn"
-        app:layout_constraintLeft_toLeftOf="@id/logoutBtn"
-        app:layout_constraintTop_toTopOf="@id/logoutBtn" />
-
-    <ImageButton
-        android:id="@+id/logoutBtn"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/transparent"
-        android:elevation="1dp"
-        android:padding="20dp"
-        android:scaleType="fitEnd"
-        android:src="@drawable/btn_go"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editProfileBtn" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="회원 탈퇴"
-        android:textColor="#A84F4F"
-        app:layout_constraintBottom_toBottomOf="@id/withdrawBtn"
-        app:layout_constraintLeft_toLeftOf="@id/withdrawBtn"
-        app:layout_constraintTop_toTopOf="@id/withdrawBtn" />
-
-    <ImageButton
-        android:id="@+id/withdrawBtn"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/transparent"
-        android:elevation="1dp"
-        android:padding="20dp"
-        android:scaleType="fitEnd"
-        android:src="@drawable/btn_go"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoutBtn" />
-
-    <TextView
-        android:id="@+id/infoTitleText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center|left"
-        android:padding="20dp"
-        android:text="앱 정보"
-        android:textColor="@color/textGray"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/withdrawBtn" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="이용약관"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@id/termsBtn"
-        app:layout_constraintLeft_toLeftOf="@id/termsBtn"
-        app:layout_constraintTop_toTopOf="@id/termsBtn" />
-
-    <ImageButton
-        android:id="@+id/termsBtn"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/transparent"
-        android:elevation="1dp"
-        android:padding="20dp"
-        android:scaleType="fitEnd"
-        android:src="@drawable/btn_go"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/infoTitleText" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="위치기반 서비스 이용약관"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@id/locationTermsBtn"
-        app:layout_constraintLeft_toLeftOf="@id/locationTermsBtn"
-        app:layout_constraintTop_toTopOf="@id/locationTermsBtn" />
-
-    <ImageButton
-        android:id="@+id/locationTermsBtn"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/transparent"
-        android:elevation="1dp"
-        android:padding="20dp"
-        android:scaleType="fitEnd"
-        android:src="@drawable/btn_go"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/termsBtn" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="개인정보 처리 방침"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@id/privacyBtn"
-        app:layout_constraintLeft_toLeftOf="@id/privacyBtn"
-        app:layout_constraintTop_toTopOf="@id/privacyBtn" />
-
-    <ImageButton
-        android:id="@+id/privacyBtn"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/transparent"
-        android:elevation="1dp"
-        android:padding="20dp"
-        android:scaleType="fitEnd"
-        android:src="@drawable/btn_go"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locationTermsBtn" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="Q&amp;A"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@id/qnaBtn"
-        app:layout_constraintLeft_toLeftOf="@id/qnaBtn"
-        app:layout_constraintTop_toTopOf="@id/qnaBtn" />
-
-    <ImageButton
-        android:id="@+id/qnaBtn"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/transparent"
-        android:elevation="1dp"
-        android:padding="20dp"
-        android:scaleType="fitEnd"
-        android:src="@drawable/btn_go"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/privacyBtn" />
+        android:layout_height="wrap_content">
 
 
-    <TextView
-        android:id="@+id/inquiryTitleText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center|left"
-        android:padding="20dp"
-        android:text="문의처"
-        android:textColor="@color/textGray"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/qnaBtn" />
+        <TextView
+            android:id="@+id/pageTitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/darkBrown"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="Settings"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="official.mocacong@gmail.com"
-        android:textColor="@color/textGray"
-        app:layout_constraintLeft_toLeftOf="@id/qnaBtn"
-        app:layout_constraintTop_toBottomOf="@id/inquiryTitleText" />
+        <TextView
+            android:id="@+id/accountTitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center|left"
+            android:padding="20dp"
+            android:text="계정"
+            android:textColor="@color/textGray"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pageTitleText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="계정 정보"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/editProfileBtn"
+            app:layout_constraintLeft_toLeftOf="@id/editProfileBtn"
+            app:layout_constraintTop_toTopOf="@id/editProfileBtn" />
+
+        <ImageButton
+            android:id="@+id/editProfileBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/transparent"
+            android:elevation="1dp"
+            android:padding="20dp"
+            android:scaleType="fitEnd"
+            android:src="@drawable/btn_go"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/accountTitleText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="로그아웃"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/logoutBtn"
+            app:layout_constraintLeft_toLeftOf="@id/logoutBtn"
+            app:layout_constraintTop_toTopOf="@id/logoutBtn" />
+
+        <ImageButton
+            android:id="@+id/logoutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/transparent"
+            android:elevation="1dp"
+            android:padding="20dp"
+            android:scaleType="fitEnd"
+            android:src="@drawable/btn_go"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editProfileBtn" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="회원 탈퇴"
+            android:textColor="#A84F4F"
+            app:layout_constraintBottom_toBottomOf="@id/withdrawBtn"
+            app:layout_constraintLeft_toLeftOf="@id/withdrawBtn"
+            app:layout_constraintTop_toTopOf="@id/withdrawBtn" />
+
+        <ImageButton
+            android:id="@+id/withdrawBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/transparent"
+            android:elevation="1dp"
+            android:padding="20dp"
+            android:scaleType="fitEnd"
+            android:src="@drawable/btn_go"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logoutBtn" />
+
+        <TextView
+            android:id="@+id/infoTitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center|left"
+            android:padding="20dp"
+            android:text="앱 정보"
+            android:textColor="@color/textGray"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/withdrawBtn" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="이용약관"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/termsBtn"
+            app:layout_constraintLeft_toLeftOf="@id/termsBtn"
+            app:layout_constraintTop_toTopOf="@id/termsBtn" />
+
+        <ImageButton
+            android:id="@+id/termsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/transparent"
+            android:elevation="1dp"
+            android:padding="20dp"
+            android:scaleType="fitEnd"
+            android:src="@drawable/btn_go"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/infoTitleText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="위치기반 서비스 이용약관"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/locationTermsBtn"
+            app:layout_constraintLeft_toLeftOf="@id/locationTermsBtn"
+            app:layout_constraintTop_toTopOf="@id/locationTermsBtn" />
+
+        <ImageButton
+            android:id="@+id/locationTermsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/transparent"
+            android:elevation="1dp"
+            android:padding="20dp"
+            android:scaleType="fitEnd"
+            android:src="@drawable/btn_go"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/termsBtn" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="개인정보 처리 방침"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/privacyBtn"
+            app:layout_constraintLeft_toLeftOf="@id/privacyBtn"
+            app:layout_constraintTop_toTopOf="@id/privacyBtn" />
+
+        <ImageButton
+            android:id="@+id/privacyBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/transparent"
+            android:elevation="1dp"
+            android:padding="20dp"
+            android:scaleType="fitEnd"
+            android:src="@drawable/btn_go"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/locationTermsBtn" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="Q&amp;A"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/qnaBtn"
+            app:layout_constraintLeft_toLeftOf="@id/qnaBtn"
+            app:layout_constraintTop_toTopOf="@id/qnaBtn" />
+
+        <ImageButton
+            android:id="@+id/qnaBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/transparent"
+            android:elevation="1dp"
+            android:padding="20dp"
+            android:scaleType="fitEnd"
+            android:src="@drawable/btn_go"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/privacyBtn" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/inquiryTitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center|left"
+            android:padding="20dp"
+            android:text="문의처"
+            android:textColor="@color/textGray"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/qnaBtn" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="official.mocacong@gmail.com"
+            android:textColor="@color/textGray"
+            app:layout_constraintLeft_toLeftOf="@id/qnaBtn"
+            app:layout_constraintTop_toBottomOf="@id/inquiryTitleText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

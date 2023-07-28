@@ -35,7 +35,7 @@ interface CafeDetailAPI {
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Path("cafeId") cafeId: String,
         @Body myReview: ReviewRequest
-    ) : Response<ReviewResponse>
+    ) : Response<Void>
 
     @GET("/cafes/{cafeId}/comments")
     suspend fun getCafeComment(
@@ -56,7 +56,7 @@ interface CafeDetailAPI {
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Path("cafeId") cafeId: String,
         @Body myReview: ReviewRequest
-    ) : Response<ReviewResponse>
+    ) : Response<Void>
 
     @POST("/cafes/{cafeId}/favorites")
     suspend fun postFavorite(
