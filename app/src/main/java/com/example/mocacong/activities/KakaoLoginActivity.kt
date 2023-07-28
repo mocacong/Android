@@ -16,7 +16,6 @@ import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.OAuthRequest
 import com.example.mocacong.data.response.KakaoLoginResponse
 import com.example.mocacong.databinding.ActivityKakaoLoginBinding
-import com.example.mocacong.network.ServerNetworkException
 import com.example.mocacong.network.SignInAPI
 import com.example.mocacong.network.SignUpAPI
 import com.example.mocacong.ui.MessageDialog
@@ -41,13 +40,8 @@ class KakaoLoginActivity : AppCompatActivity() {
         binding = ActivityKakaoLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //카카오서버에서 인가코드 받기
-        try {
-            kakaoOAuthLogin()
-            setListener()
-        } catch (e: ServerNetworkException) {
-            MessageDialog(e.responseMessage)
-        }
+        kakaoOAuthLogin()
+        setListener()
     }
 
     private fun setListener() {

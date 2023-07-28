@@ -2,6 +2,11 @@
     <string name="app_name">Mocacong</string>
     <string name="REST_KEY">0c5797613ead2a6d69354f77254c6a25</string>
 
+    <string name="termsUrl">https://mocacong.notion.site/78a169a2532a4e9e94fe2ae2da41c6a4</string>
+    <string name="locationTermsUrl">https://mocacong.notion.site/36de943075a2454d9bc3383e909c1390</string>
+    <string name="privacyUrl">https://mocacong.notion.site/ef1c29e4c9954d3e907936e955a1b8a0</string>
+    <string name="qnaUrl">https://mocacong.notion.site/Q-A-2c8e8ad6c2604245ba1610fdbcfcc7e2</string>
+
     <string-array name="level_wifi">
         <item>와이파이는</item>
         <item>빵빵해요</item>

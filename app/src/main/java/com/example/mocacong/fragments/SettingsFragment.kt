@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.mocacong.R
 import com.example.mocacong.activities.EditProfileActivity
 import com.example.mocacong.activities.SignInActivity
+import com.example.mocacong.activities.WebViewActivity
 import com.example.mocacong.data.objects.Member
 import com.example.mocacong.databinding.FragmentSettingsBinding
 import com.example.mocacong.ui.MessageDialog
@@ -52,10 +54,30 @@ class SettingsFragment : Fragment() {
                 MessageDialog("서비스 준비 중입니다").show(childFragmentManager, "MessageDialog")
             }
 
+            termsBtn.setOnClickListener {
+                gotoTermsActivity(getString(R.string.termsUrl))
+            }
+
+            locationTermsBtn.setOnClickListener {
+                gotoTermsActivity(getString(R.string.locationTermsUrl))
+            }
+
+            privacyBtn.setOnClickListener {
+                gotoTermsActivity(getString(R.string.privacyUrl))
+            }
+
+            qnaBtn.setOnClickListener {
+                gotoTermsActivity(getString(R.string.qnaUrl))
+            }
+
         }
     }
 
-
+    private fun gotoTermsActivity(urlString: String){
+        val intent = Intent(requireActivity(), WebViewActivity::class.java)
+        intent.putExtra("urlString",urlString)
+        startActivity(intent)
+    }
 
 
     override fun onDestroyView() {
