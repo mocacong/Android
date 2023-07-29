@@ -2,20 +2,19 @@ package com.example.mocacong.activities
 
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
 import com.example.mocacong.data.objects.Utils
-import com.example.mocacong.data.objects.Utils.intentSerializable
-import com.example.mocacong.data.response.Place
 import com.example.mocacong.data.util.ViewModelFactory
 import com.example.mocacong.databinding.ActivityMainBinding
 import com.example.mocacong.fragments.HomeFragment
 import com.example.mocacong.fragments.MypageFragment
-import com.example.mocacong.fragments.SearchFragment
 import com.example.mocacong.fragments.SettingsFragment
 import com.example.mocacong.repositories.MapRepository
 import com.example.mocacong.viewmodels.MapViewModel
@@ -25,11 +24,15 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-    private lateinit var homeFragment: HomeFragment
     private var backButtonPressedOnce = false
 
     private lateinit var mapViewModel: MapViewModel
     private lateinit var mapViewModelFactory: ViewModelFactory<MapRepository>
+
+    private lateinit var homeFragment: HomeFragment
+    private lateinit var settingsFragment: SettingsFragment
+    private lateinit var mypageFragment: MypageFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -39,8 +42,10 @@ class MainActivity : AppCompatActivity() {
         mapViewModel = ViewModelProvider(this, mapViewModelFactory)[MapViewModel::class.java]
 
         setBackBtn()
+        setInitialFragments()
         setBottomNav()
     }
+
 
     private fun setBackBtn() {
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -56,9 +61,22 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
+
+    private fun setInitialFragments() {
+        homeFragment = HomeFragment()
+        mypageFragment = MypageFragment()
+        settingsFragment = SettingsFragment()
+
+        supportFragmentManager.beginTransaction()
+            .add(binding.frameLayout.id, mypageFragment)
+            .add(binding.frameLayout.id, settingsFragment)
+            .add(binding.frameLayout.id, homeFragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            .commit()
+    }
+
 
     private fun setBottomNav() {
         val btnv = binding.bottomMenu
@@ -66,25 +84,16 @@ class MainActivity : AppCompatActivity() {
         btnv.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_map -> {
-                    homeFragment = HomeFragment()
-
-                    val place = intent.intentSerializable("place", Place::class.java)
-                    place?.let {
-                        val args = Bundle()
-                        args.putSerializable("searchedPlace", place)
-                        homeFragment.arguments = args
-                    }
-
                     showFragment(homeFragment)
                     true
                 }
                 R.id.menu_mypage -> {
-                    showFragment(MypageFragment())
+                    showFragment(mypageFragment)
                     true
                 }
                 R.id.menu_settings -> {
                     //해야됨
-                    showFragment(SettingsFragment())
+                    showFragment(settingsFragment)
                     true
                 }
                 else -> false
@@ -104,14 +113,27 @@ class MainActivity : AppCompatActivity() {
 
     fun showFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(binding.frameLayout.id, fragment)
+            .hideAll()
+            .show(fragment)
             .commit()
     }
 
     fun addFragment(fragment: Fragment){
+        binding.bottomMenu.visibility = View.GONE
         supportFragmentManager.beginTransaction()
             .add(binding.frameLayout.id, fragment)
+            .addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             .commit()
+    }
+
+    private fun FragmentTransaction.hideAll() : FragmentTransaction{
+        supportFragmentManager.fragments.forEach {
+            if(it!=null){
+                hide(it)
+            }
+        }
+        return this
     }
 
 }

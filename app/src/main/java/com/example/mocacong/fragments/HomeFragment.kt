@@ -1,6 +1,8 @@
 package com.example.mocacong.fragments
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
@@ -8,13 +10,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
-import com.example.mocacong.activities.MainActivity
+import com.example.mocacong.activities.SearchActivity
 import com.example.mocacong.data.objects.Utils
+import com.example.mocacong.data.objects.Utils.intentSerializable
 import com.example.mocacong.data.request.FilteringRequest
 import com.example.mocacong.data.response.Place
 import com.example.mocacong.data.util.ApiState
@@ -52,6 +56,23 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1000
 
+    private val searchLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.intentSerializable("searchedPlace", Place::class.java)?.let {
+                    gotoSearchedPlace(it)
+                }
+            }
+        }
+
+    val cafeDetailLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Log.d(TAG, "cafeDetail 끝!")
+                refreshMarkerList()
+            }
+        }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -60,6 +81,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         getMapFragment()
         return binding.root
     }
+
     override fun onMapReady(naverMap: NaverMap) {
         //지도 객체 세팅
         Log.d("MAP", "객체 초기화")
@@ -84,48 +106,44 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         naverMap.addOnCameraIdleListener {
             lifecycleScope.launch {
                 if (!isLoading) {
-                    delMarkers()
-                    refreshMarkerList().join()
-                    mapViewModel.searchedPlaceResult?.let {
-                        markers[it]?.let { marker->
-                            marker.performClick()
-                            Log.d(TAG, "마커클릭됨!")
-                            mapViewModel.searchedPlaceResult = null
-                        }
-                        Log.d(TAG, "searched 들어옴!")
-                    }
+                    if (markers.size >= 45)
+                        delMarkers()
+                    refreshMarkerList()
                 }
             }
         }
 
-        mapViewModel.searchedPlaceResult?.let {
-            gotoSearchedPlace(it)
-        }
 
         naverMap.setOnMapClickListener { _, _ ->
             revertMarker()
         }
 
         setLayout()
+        refreshMarkerList()
     }
 
 
     private fun gotoSearchedPlace(searchedPlace: Place) {
         Log.d(TAG, "searched 받았음 : $searchedPlace")
-        val cameraUpdate = CameraUpdate.scrollTo(
+        val cameraUpdate = CameraUpdate.scrollAndZoomTo(
             LatLng(
                 searchedPlace.y.toDouble(), searchedPlace.x.toDouble()
-            )
+            ), 21.0
         ).animate(CameraAnimation.Easing)
+            .finishCallback {
+                addMarker(searchedPlace)
+                markers[searchedPlace]?.let {
+                    it.map = naverMap
+                    it.performClick()
+                }
+                Log.d(TAG, "검색 Place 마커 클릭됨")
+            }
         naverMap.moveCamera(cameraUpdate)
     }
 
     private fun setLayout() {
         binding.searchBar.setOnClickListener {
-            val activity = requireActivity()
-            if (activity is MainActivity) {
-                activity.addFragment(SearchFragment())
-            }
+            searchLauncher.launch(Intent(requireContext(), SearchActivity::class.java))
         }
 
         binding.filteringSoloBtn.setOnClickListener {
@@ -226,6 +244,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                             markers.forEach { place, marker ->
                                 if (response.mapIds.contains(place.id)) {
                                     marker.icon = markerFavImg
+                                    place.isFavorite = true
+                                }else{
+                                    marker.icon = markerImg
+                                    place.isFavorite = false
                                 }
                             }
                         }
@@ -268,6 +290,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 fm.beginTransaction().add(R.id.map, it).commit()
             }
         mapFragment.getMapAsync(this)
+
     }
 
 
@@ -297,12 +320,18 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     fun revertMarker() {
-        if (clickedMarker != null) {
-            clickedMarker!!.icon = markerImg
-            clickedMarker!!.captionColor = Color.BLACK
-            clickedMarker!!.tag = 0
-            clickedMarker = null
+        clickedMarker?.let {
+            markers.forEach { (place, marker) ->
+                if (marker == clickedMarker) {
+                    it.icon = if (place.isFavorite) markerFavImg else markerImg
+                    it.captionColor = Color.BLACK
+                    it.tag = 0
+                    clickedMarker = null
+                    return@forEach
+                }
+            }
         }
+
     }
 
     private fun refreshMarkerList() =
@@ -316,8 +345,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     is ApiState.Success -> {
                         state.data?.let {
                             it.documents.forEach { place ->
-                                //없으면 추가하기
-                                if (!markers.containsKey(place)) addMarker(place)
+                                addMarker(place)
                             }
                             isLoading = false
                             filterFavs()
@@ -345,8 +373,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun addMarker(place: Place?): Marker? {
+    private fun addMarker(place: Place?) {
         place?.let {
+            if (markers.containsKey(it)) return
             Log.d(TAG, "addMarker 호출 place = ${place.place_name}")
             val marker = Marker()
             markers[place] = marker
@@ -354,7 +383,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             marker.position = LatLng(place.y.toDouble(), place.x.toDouble())
             marker.captionText = place.place_name
             marker.captionMinZoom = 9.0
-            marker.icon = markerImg
             marker.isHideCollidedSymbols = true
 
             marker.setOnClickListener {
@@ -365,10 +393,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 }
                 true
             }
-
-            return marker
         }
-        return null
     }
 
     private fun createPreview(cafe: Place) {
@@ -396,5 +421,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         _binding = null
         revertMarker()
     }
+
 
 }

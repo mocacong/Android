@@ -53,15 +53,6 @@ class MapRepository {
         }
     }
 
-    suspend fun getKeywordBasedCafes(query: String): ApiState<LocalSearchResponse>  {
-        val response =  kakaoApi.getKeywordSearchResponse(query = query)
-        return if (response.isSuccessful) {
-            ApiState.Success(response.body())
-        } else {
-            val errorResponse = NetworkUtil.getErrorResponse(response.errorBody()!!)
-            ApiState.Error(errorResponse = errorResponse!!)
-        }
-    }
 
     suspend fun getPreviewInfo(cafeId: String): ApiState<CafePreviewResponse> {
        val response = mapApi.getPreview(cafeId = cafeId)

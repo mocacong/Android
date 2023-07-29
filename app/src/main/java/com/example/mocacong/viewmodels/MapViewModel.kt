@@ -31,12 +31,6 @@ class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
         MutableStateFlow(ApiState.Loading())
     var placeByLocation: StateFlow<ApiState<LocalSearchResponse>> = mPlaceByLocation
 
-    var mPlaceByKeyword: MutableStateFlow<ApiState<LocalSearchResponse>> =
-        MutableStateFlow(ApiState.Loading())
-    var placeByKeyword: StateFlow<ApiState<LocalSearchResponse>> = mPlaceByKeyword
-
-    var searchedPlaceResult : Place? = null
-
     var mPreviewInfo: MutableStateFlow<ApiState<CafePreviewResponse>> =
         MutableStateFlow(ApiState.Loading())
     var previewInfo: StateFlow<ApiState<CafePreviewResponse>> = mPreviewInfo
@@ -64,11 +58,6 @@ class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
         mPlaceByLocation.value = ApiState.Loading()
         val result = mapRepository.getLocationBasedCafes(mapx, mapy)
         mPlaceByLocation.value = result
-    }
-
-    fun requestKeyCafeLists(query: String) = viewModelScope.launch(Dispatchers.IO) {
-        mPlaceByKeyword.value = ApiState.Loading()
-        mPlaceByKeyword.value = mapRepository.getKeywordBasedCafes(query)
     }
 
     fun requestPreviewInfo(cafeId: String) = viewModelScope.launch(Dispatchers.IO) {
