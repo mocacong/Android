@@ -1,5 +1,6 @@
 package com.example.mocacong.fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,18 +12,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.adapter.CafeCommentsAdapter
 import com.example.mocacong.data.objects.Utils
+import com.example.mocacong.data.objects.Utils.showKeyboard
 import com.example.mocacong.data.response.Comment
 import com.example.mocacong.data.util.ApiState
 import com.example.mocacong.data.util.TokenExceptionHandler
 import com.example.mocacong.databinding.FragmentCafeCommentsBinding
 import com.example.mocacong.ui.MessageDialog
 import com.example.mocacong.viewmodels.CafeDetailViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
 
 class CafeCommentsFragment : BottomSheetDialogFragment() {
     private val TAG = "CafeComments"
-
 
     private var _binding: FragmentCafeCommentsBinding? = null
     private val binding get() = _binding!!
@@ -34,6 +37,15 @@ class CafeCommentsFragment : BottomSheetDialogFragment() {
     private val comments = mutableListOf<Comment>()
     private var currentPage = 0
     private var isEnd = false
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = BottomSheetDialog(requireContext(), theme).apply {
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            behavior.isDraggable = false
+        }
+
+        return dialog
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +63,10 @@ class CafeCommentsFragment : BottomSheetDialogFragment() {
         binding.completeBtn.setOnClickListener {
             postComment()
         }
+
+        val isFocusToTextField = arguments?.getBoolean("isFocusToTextField", false)!!
+        if(isFocusToTextField)
+            binding.content.showKeyboard()
     }
 
     private fun refreshCommentsList() {

@@ -1,15 +1,16 @@
 package com.example.mocacong.activities
 
 import android.os.Bundle
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mocacong.adapter.SearchCafeAdapter
 import com.example.mocacong.data.objects.KakaoLocalClient
 import com.example.mocacong.data.objects.NetworkUtil
 import com.example.mocacong.data.objects.Utils.handleEnterKey
+import com.example.mocacong.data.objects.Utils.showKeyboard
 import com.example.mocacong.data.response.LocalSearchResponse
 import com.example.mocacong.data.response.Place
 import com.example.mocacong.data.util.ApiState
@@ -17,11 +18,10 @@ import com.example.mocacong.data.util.TokenExceptionHandler
 import com.example.mocacong.databinding.ActivitySearchBinding
 import com.example.mocacong.network.KakaoSearchAPI
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SearchActivity : AppCompatActivity() , SearchCafeAdapter.OnSearchItemClickedListener {
+class SearchActivity : AppCompatActivity(), SearchCafeAdapter.OnSearchItemClickedListener {
 
     private lateinit var binding: ActivitySearchBinding
     private lateinit var adapter: SearchCafeAdapter
@@ -40,34 +40,42 @@ class SearchActivity : AppCompatActivity() , SearchCafeAdapter.OnSearchItemClick
         adapter = SearchCafeAdapter(this)
         binding.searchRecyclerView.adapter = adapter
         binding.searchRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.searchText.addTextChangedListener {
-            lifecycleScope.launch {
-                val state = withContext(Dispatchers.IO) {
-                    getKeywordBasedCafes(binding.searchText.text.toString())
+
+        binding.searchText.apply {
+            handleEnterKey()
+            showKeyboard()
+            addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                override fun afterTextChanged(p0: Editable?) {}
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    setRecyclerItems()
                 }
-                 when(state) {
-                    is ApiState.Success -> {
-                        state.data?.let { response ->
-                            adapter.cafeList = response.documents
-                            adapter.notifyDataSetChanged()
-                        }
-                    }
-                    is ApiState.Error -> {
-                        state.errorResponse?.let { er ->
-                            TokenExceptionHandler.handleTokenException(this@SearchActivity, er)
-                        }
-                    }
-                    is ApiState.Loading -> {}
+            })
+        }
+    }
+
+    private fun setRecyclerItems() = lifecycleScope.launch {
+        val state = withContext(Dispatchers.IO) {
+            getKeywordBasedCafes(binding.searchText.text.toString())
+        }
+        when (state) {
+            is ApiState.Success -> {
+                state.data?.let { response ->
+                    adapter.cafeList = response.documents
+                    adapter.notifyDataSetChanged()
                 }
             }
-
+            is ApiState.Error -> {
+                state.errorResponse?.let { er ->
+                    TokenExceptionHandler.handleTokenException(this@SearchActivity, er)
+                }
+            }
+            is ApiState.Loading -> {}
         }
-        binding.searchText.handleEnterKey()
-        binding.searchText.performClick()
     }
 
 
-    suspend fun getKeywordBasedCafes(query: String): ApiState<LocalSearchResponse> {
+    private suspend fun getKeywordBasedCafes(query: String): ApiState<LocalSearchResponse> {
         val response = kakaoApi.getKeywordSearchResponse(query = query)
         return if (response.isSuccessful) {
             ApiState.Success(response.body())

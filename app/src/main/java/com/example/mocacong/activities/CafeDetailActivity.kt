@@ -63,11 +63,11 @@ class CafeDetailActivity : AppCompatActivity() {
         }
 
         binding.commentPlusBar.setOnClickListener {
-            makeCommentPopup()
+            makeCommentPopup(true)
         }
 
         binding.commentBtn.setOnClickListener {
-            makeCommentPopup()
+            makeCommentPopup(false)
         }
 
         binding.cafeImagePlusBtn.setOnClickListener {
@@ -152,7 +152,7 @@ class CafeDetailActivity : AppCompatActivity() {
         if (commentsCount > 3) {
             binding.commentMoreBtn.visibility = View.VISIBLE
             binding.commentMoreBtn.setOnClickListener {
-                makeCommentPopup()
+                makeCommentPopup(false)
             }
         }
         val cmtViews = arrayOf(binding.comment1, binding.comment2, binding.comment3)
@@ -167,9 +167,10 @@ class CafeDetailActivity : AppCompatActivity() {
             }
         }
     }
-    private fun makeCommentPopup() {
+    private fun makeCommentPopup(isFocusToTextField: Boolean) {
         val bundle = Bundle()
         bundle.putString("cafeId", cafeId)
+        bundle.putBoolean("isFocusToTextField", isFocusToTextField)
         val cafeCommentsFragment = CafeCommentsFragment()
         cafeCommentsFragment.arguments = bundle
         cafeCommentsFragment.show(supportFragmentManager, cafeCommentsFragment.tag)

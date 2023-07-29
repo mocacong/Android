@@ -50,6 +50,14 @@ object Utils {
         }
     }
 
+    fun EditText.showKeyboard(){
+        isFocusableInTouchMode = true
+        requestFocus()
+        val inputMethodManager =
+            ContextCompat.getSystemService(context, InputMethodManager::class.java)
+        inputMethodManager?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+    }
+
 
     fun showToast(context: Context, msg: String) {
         toast?.cancel()

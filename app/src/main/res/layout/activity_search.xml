@@ -23,6 +23,7 @@
         android:backgroundTint="@color/white"
         android:hint="카페를 검색해 보세요"
         android:imeOptions="actionSearch"
+        style="@style/EditTextStyle"
         android:inputType="text"
         android:maxLines="1"
         android:paddingLeft="40dp"
