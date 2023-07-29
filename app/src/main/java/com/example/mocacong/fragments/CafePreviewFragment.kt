@@ -1,17 +1,20 @@
 package com.example.mocacong.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.R
 import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.objects.Utils.bundleSerializable
+import com.example.mocacong.data.objects.Utils.intentSerializable
 import com.example.mocacong.data.request.CafeDetailRequest
 import com.example.mocacong.data.response.CafePreviewResponse
 import com.example.mocacong.data.response.Place
@@ -110,7 +113,7 @@ class CafePreviewFragment : BottomSheetDialogFragment() {
     private fun gotoDetailActivity(cafe: Place) {
         val intent = Intent(activity, CafeDetailActivity::class.java)
         intent.putExtra("cafe", cafe)
-        startActivity(intent)
+        (requireParentFragment() as HomeFragment).cafeDetailLauncher.launch(intent)
         this.dismiss()
     }
 

@@ -244,9 +244,17 @@ class CafeDetailActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+        setResult(RESULT_OK)
         finish()
     }
+
+
+    override fun onPause() {
+        setResult(RESULT_OK)
+        finish()
+        super.onPause()
+    }
+
+
+
 }
-
-

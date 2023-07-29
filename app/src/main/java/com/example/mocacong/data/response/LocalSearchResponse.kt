@@ -19,8 +19,10 @@ data class Place(
     val place_url: String,
     val road_address_name: String?,
     val x: String,
-    val y: String
+    val y: String,
+    var isFavorite: Boolean = false
 ) : Serializable {
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

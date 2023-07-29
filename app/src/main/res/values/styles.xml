@@ -6,4 +6,8 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="colorControlActivated">@color/darkBrown</item>
+    </style>
+
 </resources>
