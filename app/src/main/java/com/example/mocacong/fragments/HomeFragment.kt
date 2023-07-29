@@ -125,6 +125,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun gotoSearchedPlace(searchedPlace: Place) {
         Log.d(TAG, "searched 받았음 : $searchedPlace")
+        delMarkers()
         val cameraUpdate = CameraUpdate.scrollAndZoomTo(
             LatLng(
                 searchedPlace.y.toDouble(), searchedPlace.x.toDouble()
@@ -203,6 +204,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                                 )
                             }
                             markers.forEach { (place, marker) ->
+                                if(marker==clickedMarker) return@forEach
                                 if (response.mapIds.contains(place.id)) {
                                     marker.alpha = 1F
                                     marker.setOnClickListener {
@@ -242,6 +244,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     is ApiState.Success -> {
                         apiState.data?.let { response ->
                             markers.forEach { place, marker ->
+                                if(marker==clickedMarker) return@forEach
                                 if (response.mapIds.contains(place.id)) {
                                     marker.icon = markerFavImg
                                     place.isFavorite = true
@@ -379,19 +382,22 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             Log.d(TAG, "addMarker 호출 place = ${place.place_name}")
             val marker = Marker()
             markers[place] = marker
-            marker.tag = 0
-            marker.position = LatLng(place.y.toDouble(), place.x.toDouble())
-            marker.captionText = place.place_name
-            marker.captionMinZoom = 9.0
-            marker.isHideCollidedSymbols = true
+            marker.apply {
+                tag = 0
+                position = LatLng(place.y.toDouble(), place.x.toDouble())
+                captionText = place.place_name
+                captionMinZoom = 9.0
+                isHideCollidedSymbols = true
+                icon = markerImg
 
-            marker.setOnClickListener {
-                if (marker.tag == 0) {
-                    markerFirstClicked(marker)
-                    createPreview(place)
-                    //마커 한 번 클릭
+                setOnClickListener {
+                    if (marker.tag == 0) {
+                        markerFirstClicked(marker)
+                        createPreview(place)
+                        //마커 한 번 클릭
+                    }
+                    true
                 }
-                true
             }
         }
     }
