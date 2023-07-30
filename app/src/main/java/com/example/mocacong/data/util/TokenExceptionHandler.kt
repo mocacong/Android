@@ -3,6 +3,7 @@ package com.example.mocacong.data.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.example.mocacong.activities.SignInActivity
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.response.ErrorResponse
@@ -10,6 +11,7 @@ import com.example.mocacong.data.response.ErrorResponse
 object TokenExceptionHandler {
 
     fun handleTokenException(context: Context, errorResponse: ErrorResponse) {
+        Log.e("NetworkError",errorResponse.code.toString())
         when (errorResponse.code) {
             1013 -> {
                 Utils.showConfirmDialog(context,
@@ -22,9 +24,10 @@ object TokenExceptionHandler {
                     }
                 )
             }
-            1014 or 1015 -> {
+            1014, 1015 , 1018 , 1021-> {
+                Log.d("NetworkError","when 들어왔음")
                 Utils.showConfirmDialog(context,
-                    errorResponse.message,
+                    "세션이 만료되었습니다. 다시 한 번 로그인 해주세요",
                     confirmAction = {
                         gotoSignInActivity(context)
                     },
@@ -33,6 +36,7 @@ object TokenExceptionHandler {
                     }
                 )
             }
+
         }
     }
 

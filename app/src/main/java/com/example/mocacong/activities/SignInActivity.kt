@@ -7,6 +7,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.mocacong.controllers.SignInController
+import com.example.mocacong.data.objects.NetworkManager
+import com.example.mocacong.data.objects.NetworkManager.Companion.isNetworkConnected
+import com.example.mocacong.data.objects.NetworkManager.Companion.showCheckDialog
 import com.example.mocacong.data.objects.Utils
 import com.example.mocacong.data.request.SignInRequest
 import com.example.mocacong.databinding.ActivitySignInBinding
@@ -64,6 +67,10 @@ class SignInActivity : AppCompatActivity() {
 
     private fun signInEvent(member: SignInRequest) {
         lifecycleScope.launch {
+            if(!isNetworkConnected(this@SignInActivity)) {
+                showCheckDialog(supportFragmentManager)
+                return@launch
+            }
             val msg = async { controller.signIn(member) }.await()
             if (msg == "로그인 성공") {
                 Utils.showToast(this@SignInActivity, "로그인 성공. 환영합니다")

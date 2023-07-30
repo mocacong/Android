@@ -15,8 +15,10 @@
         <item name="windowNoTitle">true</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
 
-        <item name="colorAccent">@color/darkBrown</item>
-        <item name="android:textColorHighlight">@color/mocaBrown</item>
+        <item name="colorOnSurface">@color/ssook</item>
+
+        <item name="colorAccent">@color/ssook</item>
+        <item name="android:textColorHighlight">@color/ssook</item>
     </style>
 
     <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">

@@ -1,9 +1,11 @@
 package com.example.mocacong.activities
 
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -32,6 +34,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var homeFragment: HomeFragment
     private lateinit var settingsFragment: SettingsFragment
     private lateinit var mypageFragment: MypageFragment
+
+    val editProfileLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                showFragment(mypageFragment)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +83,7 @@ class MainActivity : AppCompatActivity() {
             .add(binding.frameLayout.id, settingsFragment)
             .add(binding.frameLayout.id, homeFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            .hideAll()
             .commit()
     }
 
@@ -102,10 +112,22 @@ class MainActivity : AppCompatActivity() {
 
         val id =
             when (intent.getIntExtra("tabNumber", 0)) {
-                0 -> R.id.menu_map
-                1 -> R.id.menu_mypage
-                2 -> R.id.menu_settings
-                else -> R.id.menu_map
+                0 -> {
+                    showFragment(homeFragment)
+                    R.id.menu_map
+                }
+                1 -> {
+                    showFragment(mypageFragment)
+                    R.id.menu_mypage
+                }
+                2 -> {
+                    showFragment(settingsFragment)
+                    R.id.menu_settings
+                }
+                else -> {
+                    showFragment(homeFragment)
+                    R.id.menu_map
+                }
             }
 
         btnv.selectedItemId = id
@@ -115,16 +137,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .hideAll()
             .show(fragment)
-            .commit()
-    }
-
-    fun addFragment(fragment: Fragment){
-        binding.bottomMenu.visibility = View.GONE
-        supportFragmentManager.beginTransaction()
-            .add(binding.frameLayout.id, fragment)
-            .addToBackStack(null)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .commit()
+            .commitNow()
     }
 
     private fun FragmentTransaction.hideAll() : FragmentTransaction{

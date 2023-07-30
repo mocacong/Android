@@ -1,6 +1,5 @@
 package com.example.mocacong.activities
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +21,7 @@ import com.example.mocacong.data.util.TokenExceptionHandler
 import com.example.mocacong.data.util.ViewModelFactory
 import com.example.mocacong.databinding.ActivityCafeDetailBinding
 import com.example.mocacong.fragments.CafeCommentsFragment
+import com.example.mocacong.fragments.CafeImagesFragment
 import com.example.mocacong.fragments.EditReviewFragment
 import com.example.mocacong.repositories.CafeDetailRepository
 import com.example.mocacong.viewmodels.CafeDetailViewModel
@@ -71,11 +71,8 @@ class CafeDetailActivity : AppCompatActivity() {
         }
 
         binding.cafeImagePlusBtn.setOnClickListener {
-            val intent = Intent(this, CafeImagesActivity::class.java)
-            intent.putExtra("cafeId", cafeId)
-            startActivity(intent)
+            makeImagesPopup()
         }
-
     }
 
     private fun favoriteClicked() {
@@ -167,6 +164,7 @@ class CafeDetailActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun makeCommentPopup(isFocusToTextField: Boolean) {
         val bundle = Bundle()
         bundle.putString("cafeId", cafeId)
@@ -175,6 +173,15 @@ class CafeDetailActivity : AppCompatActivity() {
         cafeCommentsFragment.arguments = bundle
         cafeCommentsFragment.show(supportFragmentManager, cafeCommentsFragment.tag)
     }
+
+    private fun makeImagesPopup() {
+        val bundle = Bundle()
+        bundle.putString("cafeId", cafeId)
+        val cafeImagesFragment = CafeImagesFragment()
+        cafeImagesFragment.arguments = bundle
+        cafeImagesFragment.show(supportFragmentManager, cafeImagesFragment.tag)
+    }
+
 
     private fun setBasicInfo(cafe: Place) {
         binding.apply {
@@ -248,14 +255,5 @@ class CafeDetailActivity : AppCompatActivity() {
         setResult(RESULT_OK)
         finish()
     }
-
-
-    override fun onPause() {
-        setResult(RESULT_OK)
-        finish()
-        super.onPause()
-    }
-
-
 
 }

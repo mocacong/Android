@@ -129,7 +129,6 @@ class CafePreviewFragment : BottomSheetDialogFragment() {
         val response = filteringApi.getPreview(cafeId = id)
         if (response.isSuccessful) return response.body()!!
         else {
-            Utils.showToast(requireContext(), response.message())
             return null
         }
     }

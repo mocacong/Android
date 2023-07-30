@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
@@ -27,6 +29,7 @@ object Utils {
             setMessage(msg)
             setPositiveButton("확인") { _: DialogInterface, _: Int ->
                 confirmAction()
+
             }
             setNegativeButton("취소") { _: DialogInterface, _: Int ->
                 cancelAction()
@@ -50,7 +53,7 @@ object Utils {
         }
     }
 
-    fun EditText.showKeyboard(){
+    fun EditText.showKeyboard() {
         isFocusableInTouchMode = true
         requestFocus()
         val inputMethodManager =
@@ -80,4 +83,8 @@ object Utils {
             this.getSerializable(key) as T?
         }
     }
+
+
+
+
 }

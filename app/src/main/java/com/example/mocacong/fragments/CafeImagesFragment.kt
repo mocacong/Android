@@ -1,36 +1,40 @@
-package com.example.mocacong.activities
+package com.example.mocacong.fragments
 
+import android.app.Dialog
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.mocacong.activities.CafeDetailActivity
 import com.example.mocacong.adapter.ImageAdapter
+import com.example.mocacong.data.objects.NetworkUtil
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.response.CafeImage
 import com.example.mocacong.data.response.CafeImageResponse
-import com.example.mocacong.databinding.ActivityCafeImagesBinding
+import com.example.mocacong.data.util.ApiState
+import com.example.mocacong.data.util.TokenExceptionHandler
+import com.example.mocacong.databinding.FragmentCafeImagesBinding
 import com.example.mocacong.network.CafeImagesAPI
-import com.example.mocacong.network.ServerNetworkException
 import com.example.mocacong.ui.MessageDialog
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import gun0912.tedimagepicker.builder.TedImagePicker
 import gun0912.tedimagepicker.builder.type.MediaType
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 
-class CafeImagesActivity : AppCompatActivity() {
-
-    lateinit var binding: ActivityCafeImagesBinding
-
+class CafeImagesFragment : BottomSheetDialogFragment() {
     private lateinit var adapter: ImageAdapter
     private lateinit var cafeId: String
     private val imageUriList = mutableListOf<CafeImage>()
@@ -38,42 +42,52 @@ class CafeImagesActivity : AppCompatActivity() {
     private var isEnd = false
     private val api = RetrofitClient.create(CafeImagesAPI::class.java)
 
+    private var _binding: FragmentCafeImagesBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityCafeImagesBinding.inflate(layoutInflater)
-
-        getCafeId()
-        setLayout()
-
-        setContentView(binding.root)
+        arguments?.let {
+            cafeId = it.getString("cafeId")!!
+        }
     }
 
-    private fun getCafeId() {
-        cafeId = intent.getStringExtra("cafeId").toString()
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = BottomSheetDialog(requireContext(), theme).apply {
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            behavior.isDraggable = false
+        }
+
+        return dialog
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCafeImagesBinding.inflate(inflater, container, false)
+        setLayout()
+
+        return binding.root
     }
 
 
     private fun setLayout() {
         lifecycleScope.launch {
-            val response: CafeImageResponse? = try {
+            val response: CafeImageResponse? =
                 withContext(Dispatchers.Default) {
                     getCafeImages(
                         page = currentPage++
                     )
                 }
-            } catch (e: ServerNetworkException) {
-                MessageDialog(e.responseMessage).show(supportFragmentManager, "MessgaeDialog")
-                null
-            }
+
             if (response != null) {
                 imageUriList.addAll(response.cafeImages)
 
                 isEnd = response.isEnd
                 adapter = ImageAdapter(imageUriList)
                 binding.recyclerView.adapter = adapter
-                binding.recyclerView.layoutManager = GridLayoutManager(this@CafeImagesActivity, 3)
+                binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
             }
         }
 
@@ -82,26 +96,19 @@ class CafeImagesActivity : AppCompatActivity() {
                 loadNextPage()
         }
 
-        binding.backBtn.setOnClickListener {
-            onBackPressed()
-        }
-
         binding.plusBtn.setOnClickListener {
             addImage()
         }
-
-
     }
 
     private fun addImage() {
         // 이미지 선택
 //        imageController.launchMultipleGallery()
-        val picker = TedImagePicker.with(this)
+        val picker = TedImagePicker.with(requireContext())
         picker.apply {
             mediaType(MediaType.IMAGE)
             max(3, "이미지는 최대 3장까지 선택 가능합니다.")
         }.startMultiImage { selectedImages ->
-
             val parts = selectedImages.map { uri ->
                 Log.d("CafeImage", "uri : $uri")
                 val file = File(absolutePath(uri))
@@ -114,14 +121,13 @@ class CafeImagesActivity : AppCompatActivity() {
     }
 
 
-    private suspend fun postCafeImage(body: List<MultipartBody.Part>) {
+    private suspend fun postCafeImage(body: List<MultipartBody.Part>): ApiState<Void> {
         val response = api.postCafeImages(cafeId = cafeId, files = body)
 
-        Log.d("CafeImage", "이미지 보낸다 : ${response.raw().request().body()}")
-        if (response.isSuccessful) {
-            Log.d("CafeImage", "이미지 포스트 성공")
-        } else {
-
+        return if (response.isSuccessful) ApiState.Success(response.body())
+        else {
+            val errorResponse = NetworkUtil.getErrorResponse(response.errorBody()!!)
+            ApiState.Error(errorResponse = errorResponse!!)
         }
     }
 
@@ -138,45 +144,58 @@ class CafeImagesActivity : AppCompatActivity() {
 
 
     private fun loadNextPage() {
-        binding.progressBar.visibility = View.VISIBLE
-
         // 다음 페이지 가져옴
         lifecycleScope.launch {
-            try {
-                val response = getCafeImages(page = currentPage++)
-                if (response != null) {
-                    imageUriList.addAll(response.cafeImages)
-                    adapter.notifyItemRangeInserted(
-                        imageUriList.size - response.cafeImages.size,
-                        response.cafeImages.size
-                    )
-                    isEnd = response.isEnd
-                    binding.progressBar.visibility = View.GONE
-                }
-            } catch (e: ServerNetworkException) {
-
+            val response = getCafeImages(page = currentPage++)
+            if (response != null) {
+                imageUriList.addAll(response.cafeImages)
+                adapter.notifyItemRangeInserted(
+                    imageUriList.size - response.cafeImages.size,
+                    response.cafeImages.size
+                )
+                isEnd = response.isEnd
             }
         }
     }
 
     private fun onImageSelected(imageParts: List<MultipartBody.Part>) {
         lifecycleScope.launch {
-            async { postCafeImage(imageParts) }.await()
-            imageUriList.clear()
-            currentPage = 0
-            val response = async { getCafeImages(page = currentPage++) }.await()
-            if (response != null) {
-                imageUriList.addAll(response.cafeImages)
-                adapter.notifyDataSetChanged()
-                isEnd = response.isEnd
-                binding.progressBar.visibility = View.GONE
+            val imgPostState = withContext(Dispatchers.IO) {
+                postCafeImage(imageParts)
+            }
+            when (imgPostState) {
+                is ApiState.Success -> {
+                    imageUriList.clear()
+                    currentPage = 0
+                    val response = withContext(Dispatchers.IO) {
+                        getCafeImages(page = currentPage++)
+                    }
+                    if (response != null) {
+                        imageUriList.addAll(response.cafeImages)
+                        adapter.notifyDataSetChanged()
+                        isEnd = response.isEnd
+                    }
+                }
+                is ApiState.Error -> {
+                    imgPostState.errorResponse?.let {
+                        TokenExceptionHandler.handleTokenException(requireContext(), it)
+                        Log.e("Image", it.message)
+                        if (it.code == 2008) {
+                            MessageDialog("카페 이미지는 세 장까지 업로드 가능합니다").show(
+                                childFragmentManager,
+                                "MessageDialog"
+                            )
+                        }
+                    }
+                }
+                is ApiState.Loading -> {}
             }
         }
     }
 
     private fun absolutePath(uri: Uri?): String {
         val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-        val c: Cursor? = contentResolver.query(uri!!, proj, null, null, null)
+        val c: Cursor? = requireActivity().contentResolver.query(uri!!, proj, null, null, null)
         val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         c?.moveToFirst()
 
@@ -186,6 +205,11 @@ class CafeImagesActivity : AppCompatActivity() {
         return result!!
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as CafeDetailActivity).refreshDetailInfo()
+        _binding = null
+    }
+
 
 }
-

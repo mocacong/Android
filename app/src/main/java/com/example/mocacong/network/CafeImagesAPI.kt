@@ -12,8 +12,8 @@ interface CafeImagesAPI {
     suspend fun getCafeImagesResponse(
         @Header("Authorization") token : String? = "Bearer ${Member.getAuthToken()}",
         @Path("cafeId") cafeId : String,
-        @Query("page") page : Int = 10,
-        @Query("count") count : Int = 10
+        @Query("page") page : Int = 0,
+        @Query("count") count : Int = 20
     ) : Response<CafeImageResponse>
 
     @Multipart

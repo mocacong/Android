@@ -14,8 +14,6 @@ import com.example.mocacong.data.response.Cafe
 import com.example.mocacong.data.response.MypageCafesResponse
 import com.example.mocacong.databinding.FragmentMyCommentsBinding
 import com.example.mocacong.network.MyPageAPI
-import com.example.mocacong.network.ServerNetworkException
-import com.example.mocacong.ui.MessageDialog
 import kotlinx.coroutines.launch
 
 class MyCommentsFragment : Fragment() {
@@ -29,11 +27,7 @@ class MyCommentsFragment : Fragment() {
     ): View {
         _binding = FragmentMyCommentsBinding.inflate(inflater, container, false)
 
-        try {
-            setLayout()
-        } catch (e: ServerNetworkException) {
-            MessageDialog(e.responseMessage)
-        }
+        setLayout()
         return binding.root
     }
 

@@ -32,6 +32,7 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
@@ -159,10 +160,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-    private fun requestFiltering() {
+    private fun requestFiltering(): Job {
         val isGroupClicked = binding.filteringGroupBtn.isSelected
         val isSoloClicked = binding.filteringSoloBtn.isSelected
-        when {
+        return when {
             isSoloClicked && isGroupClicked -> {
                 filterMarkers("both")
             }
@@ -173,7 +174,21 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 filterMarkers("group")
             }
             else -> {
+                noFiltering()
+            }
+        }
+    }
 
+    private fun noFiltering() = lifecycleScope.launch {
+        markers.forEach { (place, marker) ->
+            marker.alpha = 1F
+            marker.setOnClickListener {
+                if (marker.tag == 0) {
+                    markerFirstClicked(marker)
+                    createPreview(place)
+                    //마커 한 번 클릭
+                }
+                true
             }
         }
     }
@@ -204,7 +219,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                                 )
                             }
                             markers.forEach { (place, marker) ->
-                                if(marker==clickedMarker) return@forEach
+                                if (marker == clickedMarker) return@forEach
                                 if (response.mapIds.contains(place.id)) {
                                     marker.alpha = 1F
                                     marker.setOnClickListener {
@@ -244,11 +259,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     is ApiState.Success -> {
                         apiState.data?.let { response ->
                             markers.forEach { place, marker ->
-                                if(marker==clickedMarker) return@forEach
+                                if (marker == clickedMarker) return@forEach
                                 if (response.mapIds.contains(place.id)) {
                                     marker.icon = markerFavImg
                                     place.isFavorite = true
-                                }else{
+                                } else {
                                     marker.icon = markerImg
                                     place.isFavorite = false
                                 }
@@ -352,7 +367,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                             }
                             isLoading = false
                             filterFavs()
-                            requestFiltering()
+                            requestFiltering().join()
                             addMarkersToMap()
                         }
                     }

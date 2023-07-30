@@ -6,6 +6,7 @@ import okhttp3.*
 import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
@@ -16,6 +17,9 @@ object RetrofitClient {
 
     //interceptor 생성
     private val interceptorClient = OkHttpClient().newBuilder()
+        .connectTimeout(5, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(15, TimeUnit.SECONDS)
         .addInterceptor(ResponseInterceptor())
         .build()
 

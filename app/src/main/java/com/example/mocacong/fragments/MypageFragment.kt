@@ -1,17 +1,20 @@
 package com.example.mocacong.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.mocacong.R
 import com.example.mocacong.activities.EditProfileActivity
+import com.example.mocacong.activities.MainActivity
 import com.example.mocacong.data.objects.RetrofitClient
 import com.example.mocacong.data.response.ProfileResponse
 import com.example.mocacong.data.util.ApiState
@@ -34,18 +37,23 @@ class MypageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
-        setProfileInfo()
-        setInitialFragment()
+
         setTabLayout()
         setLayout()
-
+        setInitialFragment()
         return binding.root
+    }
+
+    override fun onResume() {
+        setProfileInfo()
+        super.onResume()
     }
 
     private fun setLayout() {
         binding.editProfileBtn.setOnClickListener {
+            val activity = requireActivity() as MainActivity
             val intent = Intent(requireContext(), EditProfileActivity::class.java)
-            startActivity(intent)
+            activity.editProfileLauncher.launch(intent)
         }
     }
 

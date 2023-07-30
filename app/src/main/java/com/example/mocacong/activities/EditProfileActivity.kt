@@ -90,10 +90,8 @@ class EditProfileActivity : AppCompatActivity() {
                 }
                 if (isImageSuccess) {
                     Utils.showToast(this@EditProfileActivity, "회원 정보가 변경되었습니다")
-                    val intent = Intent(this@EditProfileActivity, MainActivity::class.java)
-                    intent.putExtra("tabNumber", 1)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
+                    setResult(RESULT_OK)
+                    finish()
                 }
             }
         }
