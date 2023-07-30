@@ -122,12 +122,12 @@
 
 
         <com.example.mocacong.ui.ReviewButtonGroup
-            android:id="@+id/wifiGroup"
+            android:id="@+id/powerGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="10dp"
-            app:category="wifi"
+            app:category="power"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/withBtn" />
@@ -141,7 +141,7 @@
             app:category="desk"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/wifiGroup" />
+            app:layout_constraintTop_toBottomOf="@id/powerGroup" />
 
         <com.example.mocacong.ui.ReviewButtonGroup
             android:id="@+id/parkingGroup"
@@ -166,12 +166,12 @@
             app:layout_constraintTop_toBottomOf="@id/parkingGroup" />
 
         <com.example.mocacong.ui.ReviewButtonGroup
-            android:id="@+id/powerGroup"
+            android:id="@+id/wifiGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="10dp"
-            app:category="power"
+            app:category="wifi"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toiletGroup" />
@@ -185,7 +185,7 @@
             app:category="sound"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/powerGroup" />
+            app:layout_constraintTop_toBottomOf="@id/wifiGroup" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

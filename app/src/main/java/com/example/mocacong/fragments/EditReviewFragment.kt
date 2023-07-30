@@ -50,7 +50,7 @@ class EditReviewFragment : BottomSheetDialogFragment() {
 
     private fun setInitialLayout() {
         binding.apply {
-            wifiGroup.setRequiredView()
+            powerGroup.setRequiredView()
             deskGroup.setRequiredView()
         }
         lifecycleScope.launch {
@@ -128,7 +128,7 @@ class EditReviewFragment : BottomSheetDialogFragment() {
             MessageDialog("코딩 타입을 남겨주세요!").show(childFragmentManager, "MessageDialog")
             return false
         }
-        if (binding.wifiGroup.getSelectedLabel() == null || binding.deskGroup.getSelectedLabel() == null) {
+        if (binding.powerGroup.getSelectedLabel() == null || binding.deskGroup.getSelectedLabel() == null) {
             MessageDialog("필수 항목(*)을 체크해주세요!").show(childFragmentManager, "MessageDialog")
             return false
         }
