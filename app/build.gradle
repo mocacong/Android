@@ -6,7 +6,7 @@ plugins {
 
 
 android {
-    namespace 'com.example.mocacong'
+    namespace 'com.konkuk.mocacong'
     compileSdk 33
 
     viewBinding {
@@ -18,11 +18,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.mocacong"
+        applicationId "com.konkuk.mocacong"
         minSdk 25
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
 
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

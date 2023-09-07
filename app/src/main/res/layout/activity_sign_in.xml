@@ -74,7 +74,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:text="jsshin0107@gmail.com"
         app:layout_constraintTop_toBottomOf="@id/logoText"
         app:layout_constraintLeft_toLeftOf="@id/leftline"
         app:layout_constraintRight_toRightOf="@id/rightline"
@@ -101,7 +100,6 @@
         app:layout_constraintLeft_toLeftOf="@id/leftline"
         app:layout_constraintRight_toRightOf="@id/rightline"
         android:paddingHorizontal="15dp"
-        android:text="tlswltn9"
         android:paddingVertical="10dp"
         android:background="@drawable/round_stroke"
         android:layout_marginTop="20dp"
@@ -165,9 +163,5 @@
         app:layout_constraintBaseline_toBaselineOf="@id/findBtn"
         app:layout_constraintRight_toRightOf="@id/rightline"
         />
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

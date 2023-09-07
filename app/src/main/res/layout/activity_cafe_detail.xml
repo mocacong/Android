@@ -10,7 +10,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <ImageView
             android:id="@+id/cafeImage_1"
             android:layout_width="0dp"
@@ -360,19 +359,19 @@
                 android:layout_height="wrap_content"
                 android:text="코멘트가 아직 없어요 ㅠ.ㅠ" />
 
-            <com.example.mocacong.ui.CommentView
+            <com.konkuk.mocacong.ui.CommentView
                 android:id="@+id/comment1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone" />
 
-            <com.example.mocacong.ui.CommentView
+            <com.konkuk.mocacong.ui.CommentView
                 android:id="@+id/comment2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone" />
 
-            <com.example.mocacong.ui.CommentView
+            <com.konkuk.mocacong.ui.CommentView
                 android:id="@+id/comment3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

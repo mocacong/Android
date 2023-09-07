@@ -20,15 +20,10 @@
         android:theme="@style/Theme.Mocacong"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".activities.WebViewActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activities.CafeImagesActivity"
-            android:exported="true" />
+
         <activity
             android:name=".activities.EditProfileActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.KakaoLoginActivity"
             android:exported="true" />
@@ -52,6 +47,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.SignUpActivity"
             android:exported="true" />

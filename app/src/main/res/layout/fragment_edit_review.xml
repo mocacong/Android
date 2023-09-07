@@ -95,7 +95,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/soloBtn" />
 
-        <com.example.mocacong.ui.CustomButton
+        <com.konkuk.mocacong.ui.CustomButton
             android:id="@+id/soloBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
             app:layout_constraintTop_toBottomOf="@id/ratingBar"
             app:layout_constraintWidth_percent="0.25" />
 
-        <com.example.mocacong.ui.CustomButton
+        <com.konkuk.mocacong.ui.CustomButton
             android:id="@+id/withBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
             app:layout_constraintWidth_percent="0.25" />
 
 
-        <com.example.mocacong.ui.ReviewButtonGroup
+        <com.konkuk.mocacong.ui.ReviewButtonGroup
             android:id="@+id/powerGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/withBtn" />
 
-        <com.example.mocacong.ui.ReviewButtonGroup
+        <com.konkuk.mocacong.ui.ReviewButtonGroup
             android:id="@+id/deskGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/powerGroup" />
 
-        <com.example.mocacong.ui.ReviewButtonGroup
+        <com.konkuk.mocacong.ui.ReviewButtonGroup
             android:id="@+id/parkingGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -154,7 +154,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deskGroup" />
 
-        <com.example.mocacong.ui.ReviewButtonGroup
+        <com.konkuk.mocacong.ui.ReviewButtonGroup
             android:id="@+id/toiletGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/parkingGroup" />
 
-        <com.example.mocacong.ui.ReviewButtonGroup
+        <com.konkuk.mocacong.ui.ReviewButtonGroup
             android:id="@+id/wifiGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toiletGroup" />
 
-        <com.example.mocacong.ui.ReviewButtonGroup
+        <com.konkuk.mocacong.ui.ReviewButtonGroup
             android:id="@+id/soundGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
