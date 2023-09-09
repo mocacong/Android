@@ -2,15 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_marginVertical="5dp"
-    android:padding="15dp"
     android:layout_height="wrap_content"
+    android:layout_marginVertical="0.5dp"
     android:background="@color/white">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_margin="20dp"
         android:padding="5dp"
         android:src="@drawable/comment_profile"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -22,9 +22,9 @@
         android:layout_height="15dp"
         android:background="@drawable/round_btn"
         android:backgroundTint="@color/ssook"
-        android:textColor="@color/white"
         android:gravity="center"
         android:text="my"
+        android:textColor="@color/white"
         android:textSize="8sp"
         android:visibility="gone"
         app:layout_constraintBaseline_toBottomOf="@id/profileImage"
@@ -36,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
         android:text="(알 수 없음)"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/commentTextView"
@@ -47,82 +48,58 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="2"
+        android:layout_marginTop="10dp"
         android:text="Comment text"
         android:textColor="@color/black"
+        android:layout_marginBottom="25dp"
+        android:layout_marginRight="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/nicknameTextView"
         app:layout_constraintRight_toLeftOf="@id/moreButton"
-        app:layout_constraintTop_toBottomOf="@id/nicknameTextView"
-
-        />
+        app:layout_constraintTop_toBottomOf="@id/nicknameTextView" />
 
     <TextView
         android:id="@+id/moreButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="15dp"
         android:text="더보기"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="@color/textGray"
+        app:layout_constraintBaseline_toBaselineOf="@id/commentTextView"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <LinearLayout
-        android:id="@+id/mySwipeMenu"
+        android:id="@+id/myMenu"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:background="@color/textGray"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="10dp"
+        android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        app:layout_constraintBottom_toBottomOf="@id/nicknameTextView"
+        >
         <ImageButton
             android:id="@+id/editBtn"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/transparent"
-            android:scaleType="fitCenter"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/detail_btn_edit"
-            app:tint="@color/white" />
-
+            android:background="@color/transparent"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            app:tint="@color/ssook" />
         <ImageButton
             android:id="@+id/deleteBtn"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:background="@color/transparent"
-            android:padding="2dp"
-            android:scaleType="fitCenter"
+            android:textColor="@color/textGray"
             android:src="@drawable/icon_delete"
-            app:tint="@color/white" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/othersSwipeMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:background="@color/textGray"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageButton
-            android:id="@+id/warningBtn"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:background="@color/transparent"
-            android:padding="2dp"
+            app:tint="@color/red"
             android:scaleType="fitCenter"
-            android:src="@drawable/icon_warning"
-            app:tint="@color/white" />
+            android:background="@color/transparent"
+            android:padding="5dp"
+            />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
