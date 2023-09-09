@@ -23,6 +23,12 @@ data class Place(
     var isFavorite: Boolean = false
 ) : Serializable {
 
+    val addressString: String
+        get() = if(road_address_name.isNullOrBlank()) "주소 정보 없음" else road_address_name
+    val phoneString: String
+        get() = if(phone.isNullOrBlank()) "전화번호 정보 없음" else phone
+
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -30,6 +36,7 @@ data class Place(
         if (id != other.id) return false
         return true
     }
+
     override fun hashCode(): Int {
         return id.hashCode()
     }

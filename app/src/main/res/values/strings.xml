@@ -8,6 +8,8 @@
     <string name="qnaUrl">https://mocacong.notion.site/Q-A-2c8e8ad6c2604245ba1610fdbcfcc7e2</string>
 
     <string name="scoreFormatString">x %.1f</string>
+    <string name="reviewCountFormatString">%d Reviewers Answered : </string>
+    <string name="commentsCountFormatString">%d Commnets : </string>
 
     <string-array name="level_wifi">
         <item>와이파이는</item>

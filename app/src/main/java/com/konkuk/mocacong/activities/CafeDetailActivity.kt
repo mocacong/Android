@@ -1,15 +1,12 @@
 package com.konkuk.mocacong.activities
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.konkuk.mocacong.R
 import com.konkuk.mocacong.data.objects.Utils
 import com.konkuk.mocacong.data.objects.Utils.intentSerializable
 import com.konkuk.mocacong.data.response.CafeImage
@@ -179,28 +176,11 @@ class CafeDetailActivity : AppCompatActivity() {
 
 
     private fun setBasicInfo(cafe: Place) {
-        binding.apply {
-            cafeName.text = cafe.place_name
-            if (cafe.phone != "") callText.text = cafe.phone
-            if (cafe.road_address_name != "")
-                addressText.text = cafe.road_address_name
-        }
+        binding.placeInfo = cafe
     }
 
     private fun setDetailInfoLayout(data: CafeResponse) {
-        binding.apply {
-            scoreImgs.rating = data.score.toFloat()
-            val tmp = "${String.format("%.1f", data.score)} / 5.0"
-            scoreText.text = tmp
-            reviewCountText.text = data.reviewsCount.toString()
-            commentCountText.text = data.commentsCount.toString()
-            wifiText.setReviewText(data.wifi, getString(R.string.wifi))
-            parkingText.setReviewText(data.parking, getString(R.string.parking))
-            toiletText.setReviewText(data.toilet, getString(R.string.toilet))
-            deskText.setReviewText(data.desk, getString(R.string.desk))
-            powerText.setReviewText(data.power, getString(R.string.power))
-            soundText.setReviewText(data.sound, getString(R.string.sound))
-        }
+        binding.detailInfo = data
     }
 
     fun refreshDetailInfo() = lifecycleScope.launch {
@@ -231,18 +211,6 @@ class CafeDetailActivity : AppCompatActivity() {
                 is ApiState.Loading -> {}
             }
 
-        }
-    }
-
-
-    private fun TextView.setReviewText(rev: String?, type: String) {
-        if (rev != null) {
-            val str = "$type $rev"
-            this.text = str
-            this.setTextColor(getColor(R.color.darkBrown))
-        } else {
-            this.text = getString(R.string.plzRV)
-            this.setTextColor(getColor(R.color.stroke))
         }
     }
 

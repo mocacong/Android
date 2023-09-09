@@ -86,7 +86,6 @@
         android:background="@drawable/round_stroke"
         android:layout_marginTop="50dp"
         android:hint="ID"
-
         android:textSize="18sp"
         android:textColorHint="@color/jingray"
         android:inputType="textEmailAddress"
