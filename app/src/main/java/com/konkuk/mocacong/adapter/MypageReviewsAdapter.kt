@@ -11,7 +11,6 @@ class MypageReviewsAdapter(
 ) : RecyclerView.Adapter<MypageReviewsAdapter.MyViewHolder>() {
     inner class MyViewHolder(private val binding: ItemMyCafesBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(cafe: Cafe) {
             binding.cafeInfo = cafe
         }

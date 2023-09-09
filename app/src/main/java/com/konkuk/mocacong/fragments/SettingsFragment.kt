@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.activities.EditProfileActivity
 import com.konkuk.mocacong.activities.SignInActivity
+import com.konkuk.mocacong.activities.WebViewActivity
 import com.konkuk.mocacong.data.objects.Member
 import com.konkuk.mocacong.databinding.FragmentSettingsBinding
 import com.konkuk.mocacong.ui.MessageDialog
@@ -72,9 +73,9 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun gotoTermsActivity(urlString: String){
+    private fun gotoTermsActivity(urlString: String) {
         val intent = Intent(requireActivity(), WebViewActivity::class.java)
-        intent.putExtra("urlString",urlString)
+        intent.putExtra("urlString", urlString)
         startActivity(intent)
     }
 
