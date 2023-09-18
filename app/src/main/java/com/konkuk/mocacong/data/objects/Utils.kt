@@ -54,9 +54,11 @@ object Utils {
     fun EditText.showKeyboard() {
         isFocusableInTouchMode = true
         requestFocus()
-        val inputMethodManager =
-            ContextCompat.getSystemService(context, InputMethodManager::class.java)
-        inputMethodManager?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+        postDelayed({
+            val inputMethodManager =
+                ContextCompat.getSystemService(context, InputMethodManager::class.java)
+            inputMethodManager?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+        }, 30)
     }
 
 
@@ -81,8 +83,6 @@ object Utils {
             this.getSerializable(key) as T?
         }
     }
-
-
 
 
 }

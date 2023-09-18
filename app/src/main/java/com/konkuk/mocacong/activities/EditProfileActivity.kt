@@ -21,7 +21,6 @@ import com.konkuk.mocacong.data.util.TokenExceptionHandler
 import com.konkuk.mocacong.data.util.ViewModelFactory
 import com.konkuk.mocacong.databinding.ActivityEditProfileBinding
 import com.konkuk.mocacong.repositories.EditProfileRepository
-import com.konkuk.mocacong.ui.MessageDialog
 import com.konkuk.mocacong.viewmodels.EditProfileViewModel
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.Dispatchers
@@ -72,7 +71,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         binding.gotoEditPasswordBtn.setOnClickListener {
-            MessageDialog("서비스 준비 중입니다.").show(supportFragmentManager, "MessageDialog")
+//            MessageDialog("서비스 준비 중입니다.").show(supportFragmentManager, "MessageDialog")
         }
     }
 
@@ -131,10 +130,10 @@ class EditProfileActivity : AppCompatActivity() {
                         Log.e(TAG, it.message)
                         when(it.code){
                             1002->{
-                                MessageDialog("닉네임 형식은 영어, 한글 2~6자 입니다").show(supportFragmentManager, "MessageDialog")
+//                                MessageDialog("닉네임 형식은 영어, 한글 2~6자 입니다").show(supportFragmentManager, "MessageDialog")
                             }
                             1004->{
-                                MessageDialog("이미 존재하는 닉네임입니다").show(supportFragmentManager, "MessageDialog")
+//                                MessageDialog("이미 존재하는 닉네임입니다").show(supportFragmentManager, "MessageDialog")
                             }
                         }
                     }

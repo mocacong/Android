@@ -12,7 +12,6 @@ import com.konkuk.mocacong.data.objects.Utils
 import com.konkuk.mocacong.data.request.SignInRequest
 import com.konkuk.mocacong.data.request.SignUpRequest
 import com.konkuk.mocacong.databinding.ActivitySignUpBinding
-import com.konkuk.mocacong.ui.MessageDialog
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
@@ -108,7 +107,7 @@ class SignUpActivity : AppCompatActivity() {
                 )
                 signUpEvent(member)
             } else {
-                MessageDialog(msg).show(supportFragmentManager, "MessageDialog")
+                TODO()
             }
         }
 
@@ -143,8 +142,7 @@ class SignUpActivity : AppCompatActivity() {
                     isEmailChecked = true
                     "${email}은(는)\n사용 가능한 이메일입니다"
                 }
-            val dialog = MessageDialog(message)
-            dialog.show(supportFragmentManager, "MessageDialog")
+            TODO()
         }
     }
 
@@ -161,8 +159,7 @@ class SignUpActivity : AppCompatActivity() {
                     isNicknameChecked = true
                     "${nickName}은(는)\n사용 가능한 닉네임입니다"
                 }
-            val dialog = MessageDialog(message)
-            dialog.show(supportFragmentManager, "MessageDialog")
+            TODO()
         }
     }
 
@@ -174,7 +171,7 @@ class SignUpActivity : AppCompatActivity() {
                 val intent = Intent(this@SignUpActivity, MainActivity::class.java)
                 startActivity(intent)
             } else {
-                MessageDialog(msg).show(supportFragmentManager, "MessageDialog")
+                TODO()
             }
         }
     }
@@ -187,7 +184,7 @@ class SignUpActivity : AppCompatActivity() {
             if (msg == "성공") {
                 signInEvent(SignInRequest(member.email, member.password))
             } else {
-                MessageDialog(msg).show(supportFragmentManager, "MessageDialog")
+                TODO()
             }
         }
     }

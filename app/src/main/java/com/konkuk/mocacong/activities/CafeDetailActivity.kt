@@ -141,17 +141,18 @@ class CafeDetailActivity : AppCompatActivity() {
     private fun setCommentsLayout(comments: List<Comment>, commentsCount: Int) {
         if (commentsCount > 0) {
             binding.noCmtTextView.visibility = View.GONE
-        }
-
-        if (commentsCount > 3) {
             binding.commentMoreBtn.visibility = View.VISIBLE
             binding.commentMoreBtn.setOnClickListener {
                 makeCommentPopup(false)
             }
         }
+
         val cmtViews = arrayOf(binding.comment1, binding.comment2, binding.comment3)
 
         for (i in comments.indices) {
+            comments[i].isMe = false
+            //프리뷰에서 댓글을 수정하지 못하도록 함
+
             cmtViews[i].visibility = View.VISIBLE
             cmtViews[i].setCommentView(comments[i])
         }

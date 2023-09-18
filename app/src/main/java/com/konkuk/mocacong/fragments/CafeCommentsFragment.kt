@@ -9,6 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.konkuk.mocacong.activities.CafeDetailActivity
 import com.konkuk.mocacong.adapter.CafeCommentsAdapter
 import com.konkuk.mocacong.data.objects.Utils
@@ -17,14 +21,11 @@ import com.konkuk.mocacong.data.response.Comment
 import com.konkuk.mocacong.data.util.ApiState
 import com.konkuk.mocacong.data.util.TokenExceptionHandler
 import com.konkuk.mocacong.databinding.FragmentCafeCommentsBinding
-import com.konkuk.mocacong.ui.MessageDialog
 import com.konkuk.mocacong.viewmodels.CafeDetailViewModel
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
 
-class CafeCommentsFragment : BottomSheetDialogFragment() {
+class CafeCommentsFragment : BottomSheetDialogFragment(),
+    CafeCommentsAdapter.OnCommentBtnClickedListener {
     private val TAG = "CafeComments"
 
     private var _binding: FragmentCafeCommentsBinding? = null
@@ -60,13 +61,30 @@ class CafeCommentsFragment : BottomSheetDialogFragment() {
     private fun setLayout() {
         setRecyclerLayout()
         binding.completeBtn.setOnClickListener {
-            postComment()
+            if (cafeViewModel.isCommentEditing)
+                putComment()
+            else postComment()
         }
 
+
         val isFocusToTextField = arguments?.getBoolean("isFocusToTextField", false)!!
-        if(isFocusToTextField)
+        if (isFocusToTextField)
             binding.content.showKeyboard()
     }
+
+    private fun putComment() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("댓글 수정")
+            .setMessage("댓글을 정말 수정하시겠습니까?")
+            .setPositiveButton("확인", null)
+            .setNegativeButton("취소", null)
+            .show()
+
+
+        //레포단 작업 완료
+        cafeViewModel.isCommentEditing = false
+    }
+
 
     private fun refreshCommentsList() {
         currentPage = 0
@@ -78,11 +96,11 @@ class CafeCommentsFragment : BottomSheetDialogFragment() {
     private fun postComment() {
         val content = binding.content.text.toString()
         if (content.isBlank()) {
-            MessageDialog("공백일 수 없습니다").show(childFragmentManager, "MessageDialog")
+//            MessageDialog("공백일 수 없습니다").show(childFragmentManager, "MessageDialog")
             return
         }
         if (content.length > 200) {
-            MessageDialog("댓글은 최대 200자까지 가능합니다").show(childFragmentManager, "MessageDialog")
+//            MessageDialog("댓글은 최대 200자까지 가능합니다").show(childFragmentManager, "MessageDialog")
             return
         }
 
@@ -108,6 +126,7 @@ class CafeCommentsFragment : BottomSheetDialogFragment() {
 
     private fun setRecyclerLayout() {
         adapter = CafeCommentsAdapter(comments)
+        adapter.commentBtnClickedListener = this
         binding.commentsRecycler.let {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(
@@ -154,6 +173,20 @@ class CafeCommentsFragment : BottomSheetDialogFragment() {
         super.onDestroyView()
         (activity as CafeDetailActivity).refreshDetailInfo()
         _binding = null
+    }
+
+    override fun onEditClicked(comment: Comment) {
+        cafeViewModel.isCommentEditing = true
+        binding.content.apply {
+            setText(comment.content)
+            showKeyboard()
+        }
+        //뷰모델에 편집/새로작성 구분하는 state 생성하기
+
+    }
+
+    override fun onDeleteClicked(comment: Comment) {
+        TODO("Not yet implemented")
     }
 
 

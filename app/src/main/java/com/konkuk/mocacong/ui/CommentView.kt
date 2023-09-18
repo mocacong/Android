@@ -16,23 +16,14 @@ class CommentView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    var binding: CommentViewBinding
+    private var binding: CommentViewBinding
     lateinit var comment: Comment
 
     init {
         val inflater = LayoutInflater.from(context)
         binding = CommentViewBinding.inflate(inflater, this, true)
-        setListeners()
     }
 
-    private fun setListeners() {
-        binding.editBtn.setOnClickListener {
-            Log.d("COMMENTVIEW", "버튼 클릭됨")
-        }
-        binding.deleteBtn.setOnClickListener {
-            Log.d("COMMENTVIEW", "버튼 클릭됨")
-        }
-    }
 
     fun setCommentView(comment: Comment) {
         this.comment = comment
@@ -47,7 +38,6 @@ class CommentView @JvmOverloads constructor(
         else Glide.with(context).load(imgUrl).into(binding.profileImage)
     }
 
-
     private fun setNickname(nickname: String) {
         binding.nicknameTextView.text = nickname
     }
@@ -60,12 +50,10 @@ class CommentView @JvmOverloads constructor(
     private fun setIsMe(isMe: Boolean) {
         if (isMe) {
             binding.myReview.visibility = VISIBLE
-            binding.myMenu.visibility = VISIBLE
             return
         }
 
         binding.myReview.visibility = GONE
-        binding.myMenu.visibility = GONE
     }
 
     private fun setViewMore() {

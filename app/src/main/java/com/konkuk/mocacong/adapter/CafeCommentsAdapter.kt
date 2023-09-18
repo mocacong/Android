@@ -9,10 +9,20 @@ import com.konkuk.mocacong.databinding.ItemCafeCommentBinding
 class CafeCommentsAdapter(
     private val commentList: MutableList<Comment>
 ) : RecyclerView.Adapter<CafeCommentsAdapter.MyViewHolder>() {
+
+    lateinit var commentBtnClickedListener: OnCommentBtnClickedListener
+
+    interface OnCommentBtnClickedListener {
+        fun onEditClicked(comment: Comment)
+        fun onDeleteClicked(comment: Comment)
+    }
+
     inner class MyViewHolder(private val binding: ItemCafeCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(comment: Comment) {
-            binding.commentView.setCommentView(comment)
+            binding.commentView.apply {
+                setCommentView(comment)
+            }
         }
     }
 

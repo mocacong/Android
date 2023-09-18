@@ -18,7 +18,6 @@ import com.konkuk.mocacong.data.response.KakaoLoginResponse
 import com.konkuk.mocacong.databinding.ActivityKakaoLoginBinding
 import com.konkuk.mocacong.network.SignInAPI
 import com.konkuk.mocacong.network.SignUpAPI
-import com.konkuk.mocacong.ui.MessageDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,10 +58,7 @@ class KakaoLoginActivity : AppCompatActivity() {
                     }?.result
 
                 if (isDuplicated == true) {
-                    MessageDialog("${nickname}은(는)\n중복된 닉네임입니다.").show(
-                        supportFragmentManager,
-                        "MessageDialog"
-                    )
+                    TODO()
                     binding.nickEditText.performClick()
                 } else {
                     val request =
@@ -79,10 +75,7 @@ class KakaoLoginActivity : AppCompatActivity() {
                             "kakaoOauth",
                             "모카콩 서버 회원가입 실패 : ${signUpResponse.errorBody()?.string()}"
                         )
-                        MessageDialog("죄송합니다. 가입에 실패하였습니다.").show(
-                            supportFragmentManager,
-                            "MessageDialog"
-                        )
+                        TODO()
                     }
                 }
             }

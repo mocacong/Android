@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 
 class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository) : ViewModel() {
 
-
     var mCafeDetailInfosFlow: MutableStateFlow<ApiState<CafeResponse>> =
         MutableStateFlow(ApiState.Loading())
     var cafeDatailInfoFlow: StateFlow<ApiState<CafeResponse>> = mCafeDetailInfosFlow
@@ -30,15 +29,19 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
     var mCommentPostFlow: MutableStateFlow<ApiState<Void>> = MutableStateFlow(ApiState.Loading())
     var commentPostFlow: StateFlow<ApiState<Void>> = mCommentPostFlow
 
-    var mPostReviewFlow : MutableStateFlow<ApiState<Void>> = MutableStateFlow(ApiState.Loading())
+    var mPostReviewFlow: MutableStateFlow<ApiState<Void>> = MutableStateFlow(ApiState.Loading())
     var postReviewFlow: StateFlow<ApiState<Void>> = mPostReviewFlow
 
-    var mPutReviewFlow : MutableStateFlow<ApiState<Void>> = MutableStateFlow(ApiState.Loading())
+    var mPutReviewFlow: MutableStateFlow<ApiState<Void>> = MutableStateFlow(ApiState.Loading())
     var putReviewFlow: StateFlow<ApiState<Void>> = mPutReviewFlow
 
-    var mMyReviewFlow : MutableStateFlow<ApiState<MyReviewResponse>> = MutableStateFlow(ApiState.Loading())
+    var mMyReviewFlow: MutableStateFlow<ApiState<MyReviewResponse>> =
+        MutableStateFlow(ApiState.Loading())
     var myReviewFlow: StateFlow<ApiState<MyReviewResponse>> = mMyReviewFlow
 
+    var isCommentEditing : Boolean = false
+
+    //isLoading, errorState livedata로 한 번에 관리
 
     fun requestCafeDetailInfo(cafeId: String) = viewModelScope.launch(Dispatchers.IO) {
         mCafeDetailInfosFlow.value = ApiState.Loading()
@@ -65,17 +68,25 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
         mCommentPostFlow.value = cafeDetailRepository.postComment(cafeId, content)
     }
 
-    fun postMyReview(cafeId: String, review: ReviewRequest)  = viewModelScope.launch(Dispatchers.IO) {
-        mPostReviewFlow.value = ApiState.Loading()
-        mPostReviewFlow.value = cafeDetailRepository.postReview(cafeId, review)
+    fun requestDeleteComment(cafeId: String, commentId: String) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+        }
     }
 
-    fun putMyReview(cafeId: String, review: ReviewRequest)  = viewModelScope.launch(Dispatchers.IO) {
+    fun postMyReview(cafeId: String, review: ReviewRequest) =
+        viewModelScope.launch(Dispatchers.IO) {
+            mPostReviewFlow.value = ApiState.Loading()
+            mPostReviewFlow.value = cafeDetailRepository.postReview(cafeId, review)
+        }
+
+    fun putMyReview(cafeId: String, review: ReviewRequest) = viewModelScope.launch(Dispatchers.IO) {
         mPutReviewFlow.value = ApiState.Loading()
         mPutReviewFlow.value = cafeDetailRepository.putReview(cafeId, review)
     }
 
-    fun getMyReview(cafeId: String)  = viewModelScope.launch(Dispatchers.IO) {
+    fun getMyReview(cafeId: String) = viewModelScope.launch(Dispatchers.IO) {
         mMyReviewFlow.value = ApiState.Loading()
         mMyReviewFlow.value = cafeDetailRepository.getMyReview(cafeId)
     }

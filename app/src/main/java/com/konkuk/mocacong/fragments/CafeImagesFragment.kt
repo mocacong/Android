@@ -21,7 +21,6 @@ import com.konkuk.mocacong.data.util.ApiState
 import com.konkuk.mocacong.data.util.TokenExceptionHandler
 import com.konkuk.mocacong.databinding.FragmentCafeImagesBinding
 import com.konkuk.mocacong.network.CafeImagesAPI
-import com.konkuk.mocacong.ui.MessageDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -181,10 +180,10 @@ class CafeImagesFragment : BottomSheetDialogFragment() {
                         TokenExceptionHandler.handleTokenException(requireContext(), it)
                         Log.e("Image", it.message)
                         if (it.code == 2008) {
-                            MessageDialog("카페 이미지는 세 장까지 업로드 가능합니다").show(
-                                childFragmentManager,
-                                "MessageDialog"
-                            )
+//                            MessageDialog("카페 이미지는 세 장까지 업로드 가능합니다").show(
+//                                childFragmentManager,
+//                                "MessageDialog"
+//                            )
                         }
                     }
                 }

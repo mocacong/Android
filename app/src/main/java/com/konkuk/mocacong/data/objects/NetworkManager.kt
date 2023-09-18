@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.fragment.app.FragmentManager
-import com.konkuk.mocacong.ui.MessageDialog
 
 class NetworkManager {
 
@@ -19,7 +18,7 @@ class NetworkManager {
         }
 
         fun Context.showCheckDialog(supportFragmentManager : FragmentManager){
-            MessageDialog("인터넷 연결 상태를 확인해주세요!").show(supportFragmentManager, "MessageDialog")
+//            MessageDialog("인터넷 연결 상태를 확인해주세요!").show(supportFragmentManager, "MessageDialog")
         }
     }
 }

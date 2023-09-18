@@ -72,11 +72,10 @@
         <Button
             android:id="@+id/emailOk"
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:background="@drawable/round_btn"
+            android:layout_height="50dp"
+            android:enabled="false"
             android:text="확인"
             android:textColor="@color/white"
-            android:enabled="false"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintLeft_toRightOf="@id/emailText"
             app:layout_constraintRight_toRightOf="@id/rightline"
@@ -89,8 +88,8 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/mocaBrown"
             android:inputType="textEmailAddress"
-            android:textColor="@color/darkBrown"
             android:maxLines="1"
+            android:textColor="@color/darkBrown"
             app:layout_constraintBaseline_toBottomOf="@id/emailOk"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
@@ -103,9 +102,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="이메일 형식에 맞게 입력해주세요"
-            android:visibility="invisible"
             android:textColor="@color/red"
             android:textSize="13sp"
+            android:visibility="invisible"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
             app:layout_constraintRight_toRightOf="@id/rightline"
             app:layout_constraintTop_toBottomOf="@id/emailText" />
@@ -126,12 +125,11 @@
         <Button
             android:id="@+id/nicknameOk"
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:background="@drawable/round_btn"
+            android:layout_height="50dp"
+            android:enabled="false"
             android:text="확인"
             android:textColor="@color/white"
             app:layout_constraintHorizontal_bias="1"
-            android:enabled="false"
             app:layout_constraintLeft_toRightOf="@id/nicknameText"
             app:layout_constraintRight_toRightOf="@id/rightline"
             app:layout_constraintTop_toTopOf="@+id/nickname"
@@ -158,13 +156,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="닉네임은 영어, 한글로만 구성된 2~6자여야 합니다"
-            android:visibility="invisible"
             android:textColor="@color/red"
             android:textSize="13sp"
+            android:visibility="invisible"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
             app:layout_constraintRight_toRightOf="@id/rightline"
             app:layout_constraintTop_toBottomOf="@id/nicknameText" />
-
 
 
         <TextView
@@ -183,20 +180,20 @@
             android:id="@+id/pwLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
             app:layout_constraintRight_toRightOf="@id/rightline"
             app:layout_constraintTop_toBottomOf="@id/pw"
-            >
+            app:passwordToggleEnabled="true">
+
             <EditText
                 android:id="@+id/pwText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/mocaBrown"
-                android:inputType="textPassword"
-                android:textColor="@color/darkBrown"
                 android:foregroundTint="@color/mocaBrown"
-                android:maxLines="1" />
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="@color/darkBrown" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -218,8 +215,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="PW확인"
             android:backgroundTint="@color/mocaBrown"
+            android:text="PW확인"
             android:textColor="@color/darkBrown"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
@@ -231,8 +228,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/mocaBrown"
-            android:textColor="@color/darkBrown"
             android:inputType="textPassword"
+            android:textColor="@color/darkBrown"
             app:layout_constraintLeft_toLeftOf="@id/leftline"
             app:layout_constraintRight_toRightOf="@id/rightline"
             app:layout_constraintTop_toBottomOf="@id/pw2" />

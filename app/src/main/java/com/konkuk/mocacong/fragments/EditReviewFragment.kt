@@ -14,7 +14,6 @@ import com.konkuk.mocacong.data.response.MyReviewResponse
 import com.konkuk.mocacong.data.util.ApiState
 import com.konkuk.mocacong.data.util.TokenExceptionHandler
 import com.konkuk.mocacong.databinding.FragmentEditReviewBinding
-import com.konkuk.mocacong.ui.MessageDialog
 import com.konkuk.mocacong.viewmodels.CafeDetailViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
@@ -116,15 +115,15 @@ class EditReviewFragment : BottomSheetDialogFragment() {
 
     private fun checkRequiredItems(): Boolean {
         if (binding.ratingBar.rating == 0f) {
-            MessageDialog("평점은 1~5점으로 남겨주세요!").show(childFragmentManager, "MessageDialog")
+//            MessageDialog("평점은 1~5점으로 남겨주세요!").show(childFragmentManager, "MessageDialog")
             return false
         }
         if (getStudyType() == "") {
-            MessageDialog("코딩 타입을 남겨주세요!").show(childFragmentManager, "MessageDialog")
+//            MessageDialog("코딩 타입을 남겨주세요!").show(childFragmentManager, "MessageDialog")
             return false
         }
         if (binding.powerGroup.getSelectedLabel() == null || binding.deskGroup.getSelectedLabel() == null) {
-            MessageDialog("필수 항목(*)을 체크해주세요!").show(childFragmentManager, "MessageDialog")
+//            MessageDialog("필수 항목(*)을 체크해주세요!").show(childFragmentManager, "MessageDialog")
             return false
         }
         return true

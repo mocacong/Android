@@ -12,7 +12,6 @@ import com.konkuk.mocacong.data.objects.NetworkManager.Companion.showCheckDialog
 import com.konkuk.mocacong.data.objects.Utils
 import com.konkuk.mocacong.data.request.SignInRequest
 import com.konkuk.mocacong.databinding.ActivitySignInBinding
-import com.konkuk.mocacong.ui.MessageDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,8 +48,7 @@ class SignInActivity : AppCompatActivity() {
 
         binding.findBtn.setOnClickListener {
             val msg = "서비스 준비 중입니다"
-            val dialog = MessageDialog(msg)
-            dialog.show(supportFragmentManager, "MessageDialog")
+            TODO()
         }
 
         binding.kakaoBtn.setOnClickListener {
@@ -79,7 +77,7 @@ class SignInActivity : AppCompatActivity() {
                 val intent = Intent(this@SignInActivity, MainActivity::class.java)
                 startActivity(intent)
             } else
-                MessageDialog(msg).show(supportFragmentManager, "MessageDialog")
+                TODO()
         }
     }
 
