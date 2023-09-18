@@ -17,7 +17,7 @@
         <item name="android:statusBarColor">@color/darkBrown</item>
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
-        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetFragmentStyle</item>
 
         <!--alart dialog-->
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
