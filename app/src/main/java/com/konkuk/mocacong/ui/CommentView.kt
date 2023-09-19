@@ -2,7 +2,6 @@ package com.konkuk.mocacong.ui
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
@@ -24,6 +23,9 @@ class CommentView @JvmOverloads constructor(
         binding = CommentViewBinding.inflate(inflater, this, true)
     }
 
+    fun setPreview(){
+        binding.menuBtn.visibility = GONE
+    }
 
     fun setCommentView(comment: Comment) {
         this.comment = comment
