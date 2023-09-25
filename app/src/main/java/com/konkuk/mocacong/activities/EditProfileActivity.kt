@@ -27,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -151,7 +152,7 @@ class EditProfileActivity : AppCompatActivity() {
             TedImagePicker.with(this).start {
                 binding.profileImg.setImageURI(it)
                 val file = File(absolutePath(it))
-                val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
+                val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                 body = MultipartBody.Part.createFormData("file", file.name, requestFile)
                 Log.d("editProfile", "body = $body")
             }

@@ -12,5 +12,5 @@ interface SignInAPI {
     suspend fun signIn(@Body member: SignInRequest): Response<SignInResponse>
 
     @POST("/login/kakao")
-    suspend fun kakaoLoginPost(@Body code : String?) : Response<KakaoLoginResponse>
+    suspend fun kakaoLoginPost(@Body token: String?): Response<KakaoLoginResponse>
 }

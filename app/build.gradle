@@ -4,7 +4,6 @@ plugins {
 }
 
 
-
 android {
     namespace 'com.konkuk.mocacong'
     compileSdk 33
@@ -24,7 +23,6 @@ android {
         versionCode 2
         versionName "1.0.1"
 
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,7 +35,6 @@ android {
             keyAlias "mocacong"
             keyPassword "mocacong"
         }
-
     }
 
 
@@ -82,6 +79,9 @@ dependencies {
     //네이버지도
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.naver.maps:map-sdk:3.16.2'
+
+    //카카오 로그인
+    implementation "com.kakao.sdk:v2-user:2.16.0"
 
     //circleImageView
     implementation 'de.hdodenhof:circleimageview:3.1.0'

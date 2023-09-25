@@ -2,14 +2,15 @@ package com.konkuk.mocacong.data.objects
 
 import android.util.Log
 import com.google.gson.GsonBuilder
-import okhttp3.*
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Response
 import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-
 
     private const val BASE_URL = "http://3.37.64.38:8080/"
 //    private const val BASE_URL = "https://mocacong.com/"
@@ -26,10 +27,13 @@ object RetrofitClient {
     val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(interceptorClient)
-        .addConverterFactory(GsonConverterFactory.create(
-            GsonBuilder()
-            .setLenient()
-            .create()))
+        .addConverterFactory(
+            GsonConverterFactory.create(
+                GsonBuilder()
+                    .setLenient()
+                    .create()
+            )
+        )
         .build()
 
 
@@ -54,5 +58,4 @@ class ResponseInterceptor : Interceptor {
             response
         }
     }
-
 }

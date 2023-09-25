@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".data.util.GlobalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -20,6 +21,15 @@
         android:theme="@style/Theme.Mocacong"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.KakaoTest"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.WebViewActivity"
             android:exported="true" />
@@ -34,20 +44,28 @@
             android:exported="true" />
         <activity
             android:name=".activities.CafeDetailActivity"
-            android:exported="true" />
-
+            android:exported="true" /> <!-- 네이버 지도 SDK -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="h0q2yui3cy" />
+            android:value="h0q2yui3cy" /> <!-- 카카오로그인 SDK -->
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data
+                    android:host="oauth"
+                    android:scheme="kakaoeb2cc1ff484fdd2ba0934a003fd80b3b" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.SignInActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activities.SignUpActivity"

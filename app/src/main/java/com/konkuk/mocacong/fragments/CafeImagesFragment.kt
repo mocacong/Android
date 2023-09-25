@@ -29,6 +29,7 @@ import gun0912.tedimagepicker.builder.type.MediaType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -111,7 +112,7 @@ class CafeImagesFragment : BottomSheetDialogFragment() {
             val parts = selectedImages.map { uri ->
                 Log.d("CafeImage", "uri : $uri")
                 val file = File(absolutePath(uri))
-                val requestFile = RequestBody.create(okhttp3.MediaType.parse("image/*"), file)
+                val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                 Log.d("Image", "files에 추가됐따!!!!!!!!!!!!!!!!!! ${file.name}")
                 MultipartBody.Part.createFormData("files", file.name, requestFile)
             }
