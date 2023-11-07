@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".activities.CafeDetailActivity">
+        tools:context=".presentaion.detail.CafeDetailActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -347,19 +347,19 @@
                     android:text="코멘트가 아직 없어요 ㅠ.ㅠ"
                     android:textColor="@color/textGray" />
 
-                <com.konkuk.mocacong.ui.CommentView
+                <com.konkuk.mocacong.presentaion.detail.CommentView
                     android:id="@+id/comment1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone" />
 
-                <com.konkuk.mocacong.ui.CommentView
+                <com.konkuk.mocacong.presentaion.detail.CommentView
                     android:id="@+id/comment2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone" />
 
-                <com.konkuk.mocacong.ui.CommentView
+                <com.konkuk.mocacong.presentaion.detail.CommentView
                     android:id="@+id/comment3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

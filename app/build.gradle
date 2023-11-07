@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.dagger.hilt.android'
 }
-
 
 android {
     namespace 'com.konkuk.mocacong'
@@ -64,6 +64,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:+'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -91,4 +92,8 @@ dependencies {
 
     //이미지 피커
     implementation 'io.github.ParkSangGwon:tedimagepicker:1.4.2'
+
+    //hilt
+    implementation 'com.google.dagger:hilt-android:2.48.1'
+    annotationProcessor 'com.google.dagger:hilt-compiler:2.48.1'
 }

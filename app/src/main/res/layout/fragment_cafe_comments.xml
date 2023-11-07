@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/round_bottom_sheet"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    tools:context=".fragments.CafeCommentsFragment">
+    tools:context=".presentaion.detail.CafeCommentsFragment">
 
     <TextView
         android:id="@+id/commentsCountText"

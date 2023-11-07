@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".data.util.GlobalApplication"
+        android:name=".util.GlobalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,29 +21,21 @@
         android:theme="@style/Theme.Mocacong"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".activities.KakaoTest"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
-            android:name=".activities.WebViewActivity"
+            android:name=".presentaion.login.WebViewActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.EditProfileActivity"
+            android:name=".presentaion.main.settings.EditProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.KakaoLoginActivity"
+            android:name=".presentaion.login.KakaoLoginActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.SearchActivity"
+            android:name=".presentaion.main.map.SearchActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.CafeDetailActivity"
+            android:name=".presentaion.detail.CafeDetailActivity"
             android:exported="true" /> <!-- 네이버 지도 SDK -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
@@ -64,14 +56,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.SignInActivity"
+            android:name=".presentaion.login.SignInActivity"
             android:exported="true">
         </activity>
         <activity
-            android:name=".activities.SignUpActivity"
+            android:name=".presentaion.login.SignUpActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".presentaion.main.MainActivity"
             android:exported="true" />
     </application>
 
