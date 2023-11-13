@@ -10,11 +10,6 @@ class CafeCommentsAdapter(
     private val commentList: MutableList<Comment>
 ) : RecyclerView.Adapter<CafeCommentsAdapter.MyViewHolder>() {
 
-    lateinit var commentBtnClickedListener: OnCommentBtnClickedListener
-
-    interface OnCommentBtnClickedListener {
-        fun onCommentMenuClicked(comment: Comment)
-    }
 
     inner class MyViewHolder(private val binding: ItemCafeCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {

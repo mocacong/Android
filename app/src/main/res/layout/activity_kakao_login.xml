@@ -24,7 +24,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        style="@style/textStyle"
         android:id="@+id/nickLabel"
         android:text="닉네임을 입력해주세요"
         android:visibility="gone"

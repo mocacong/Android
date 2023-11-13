@@ -10,18 +10,18 @@ interface CafeImagesAPI {
 
     @GET("/cafes/{cafeId}/img")
     suspend fun getCafeImagesResponse(
-        @Header("Authorization") token : String? = "Bearer ${Member.getAuthToken()}",
-        @Path("cafeId") cafeId : String,
-        @Query("page") page : Int = 0,
-        @Query("count") count : Int = 20
-    ) : Response<CafeImageResponse>
+        @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
+        @Path("cafeId") cafeId: String,
+        @Query("page") page: Int = 0,
+        @Query("count") count: Int = 20
+    ): Response<CafeImageResponse>
 
     @Multipart
     @POST("/cafes/{cafeId}/img")
     suspend fun postCafeImages(
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Header("header") header: String = "MULTIPART_FORM_DATA_VALUE",
-        @Path("cafeId") cafeId : String,
+        @Path("cafeId") cafeId: String,
         @Part files: List<MultipartBody.Part>
     ): Response<Void>
 }

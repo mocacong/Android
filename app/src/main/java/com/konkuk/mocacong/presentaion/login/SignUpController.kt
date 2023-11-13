@@ -3,8 +3,6 @@ package com.konkuk.mocacong.presentaion.login
 import android.util.Log
 import com.konkuk.mocacong.objects.Member
 import com.konkuk.mocacong.objects.RetrofitClient
-import com.konkuk.mocacong.remote.models.request.SignInRequest
-import com.konkuk.mocacong.remote.models.request.SignUpRequest
 import com.konkuk.mocacong.remote.apis.SignInAPI
 import com.konkuk.mocacong.remote.apis.SignUpAPI
 

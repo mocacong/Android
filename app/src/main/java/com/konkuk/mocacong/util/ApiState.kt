@@ -1,6 +1,5 @@
 package com.konkuk.mocacong.util
 
-import com.konkuk.mocacong.data.response.ErrorResponse
 import com.konkuk.mocacong.remote.models.response.ErrorResponse
 
 sealed class ApiState<T>(

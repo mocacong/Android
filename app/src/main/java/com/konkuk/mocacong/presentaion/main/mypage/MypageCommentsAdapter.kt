@@ -3,8 +3,8 @@ package com.konkuk.mocacong.presentaion.main.mypage
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.konkuk.mocacong.data.response.Cafe
 import com.konkuk.mocacong.databinding.ItemMyCommentsBinding
+import com.konkuk.mocacong.remote.models.response.Cafe
 
 class MypageCommentsAdapter(
     private val cafeList: MutableList<Cafe>
@@ -18,7 +18,8 @@ class MypageCommentsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemMyCommentsBinding.inflate(LayoutInflater.from(parent.context),parent, false)
+        val binding =
+            ItemMyCommentsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 

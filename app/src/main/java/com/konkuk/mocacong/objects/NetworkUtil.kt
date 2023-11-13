@@ -1,6 +1,6 @@
 package com.konkuk.mocacong.objects
 
-import com.konkuk.mocacong.data.response.ErrorResponse
+import com.konkuk.mocacong.remote.models.response.ErrorResponse
 import okhttp3.ResponseBody
 
 object NetworkUtil {

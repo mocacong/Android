@@ -7,10 +7,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
-import com.konkuk.mocacong.objects.Utils
-import com.konkuk.mocacong.remote.models.request.SignInRequest
-import com.konkuk.mocacong.remote.models.request.SignUpRequest
 import com.konkuk.mocacong.databinding.ActivitySignUpBinding
+import com.konkuk.mocacong.objects.Utils
 import com.konkuk.mocacong.presentaion.main.MainActivity
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.konkuk.mocacong.objects.RetrofitClient
-import com.konkuk.mocacong.data.response.Cafe
-import com.konkuk.mocacong.data.response.MypageCafesResponse
 import com.konkuk.mocacong.databinding.FragmentMyReviewsBinding
+import com.konkuk.mocacong.objects.RetrofitClient
 import com.konkuk.mocacong.remote.apis.MyPageAPI
+import com.konkuk.mocacong.remote.models.response.Cafe
+import com.konkuk.mocacong.remote.models.response.MypageCafesResponse
 import kotlinx.coroutines.launch
 
 class MyReviewsFragment : Fragment() {

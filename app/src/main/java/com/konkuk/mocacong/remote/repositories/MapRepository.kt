@@ -54,7 +54,7 @@ class MapRepository {
 
 
     suspend fun getPreviewInfo(cafeId: String): ApiState<CafePreviewResponse> {
-       val response = mapApi.getPreview(cafeId = cafeId)
+        val response = mapApi.getPreview(cafeId = cafeId)
         return if (response.isSuccessful) {
             ApiState.Success(response.body())
         } else {

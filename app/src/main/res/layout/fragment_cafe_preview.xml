@@ -12,7 +12,6 @@
 
     <TextView
         android:id="@+id/cafeNameText"
-        style="@style/textStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="250dp"
@@ -37,7 +36,6 @@
 
     <TextView
         android:id="@+id/scoreText"
-        style="@style/textStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=" x 0.0"
@@ -49,7 +47,6 @@
 
     <TextView
         android:id="@+id/reviewCountText"
-        style="@style/textStyle"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
@@ -82,7 +79,6 @@
         app:layout_constraintTop_toTopOf="@id/studyTypeIcon" />
 
     <TextView
-        style="@style/textStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="reviews"
@@ -93,7 +89,6 @@
 
     <TextView
         android:id="@+id/studyTypeText"
-        style="@style/textStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="group &amp; solo\ncoding"
@@ -103,7 +98,6 @@
         app:layout_constraintTop_toBottomOf="@id/studyTypeIcon" />
 
     <TextView
-        style="@style/textStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="favorite"
@@ -125,7 +119,6 @@
 
     <TextView
         android:id="@+id/addressText"
-        style="@style/textStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"

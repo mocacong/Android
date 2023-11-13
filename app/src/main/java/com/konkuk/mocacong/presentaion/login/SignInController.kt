@@ -8,17 +8,17 @@ import com.konkuk.mocacong.remote.apis.SignInAPI
 
 class SignInController {
 
-    suspend fun signIn(signInRequest: com.konkuk.mocacong.remote.models.request.SignInRequest) : String{
+    suspend fun signIn(signInRequest: com.konkuk.mocacong.remote.models.request.SignInRequest): String {
         val response = RetrofitClient.create(SignInAPI::class.java).signIn(signInRequest)
-        return if(response.isSuccessful){
+        return if (response.isSuccessful) {
             //로그인 성공
             try {
                 Member.setAuthToken(response.body()!!.token)
-            }catch (e: NullPointerException){
+            } catch (e: NullPointerException) {
                 Log.d("signIn", "성공했는데 responseBody 없음")
             }
             "로그인 성공";
-        } else{
+        } else {
             val errorResponse = NetworkUtil.getErrorResponse(response.errorBody()!!)
             errorResponse!!.message
         }

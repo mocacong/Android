@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.konkuk.mocacong.databinding.FragmentEditReviewBinding
 import com.konkuk.mocacong.objects.Utils
-import com.konkuk.mocacong.remote.models.request.ReviewRequest
-import com.konkuk.mocacong.data.response.MyReviewResponse
+import com.konkuk.mocacong.remote.models.response.MyReviewResponse
 import com.konkuk.mocacong.util.ApiState
 import com.konkuk.mocacong.util.TokenExceptionHandler
-import com.konkuk.mocacong.databinding.FragmentEditReviewBinding
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
 
 class EditReviewFragment : BottomSheetDialogFragment() {
@@ -46,30 +45,30 @@ class EditReviewFragment : BottomSheetDialogFragment() {
             deskGroup.setRequiredView()
         }
         lifecycleScope.launch {
-           viewModel.apply {
-               getMyReview(cafeId).join()
-               when (val apiState = myReviewFlow.value) {
-                   is ApiState.Success -> {
-                       apiState.data?.let { myReview->
-                           if(myReview.myScore == 0) {
-                               isFirst = true
-                           }else{
-                               isFirst = false
-                               setButtonState(myReview)
-                           }
-                       }
-                   }
-                   is ApiState.Error -> {
-                       apiState.errorResponse?.let { er ->
-                           TokenExceptionHandler.handleTokenException(requireContext(), er)
-                           Utils.showToast(requireContext(), er.message)
-                           Log.e(TAG, er.message)
-                       }
-                       mMyReviewFlow.value = ApiState.Loading()
-                   }
-                   is ApiState.Loading -> {}
-               }
-           }
+            viewModel.apply {
+                getMyReview(cafeId).join()
+                when (val apiState = myReviewFlow.value) {
+                    is ApiState.Success -> {
+                        apiState.data?.let { myReview ->
+                            if (myReview.myScore == 0) {
+                                isFirst = true
+                            } else {
+                                isFirst = false
+                                setButtonState(myReview)
+                            }
+                        }
+                    }
+                    is ApiState.Error -> {
+                        apiState.errorResponse?.let { er ->
+                            TokenExceptionHandler.handleTokenException(requireContext(), er)
+                            Utils.showToast(requireContext(), er.message)
+                            Log.e(TAG, er.message)
+                        }
+                        mMyReviewFlow.value = ApiState.Loading()
+                    }
+                    is ApiState.Loading -> {}
+                }
+            }
         }
     }
 

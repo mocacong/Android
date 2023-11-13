@@ -15,7 +15,7 @@ class CustomButton @JvmOverloads constructor(
 ) : AppCompatButton(context, attrs, defStyleAttr) {
 
     private var isClicked = false
-    private val background : GradientDrawable
+    private val background: GradientDrawable
 
     init {
         //초기 모양

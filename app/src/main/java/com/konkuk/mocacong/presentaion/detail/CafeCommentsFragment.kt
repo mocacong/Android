@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,8 +21,7 @@ import com.konkuk.mocacong.util.ApiState
 import com.konkuk.mocacong.util.TokenExceptionHandler
 import kotlinx.coroutines.launch
 
-class CafeCommentsFragment : BottomSheetDialogFragment(),
-    CafeCommentsAdapter.OnCommentBtnClickedListener {
+class CafeCommentsFragment : BottomSheetDialogFragment(){
     private val TAG = "CafeComments"
 
     private var _binding: FragmentCafeCommentsBinding? = null
@@ -140,8 +138,8 @@ class CafeCommentsFragment : BottomSheetDialogFragment(),
             requestCafeComments(cafeId, page).join()
             when (val apiState = commentsResponseFlow.value) {
                 is ApiState.Success -> {
-                    apiState.data?.let { it ->
-                        isEnd = it.isEnd
+                    apiState.data?.let { commentsResponse ->
+                        isEnd = commentsResponse.isEnd
                         comments.addAll(commentsResponse.comments)
                         adapter.notifyDataSetChanged()
                         commentsResponse.count?.let {
@@ -166,23 +164,6 @@ class CafeCommentsFragment : BottomSheetDialogFragment(),
         super.onDestroyView()
         (activity as CafeDetailActivity).refreshDetailInfo()
         _binding = null
-    }
-
-    override fun onCommentMenuClicked(comment: Comment) {
-        val dialog = EditDeleteDialog.newInstance(object : EditDeleteDialogInterface {
-            override fun onEditButtonClick() {
-                Toast.makeText(requireContext(), "eidt clicked", Toast.LENGTH_SHORT).show()
-                putComment(comment)
-                cafeViewModel.isCommentEditing = true
-
-            }
-
-            override fun onDeleteButtonClick() {
-                Toast.makeText(requireContext(), "delete clicked", Toast.LENGTH_SHORT).show()
-            }
-        })
-
-        dialog.show(childFragmentManager, dialog.tag)
     }
 
     private fun putComment(comment: Comment) {

@@ -3,8 +3,8 @@ package com.konkuk.mocacong.presentaion.main.map
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.konkuk.mocacong.data.response.Place
 import com.konkuk.mocacong.databinding.ItemCafeListsBinding
+import com.konkuk.mocacong.remote.models.response.Place
 
 class SearchCafeAdapter(
     val itemClickedListener: OnSearchItemClickedListener

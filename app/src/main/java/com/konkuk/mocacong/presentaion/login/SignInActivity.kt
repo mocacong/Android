@@ -6,11 +6,10 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.konkuk.mocacong.databinding.ActivitySignInBinding
 import com.konkuk.mocacong.objects.NetworkManager.Companion.isNetworkConnected
 import com.konkuk.mocacong.objects.NetworkManager.Companion.showCheckDialog
 import com.konkuk.mocacong.objects.Utils
-import com.konkuk.mocacong.remote.models.request.SignInRequest
-import com.konkuk.mocacong.databinding.ActivitySignInBinding
 import com.konkuk.mocacong.presentaion.main.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -65,7 +64,7 @@ class SignInActivity : AppCompatActivity() {
 
     private fun signInEvent(member: com.konkuk.mocacong.remote.models.request.SignInRequest) {
         lifecycleScope.launch {
-            if(!isNetworkConnected(this@SignInActivity)) {
+            if (!isNetworkConnected(this@SignInActivity)) {
                 showCheckDialog(supportFragmentManager)
                 return@launch
             }

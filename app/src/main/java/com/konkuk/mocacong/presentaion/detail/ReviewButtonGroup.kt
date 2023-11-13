@@ -102,24 +102,23 @@ class ReviewButtonGroup @JvmOverloads constructor(
         }
     }
 
-    fun setInitialButtonSelected(levelString: String?){
-        if(levelStringArr.contains(levelString)){
+    fun setInitialButtonSelected(levelString: String?) {
+        if (levelStringArr.contains(levelString)) {
             selectButton(levelStringArr.indexOf(levelString))
-        }else{
-            Log.d("UI","[$levelString] 선택안됨!!")
+        } else {
+            Log.d("UI", "[$levelString] 선택안됨!!")
         }
     }
-
 
 
     fun getCategory(): String = this.category
 
     fun getSelectedLabel(): String? {
-        return if(selectedLevel==0) null
+        return if (selectedLevel == 0) null
         else levelStringArr[selectedLevel]
     }
 
-    fun setRequiredView(){
+    fun setRequiredView() {
         binding.requiredCheckText.visibility = View.VISIBLE
         setBadge()
     }

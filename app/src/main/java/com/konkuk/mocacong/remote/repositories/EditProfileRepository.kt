@@ -11,7 +11,7 @@ class EditProfileRepository {
 
     private val api = RetrofitClient.create(MembersAPI::class.java)
 
-     suspend fun sendImage(body: MultipartBody.Part): ApiState<Void> {
+    suspend fun sendImage(body: MultipartBody.Part): ApiState<Void> {
         val response = api.putMyProfileImage(file = body)
         return if (response.isSuccessful) ApiState.Success(response.body())
         else {
@@ -20,7 +20,7 @@ class EditProfileRepository {
         }
     }
 
-     suspend fun getProfileInfo(): ApiState<ProfileResponse> {
+    suspend fun getProfileInfo(): ApiState<ProfileResponse> {
         val response = api.getMyProfile()
         return if (response.isSuccessful) ApiState.Success(response.body())
         else {
@@ -29,7 +29,7 @@ class EditProfileRepository {
         }
     }
 
-     suspend fun putProfileInfo(info: com.konkuk.mocacong.remote.models.request.EditProfileRequest): ApiState<Void> {
+    suspend fun putProfileInfo(info: com.konkuk.mocacong.remote.models.request.EditProfileRequest): ApiState<Void> {
         val response = api.putProfileInfo(info = info)
         return if (response.isSuccessful) ApiState.Success(response.body())
         else {

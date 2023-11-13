@@ -2,10 +2,9 @@ package com.konkuk.mocacong.presentaion.main.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.mocacong.remote.models.request.EditProfileRequest
-import com.konkuk.mocacong.data.response.ProfileResponse
-import com.konkuk.mocacong.util.ApiState
+import com.konkuk.mocacong.remote.models.response.ProfileResponse
 import com.konkuk.mocacong.remote.repositories.EditProfileRepository
+import com.konkuk.mocacong.util.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

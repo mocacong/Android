@@ -3,10 +3,12 @@ package com.konkuk.mocacong.presentaion.main.map
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.mocacong.remote.models.request.FilteringRequest
-import com.konkuk.mocacong.data.response.*
-import com.konkuk.mocacong.util.ApiState
+import com.konkuk.mocacong.remote.models.response.CafePreviewResponse
+import com.konkuk.mocacong.remote.models.response.FilteringResponse
+import com.konkuk.mocacong.remote.models.response.LocalSearchResponse
+import com.konkuk.mocacong.remote.models.response.ProfileResponse
 import com.konkuk.mocacong.remote.repositories.MapRepository
+import com.konkuk.mocacong.util.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,12 +37,15 @@ class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
         MutableStateFlow(ApiState.Loading())
     var previewInfo: StateFlow<ApiState<CafePreviewResponse>> = mPreviewInfo
 
-    var mProfileInfo:MutableStateFlow<ApiState<ProfileResponse>> =
+    var mProfileInfo: MutableStateFlow<ApiState<ProfileResponse>> =
         MutableStateFlow(ApiState.Loading())
     var profileInfo: StateFlow<ApiState<ProfileResponse>> = mProfileInfo
 
 
-    fun requestFilterStudyType(type: String, filteringRequest: com.konkuk.mocacong.remote.models.request.FilteringRequest) =
+    fun requestFilterStudyType(
+        type: String,
+        filteringRequest: com.konkuk.mocacong.remote.models.request.FilteringRequest
+    ) =
         viewModelScope.launch(Dispatchers.IO) {
             mFilteredCafesFlow.value = ApiState.Loading()
             val result = mapRepository.getFilterings(type, filteringRequest)
@@ -65,7 +70,7 @@ class MapViewModel(private val mapRepository: MapRepository) : ViewModel() {
         mPreviewInfo.value = mapRepository.getPreviewInfo(cafeId = cafeId)
     }
 
-    fun requestMemeberProfile() = viewModelScope.launch (Dispatchers.IO){
+    fun requestMemeberProfile() = viewModelScope.launch(Dispatchers.IO) {
         mProfileInfo.value = ApiState.Loading()
         mProfileInfo.value = mapRepository.getProfileInfo()
     }

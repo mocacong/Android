@@ -10,14 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout
 import com.konkuk.mocacong.R
-import com.konkuk.mocacong.presentaion.main.settings.EditProfileActivity
+import com.konkuk.mocacong.databinding.FragmentMypageBinding
 import com.konkuk.mocacong.presentaion.main.MainActivity
+import com.konkuk.mocacong.presentaion.main.map.MapViewModel
+import com.konkuk.mocacong.presentaion.main.settings.EditProfileActivity
 import com.konkuk.mocacong.util.ApiState
 import com.konkuk.mocacong.util.TokenExceptionHandler
-import com.konkuk.mocacong.databinding.FragmentMypageBinding
-import com.konkuk.mocacong.presentaion.main.map.MapViewModel
-import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 
 class MypageFragment : Fragment() {
@@ -68,13 +68,13 @@ class MypageFragment : Fragment() {
                             }
                         }
                     }
-                    is ApiState.Error ->{
+                    is ApiState.Error -> {
                         apiState.errorResponse?.let {
                             TokenExceptionHandler.handleTokenException(requireContext(), it)
                             Log.e(TAG, it.message)
                         }
                     }
-                    is ApiState.Loading ->{
+                    is ApiState.Loading -> {
 
                     }
                 }
@@ -93,6 +93,7 @@ class MypageFragment : Fragment() {
                 val position = tab.position
                 showFragment(position)
             }
+
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })

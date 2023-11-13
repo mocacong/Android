@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.konkuk.mocacong.R
-import com.konkuk.mocacong.data.response.Comment
 import com.konkuk.mocacong.databinding.CommentViewBinding
 import com.konkuk.mocacong.remote.models.response.Comment
 
@@ -24,7 +23,7 @@ class CommentView @JvmOverloads constructor(
         binding = CommentViewBinding.inflate(inflater, this, true)
     }
 
-    fun setPreview(){
+    fun setPreview() {
         binding.menuBtn.visibility = GONE
     }
 

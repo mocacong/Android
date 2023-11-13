@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".util.GlobalApplication"
+        android:name=".util.MocacongApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,7 +21,15 @@
         android:theme="@style/Theme.Mocacong"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".presentaion.login.KakaoTestActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Mocacong.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentaion.login.WebViewActivity"
             android:exported="true" />
@@ -57,8 +65,7 @@
         </activity>
         <activity
             android:name=".presentaion.login.SignInActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".presentaion.login.SignUpActivity"
             android:exported="true" />

@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.konkuk.mocacong.R
+import com.konkuk.mocacong.databinding.FragmentSettingsBinding
+import com.konkuk.mocacong.objects.Member
 import com.konkuk.mocacong.presentaion.login.SignInActivity
 import com.konkuk.mocacong.presentaion.login.WebViewActivity
-import com.konkuk.mocacong.objects.Member
-import com.konkuk.mocacong.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
 

@@ -19,7 +19,6 @@
 
     <TextView
         android:id="@+id/labelText"
-        style="@style/textStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -51,7 +50,6 @@
 
         <TextView
             android:id="@+id/firstText"
-            style="@style/textStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="5dp" />
@@ -79,7 +77,6 @@
 
         <TextView
             android:id="@+id/secondText"
-            style="@style/textStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="5dp" />
@@ -107,7 +104,6 @@
 
         <TextView
             android:id="@+id/thirdText"
-            style="@style/textStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="5dp" />

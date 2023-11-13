@@ -11,14 +11,14 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.konkuk.mocacong.R
-import com.konkuk.mocacong.objects.Utils
-import com.konkuk.mocacong.util.ViewModelFactory
 import com.konkuk.mocacong.databinding.ActivityMainBinding
+import com.konkuk.mocacong.objects.Utils
 import com.konkuk.mocacong.presentaion.main.map.HomeFragment
+import com.konkuk.mocacong.presentaion.main.map.MapViewModel
 import com.konkuk.mocacong.presentaion.main.mypage.MypageFragment
 import com.konkuk.mocacong.presentaion.main.settings.SettingsFragment
 import com.konkuk.mocacong.remote.repositories.MapRepository
-import com.konkuk.mocacong.presentaion.main.map.MapViewModel
+import com.konkuk.mocacong.util.ViewModelFactory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -139,9 +139,9 @@ class MainActivity : AppCompatActivity() {
             .commitNow()
     }
 
-    private fun FragmentTransaction.hideAll() : FragmentTransaction{
+    private fun FragmentTransaction.hideAll(): FragmentTransaction {
         supportFragmentManager.fragments.forEach {
-            if(it!=null){
+            if (it != null) {
                 hide(it)
             }
         }

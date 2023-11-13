@@ -44,7 +44,6 @@
 
         <TextView
             android:id="@+id/score"
-            style="@style/textStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="평점"
@@ -87,7 +86,6 @@
 
         <TextView
             android:id="@+id/typeLabel"
-            style="@style/textStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="코딩 타입"

@@ -4,7 +4,7 @@
         >
         <variable
             name="cafeInfo"
-            type="com.konkuk.mocacong.data.response.Cafe" />
+            type="com.konkuk.mocacong.remote.models.response.Cafe" />
     </data>
 
 

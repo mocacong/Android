@@ -3,8 +3,8 @@ package com.konkuk.mocacong.presentaion.main.mypage
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.konkuk.mocacong.data.response.Cafe
 import com.konkuk.mocacong.databinding.ItemMyCafesBinding
+import com.konkuk.mocacong.remote.models.response.Cafe
 
 class MypageReviewsAdapter(
     private val cafeList: MutableList<Cafe>
