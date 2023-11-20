@@ -16,7 +16,6 @@ import com.konkuk.mocacong.databinding.ActivityEditProfileBinding
 import com.konkuk.mocacong.objects.Member
 import com.konkuk.mocacong.objects.Utils
 import com.konkuk.mocacong.objects.Utils.handleEnterKey
-import com.konkuk.mocacong.presentaion.login.SignInActivity
 import com.konkuk.mocacong.remote.repositories.EditProfileRepository
 import com.konkuk.mocacong.util.ApiState
 import com.konkuk.mocacong.util.TokenExceptionHandler

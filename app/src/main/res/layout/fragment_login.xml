@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FEFCF6"
+        android:paddingHorizontal="40dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <ImageView
+            android:id="@+id/logoImg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/true_cong"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintWidth_percent="0.4" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="mocacong"
+            android:textColor="#544D4B"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logoImg" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="모각코? 모카콩!"
+            android:textColor="#544D4B"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@id/title"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/idLayout"
+            style="?attr/textInputFilledStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:hint="ID"
+            app:boxBackgroundColor="#FEFCF6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/pwLayout"
+            style="?attr/textInputFilledStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="PW"
+            app:boxBackgroundColor="#FEFCF6"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/jingray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/idLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/refreshLoginCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:text="로그인 상태 유지"
+            android:textColor="#544D4B"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/pwLayout"
+            app:layout_constraintTop_toBottomOf="@id/pwLayout" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:text="비밀번호 찾기"
+            android:textColor="#544D4B"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/pwLayout"
+            app:layout_constraintTop_toBottomOf="@id/pwLayout" />
+
+        <ImageButton
+            android:id="@+id/loginBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@color/transparent"
+            android:src="@drawable/btn_login"
+            app:layout_constraintTop_toBottomOf="@id/refreshLoginCheckBox" />
+
+        <ImageButton
+            android:id="@+id/kakaoBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="80dp"
+            android:background="@color/transparent"
+            android:src="@drawable/btn_kakao"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.konkuk.mocacong.objects.Utils
-import com.konkuk.mocacong.presentaion.login.SignInActivity
 import com.konkuk.mocacong.remote.models.response.ErrorResponse
 
 object TokenExceptionHandler {
