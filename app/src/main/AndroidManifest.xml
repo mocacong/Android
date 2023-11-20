@@ -22,28 +22,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".presentaion.login.KakaoTestActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Mocacong.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".presentaion.login.WebViewActivity"
+            android:name=".presentation.login.WebViewActivity"
             android:exported="true" />
         <activity
-            android:name=".presentaion.main.settings.EditProfileActivity"
+            android:name=".presentation.main.settings.EditProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".presentaion.login.KakaoLoginActivity"
+            android:name=".presentation.main.map.SearchActivity"
             android:exported="true" />
         <activity
-            android:name=".presentaion.main.map.SearchActivity"
-            android:exported="true" />
-        <activity
-            android:name=".presentaion.detail.CafeDetailActivity"
+            android:name=".presentation.detail.CafeDetailActivity"
             android:exported="true" /> <!-- 네이버 지도 SDK -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
@@ -64,13 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentaion.login.SignInActivity"
-            android:exported="true" />
-        <activity
-            android:name=".presentaion.login.SignUpActivity"
-            android:exported="true" />
-        <activity
-            android:name=".presentaion.main.MainActivity"
+            android:name=".presentation.main.MainActivity"
             android:exported="true" />
     </application>
 

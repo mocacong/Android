@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.konkuk.mocacong.presentaion.detail.CommentView
+    <com.konkuk.mocacong.presentation.detail.CommentView
         android:id="@+id/commentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

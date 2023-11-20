@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.konkuk.mocacong.objects.Utils
+import com.konkuk.mocacong.presentation.login.LoginActivity
 import com.konkuk.mocacong.remote.models.response.ErrorResponse
 
 object TokenExceptionHandler {
@@ -40,7 +41,7 @@ object TokenExceptionHandler {
     }
 
     private fun gotoSignInActivity(context: Context) {
-        val intent = Intent(context, SignInActivity::class.java)
+        val intent = Intent(context, LoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
         if (context is Activity) {

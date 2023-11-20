@@ -8,7 +8,7 @@
     android:background="@drawable/round_bottom_sheet"
     android:padding="20dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    tools:context=".presentaion.main.map.CafePreviewFragment">
+    tools:context=".presentation.main.map.CafePreviewFragment">
 
     <TextView
         android:id="@+id/cafeNameText"
