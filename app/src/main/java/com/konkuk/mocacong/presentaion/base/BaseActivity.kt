@@ -3,72 +3,44 @@ package com.konkuk.mocacong.presentaion.base
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.konkuk.mocacong.remote.models.response.ErrorResponse
-import com.konkuk.mocacong.util.ApiState
+import androidx.lifecycle.ViewModelProvider
+import com.konkuk.mocacong.util.ViewModelFactory
 
-abstract class BaseActivity<T : ViewDataBinding, VM : ViewModel>
-    (@LayoutRes private val layoutId: Int) : AppCompatActivity() {
+abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
-    protected lateinit var binding: T
-    protected abstract val viewModel: VM
-    private var toast: Toast? = null
-
+    abstract val TAG: String // 액티비티 태그
+    lateinit var binding: T //데이터 바인딩
+    abstract val layoutRes: Int // 바인딩에 필요한 layout
+    private var toast: Toast? = null //토스트 보관 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, layoutId)
-        initView()
-        initListener()
+        binding = DataBindingUtil.setContentView(this, layoutRes)
+        initViewModel()
+        afterViewCreated()
     }
 
-    abstract fun initView()
-    abstract fun initListener()
-
+    //  모든 백스택 지우고 다음 액티비티로 넘어감
     fun startNextActivity(activity: Class<*>?) {
         val intent = Intent(this, activity)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
 
-    fun <T> consumeResponse(
-        apiState: ApiState<T>,
-        onSuccess: (T?) -> (T?),
-        onError: ((ErrorResponse) -> Unit)? = null,
-        onLoading: (() -> Unit)? = null
-    ) {
-        when (apiState) {
-            is ApiState.Success -> {
-                if (apiState.data == null) {
-                    onSuccess.invoke(null)
-                } else {
-                    onSuccess.invoke(apiState.data)
-                }
-            }
-            is ApiState.Error -> {
-                apiState.errorResponse?.let { errorResponse ->
-                    onError?.invoke(errorResponse)
-                }
-            }
-            is ApiState.Loading -> {
-                onLoading?.invoke()
-            }
-        }
+    //뷰모델 생성 함수
+    inline fun <reified VM : ViewModel, R> createViewModel(repository: R): VM {
+        val viewModelFactory = ViewModelFactory(repository)
+        return ViewModelProvider(this, viewModelFactory)[VM::class.java]
     }
 
-    fun showMessageDialog(title:String, content: String){
-        MaterialAlertDialogBuilder(this)
-            .setTitle(title)
-            .setMessage(content)
-            .setPositiveButton("확인", null)
-            .show()
-    }
+    abstract fun initViewModel()
+    abstract fun afterViewCreated()
 
+    //  토스트 생성
     fun showToast(msg: String) {
         toast?.cancel()
         toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT)
