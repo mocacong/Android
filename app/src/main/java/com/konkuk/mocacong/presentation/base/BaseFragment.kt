@@ -1,6 +1,8 @@
 package com.konkuk.mocacong.presentation.base
+
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +10,12 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import com.konkuk.mocacong.remote.models.response.ErrorResponse
+import com.konkuk.mocacong.util.ApiState
+import com.konkuk.mocacong.util.TokenExceptionHandler
 
-abstract class BaseFragment<T : ViewDataBinding>: Fragment() {
+abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
 
     private var _binding: T? = null
     protected val binding get() = _binding!!
@@ -51,4 +57,28 @@ abstract class BaseFragment<T : ViewDataBinding>: Fragment() {
         toast?.show()
     }
 
+
+    fun <R> LiveData<ApiState<R>>.observeLiveData(
+        onSuccess: (R) -> (Unit),
+        onFailure: (ErrorResponse) -> (Unit),
+        onLoading: () -> (Unit) = {}
+    ) {
+        this.observe(this@BaseFragment) { state ->
+            when (state) {
+                is ApiState.Success -> {
+                    state.data?.let(onSuccess)
+                }
+                is ApiState.Error -> {
+                    state.errorResponse?.let { er ->
+                        TokenExceptionHandler.handleTokenException(requireContext(), er)
+                        Log.e(TAG, er.message)
+                        onFailure.invoke(er)
+                    }
+                }
+                is ApiState.Loading -> {
+                    onLoading.invoke()
+                }
+            }
+        }
+    }
 }

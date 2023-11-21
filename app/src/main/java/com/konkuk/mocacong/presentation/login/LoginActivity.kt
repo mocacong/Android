@@ -15,6 +15,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     }
 
     override fun afterViewCreated() {
-        TODO("Not yet implemented")
+
     }
 }
