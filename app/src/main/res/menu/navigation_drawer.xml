@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/item1"
+            android:title="내가 리뷰한 카페" />
+        <item
+            android:id="@+id/item2"
+            android:title="즐겨찾기 목록" />
+        <item
+            android:id="@+id/item3"
+            android:title="작성 댓글 목록" />
+    </group>
+
+    <group
+        android:id="@+id/group2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/item4"
+            android:title="고객센터" />
+        <item
+            android:id="@+id/item5"
+            android:title="앱 정보" />
+        <item
+            android:id="@+id/item6"
+            android:title="도움말" />
+    </group>
+</menu>
