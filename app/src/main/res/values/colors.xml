@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="darkBrown">#FF483F30</color>
+    <color name="darkBrown">#4E483C</color>
     <color name="mocaBrown">#C2B8AF</color>
     <color name="jinBrown">#FF958B7C</color>
     <color name="jingray">#BABABA</color>
@@ -14,4 +14,10 @@
     <color name="red">#FF7474</color>
     <color name="ssook">#A2B091</color>
     <color name="ivory">#FBFAF8</color>
+
+    <color name="level1">#E7BDBD</color>
+    <color name="level2">#FFE7A9</color>
+    <color name="level3">#C1CFAF</color>
+
+
 </resources>
