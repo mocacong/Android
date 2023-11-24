@@ -21,10 +21,11 @@ class ReviewButtonGroup @JvmOverloads constructor(
     private var selectedLevel = 0
 
     init {
-        context.theme.obtainStyledAttributes(attrs, R.styleable.ReviewButtonGroup, 0, 0)
+        context.theme.obtainStyledAttributes(attrs, R.styleable.ReviewItem, 0, 0)
             .apply {
                 try {
-                    category = getString(R.styleable.ReviewButtonGroup_category).toString()
+                    category = getString(R.styleable.ReviewItem_category).toString()
+
                     Log.d("UI", "group [${category}] 생성")
                 } finally {
                     recycle()

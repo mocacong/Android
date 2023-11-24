@@ -145,7 +145,7 @@
                         android:id="@+id/editBtn"
                         android:layout_width="80dp"
                         android:layout_height="40dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="90dp"
                         android:background="@color/transparent"
                         android:scaleType="fitCenter"
@@ -169,7 +169,7 @@
                         android:id="@+id/addrText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="40dp"
                         android:paddingStart="10dp"
                         android:text="서울시관악구남현우림루티아트아ㅏㅍ트110동2923호"
                         android:textColor="@color/textGray"
@@ -205,44 +205,25 @@
                             android:orientation="horizontal"
                             android:padding="5dp">
 
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="30dp"
-                                android:layout_weight="1"
-                                android:src="@drawable/detail_ic_power" />
-
-                            <TextView
+                            <com.konkuk.mocacong.presentation.detail.ReviewItem
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="3"
-                                android:background="@drawable/shape_rect_r10_filled"
-                                android:backgroundTint="@color/stroke"
-                                android:gravity="center"
-                                android:text="리뷰가 없어요"
-                                android:textColor="@color/black"
-                                android:textSize="15sp" />
+                                android:layout_weight="4"
+                                app:category="power"
+                                app:iconImg="@drawable/detail_ic_power"
+                                app:reviewString="" />
 
                             <View
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="0.5" />
 
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"
-                                android:layout_weight="1"
-                                android:src="@drawable/detail_ic_desk" />
-
-                            <TextView
+                            <com.konkuk.mocacong.presentation.detail.ReviewItem
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="3"
-                                android:background="@drawable/shape_rect_r10_filled"
-                                android:backgroundTint="@color/stroke"
-                                android:gravity="center"
-                                android:text="리뷰가 없어요"
-                                android:textColor="@color/black"
-                                android:textSize="15sp" />
+                                android:layout_weight="4"
+                                app:category="desk"
+                                app:iconImg="@drawable/detail_ic_desk" />
 
                         </LinearLayout>
 
@@ -252,45 +233,25 @@
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:padding="5dp">
-
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"
-                                android:layout_weight="1"
-                                android:src="@drawable/detail_ic_wifi" />
-
-                            <TextView
+                            <com.konkuk.mocacong.presentation.detail.ReviewItem
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="3"
-                                android:background="@drawable/shape_rect_r10_filled"
-                                android:backgroundTint="@color/stroke"
-                                android:gravity="center"
-                                android:text="리뷰가 없어요"
-                                android:textColor="@color/black"
-                                android:textSize="15sp" />
+                                android:layout_weight="4"
+                                app:category="wifi"
+                                app:iconImg="@drawable/detail_ic_wifi"
+                                app:reviewString="" />
 
                             <View
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="0.5" />
 
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="30dp"
-                                android:layout_weight="1"
-                                android:src="@drawable/detail_ic_sound" />
-
-                            <TextView
+                            <com.konkuk.mocacong.presentation.detail.ReviewItem
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="3"
-                                android:background="@drawable/shape_rect_r10_filled"
-                                android:backgroundTint="@color/stroke"
-                                android:gravity="center"
-                                android:text="리뷰가 없어요"
-                                android:textColor="@color/black"
-                                android:textSize="15sp" />
+                                android:layout_weight="4"
+                                app:category="sound"
+                                app:iconImg="@drawable/detail_ic_sound" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -300,44 +261,25 @@
                             android:orientation="horizontal"
                             android:padding="5dp">
 
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="24dp"
-                                android:layout_weight="1"
-                                android:src="@drawable/detail_ic_toilet" />
-
-                            <TextView
+                            <com.konkuk.mocacong.presentation.detail.ReviewItem
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="3"
-                                android:background="@drawable/shape_rect_r10_filled"
-                                android:backgroundTint="@color/stroke"
-                                android:gravity="center"
-                                android:text="리뷰가 없어요"
-                                android:textColor="@color/black"
-                                android:textSize="15sp" />
+                                android:layout_weight="4"
+                                app:category="toilet"
+                                app:iconImg="@drawable/detail_ic_toilet"
+                                app:reviewString="" />
 
                             <View
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="0.5" />
 
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="30dp"
-                                android:layout_weight="1"
-                                android:src="@drawable/detail_ic_parking" />
-
-                            <TextView
+                            <com.konkuk.mocacong.presentation.detail.ReviewItem
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="3"
-                                android:background="@drawable/shape_rect_r10_filled"
-                                android:backgroundTint="@color/stroke"
-                                android:gravity="center"
-                                android:text="리뷰가 없어요"
-                                android:textColor="@color/black"
-                                android:textSize="15sp" />
+                                android:layout_weight="4"
+                                app:category="parking"
+                                app:iconImg="@drawable/detail_ic_parking" />
 
                         </LinearLayout>
 

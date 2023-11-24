@@ -30,7 +30,7 @@
         <activity
             android:name=".presentation.main.map.SearchActivity"
             android:exported="true" />
-        
+
         <!-- 네이버 지도 SDK -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

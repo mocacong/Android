@@ -1,155 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BottomSheetFragmentStyle"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/round_bottom_sheet"
-    android:padding="20dp"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    tools:context=".presentation.main.map.CafePreviewFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/cafeNameText"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxWidth="250dp"
-        android:gravity="left|center"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="30dp">
+
+        <TextView
+            android:id="@+id/cafeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:text="모카콩카페"
+            android:textColor="@color/darkBrown"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/addrText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="서울시광진구 건국대학교 공학관 1층"
+            android:textColor="@color/darkBrown"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/cafeName" />
+
+        <TextView
+            android:id="@+id/reviewText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="리뷰 개수"
+            android:textColor="@color/darkBrown"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addrText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="11개"
+            android:textColor="@color/darkBrown"
+            android:textSize="17sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/reviewText"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
-    <ImageView
-        android:id="@+id/congImg"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginLeft="20dp"
-        android:src="@drawable/true_cong"
-        app:layout_constraintBottom_toBottomOf="@id/cafeNameText"
-        app:layout_constraintLeft_toRightOf="@id/cafeNameText"
-        app:layout_constraintTop_toTopOf="@id/cafeNameText" />
+        <TextView
+            android:id="@+id/ratingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="평점"
+            android:textColor="@color/darkBrown"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reviewText" />
 
-    <TextView
-        android:id="@+id/scoreText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" x 0.0"
-        app:layout_constraintBottom_toBottomOf="@id/congImg"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintLeft_toRightOf="@id/congImg"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/congImg" />
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/true_cong"
+            app:layout_constraintBottom_toBottomOf="@id/rating"
+            app:layout_constraintEnd_toStartOf="@id/rating"
+            app:layout_constraintTop_toTopOf="@id/rating" />
 
-    <TextView
-        android:id="@+id/reviewCountText"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/shape_circle"
-        android:backgroundTint="@color/stroke"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="@id/cafeNameText"
-        app:layout_constraintTop_toBottomOf="@id/cafeNameText" />
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="X 4.0"
+            android:textColor="@color/darkBrown"
+            android:textSize="17sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/ratingText"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
-        android:id="@+id/studyTypeIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="40dp"
-        android:background="@drawable/shape_circle"
-        android:backgroundTint="@color/stroke"
-        app:layout_constraintBottom_toBottomOf="@id/reviewCountText"
-        app:layout_constraintLeft_toRightOf="@id/reviewCountText"
-        app:layout_constraintTop_toTopOf="@id/reviewCountText" />
+        <TextView
+            android:id="@+id/typeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="스터디 타입"
+            android:textColor="@color/darkBrown"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ratingText" />
 
-    <ImageView
-        android:id="@+id/favIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:src="@drawable/preview_icon_empty_heart"
-        app:layout_constraintBottom_toBottomOf="@id/studyTypeIcon"
-        app:layout_constraintLeft_toRightOf="@id/studyTypeIcon"
-        app:layout_constraintTop_toTopOf="@id/studyTypeIcon" />
+        <TextView
+            android:id="@+id/soloBtn"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shape_rect_r10_filled"
+            android:backgroundTint="@color/mocaBrown"
+            android:gravity="center"
+            android:text="혼자"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/typeText"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="reviews"
-        android:textSize="13sp"
-        app:layout_constraintLeft_toLeftOf="@id/reviewCountText"
-        app:layout_constraintRight_toRightOf="@id/reviewCountText"
-        app:layout_constraintTop_toBottomOf="@id/reviewCountText" />
+        <TextView
+            android:id="@+id/groupBtn"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shape_rect_r10_filled"
+            android:backgroundTint="@color/mocaBrown"
+            android:gravity="center"
+            android:text="같이"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/typeText"
+            app:layout_constraintEnd_toStartOf="@id/soloBtn" />
 
-    <TextView
-        android:id="@+id/studyTypeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="group &amp; solo\ncoding"
-        android:textSize="13sp"
-        app:layout_constraintLeft_toLeftOf="@id/studyTypeIcon"
-        app:layout_constraintRight_toRightOf="@id/studyTypeIcon"
-        app:layout_constraintTop_toBottomOf="@id/studyTypeIcon" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="favorite"
-        android:textSize="13sp"
-        app:layout_constraintLeft_toLeftOf="@id/favIcon"
-        app:layout_constraintRight_toRightOf="@id/favIcon"
-        app:layout_constraintTop_toBottomOf="@id/favIcon" />
-
-
-    <ImageView
-        android:id="@+id/locIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/detail_location"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/studyTypeText"
-        app:tint="@color/darkBrown" />
-
-    <TextView
-        android:id="@+id/addressText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="주소 정보 없음"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@id/locIcon"
-        app:layout_constraintLeft_toRightOf="@id/locIcon"
-        app:layout_constraintTop_toTopOf="@id/locIcon" />
-
-
-    <ImageView
-        android:id="@+id/callIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/detail_call"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locIcon"
-        app:tint="@color/darkBrown" />
-
-    <TextView
-        android:id="@+id/callText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="전화번호 정보 없음"
-        android:textColor="@color/darkBrown"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@id/callIcon"
-        app:layout_constraintLeft_toLeftOf="@id/addressText"
-        app:layout_constraintTop_toTopOf="@id/callIcon" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ReviewButtonGroup">
+    <declare-styleable name="ReviewItem">
         <attr name="category" format="string" />
+        <attr name="iconImg" format="reference" />
+        <attr name="reviewString" format="string"/>
     </declare-styleable>
 </resources>

@@ -205,7 +205,7 @@ class CafeImagesFragment : BottomSheetDialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (activity as CafeDetailActivity).refreshDetailInfo()
+//        (activity as CafeDetailActivity).refreshDetailInfo()
         _binding = null
     }
 

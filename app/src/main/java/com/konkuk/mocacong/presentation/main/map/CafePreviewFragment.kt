@@ -1,6 +1,5 @@
 package com.konkuk.mocacong.presentation.main.map
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,11 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.FragmentCafePreviewBinding
 import com.konkuk.mocacong.objects.RetrofitClient
 import com.konkuk.mocacong.objects.Utils.bundleSerializable
-import com.konkuk.mocacong.presentation.detail.CafeDetailActivity
 import com.konkuk.mocacong.remote.apis.CafeDetailAPI
 import com.konkuk.mocacong.remote.apis.MapApi
 import com.konkuk.mocacong.remote.models.response.CafePreviewResponse
@@ -59,57 +56,11 @@ class CafePreviewFragment : BottomSheetDialogFragment() {
             info = withContext(Dispatchers.IO) {
                 getPreviewInfo(cafe.id)
             }
-            info?.let {
-                binding.apply {
-                    Log.d("qaTest", "isFavorite = ${it.favorite}")
-                    if (it.favorite) favIcon.setImageResource(R.drawable.preview_icon_fill_heart)
-                    else favIcon.setImageResource(R.drawable.preview_icon_empty_heart)
-                    reviewCountText.text = it.reviewsCount.toString()
-                    val str = " x ${String.format("%.1f", it.score)}"
-                    scoreText.text = str
-                    studyTypeText.text =
-                        when (it.studyType) {
-                            "group" -> {
-                                studyTypeIcon.setImageResource(R.drawable.preview_icon_group)
-                                "group\ncoding"
-                            }
-                            "solo" -> {
-                                studyTypeIcon.setImageResource(R.drawable.preview_icon_solo)
-                                "solo\ncoding"
-                            }
-                            else -> {
-                                studyTypeIcon.setImageResource(R.drawable.preview_icon_both)
-                                "group & solo\ncoding"
-                            }
-                        }
-                }
-            }
-        }
-
-        binding.apply {
-            cafeNameText.text = cafe.place_name
-            addressText.text = cafe.road_address_name.let {
-                if (it == "") "주소 정보가 없습니다"
-                else it
-            }
-            callText.text = cafe.phone.let {
-                if (it == "") "전화번호 정보가 없습니다"
-                else it
-            }
 
         }
 
-        binding.root.setOnClickListener {
-            gotoDetailActivity(cafe)
-        }
     }
 
-    private fun gotoDetailActivity(cafe: Place) {
-        val intent = Intent(activity, CafeDetailActivity::class.java)
-        intent.putExtra("cafe", cafe)
-        (requireParentFragment() as HomeFragment).cafeDetailLauncher.launch(intent)
-        this.dismiss()
-    }
 
     override fun onDestroy() {
         (parentFragment as HomeFragment).revertMarker()
