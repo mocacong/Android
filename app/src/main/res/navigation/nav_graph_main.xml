@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_main"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/reviewFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.konkuk.mocacong.presentation.main.map.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/reviewFragment"
+        android:name="com.konkuk.mocacong.presentation.detail.ReviewFragment"
+        android:label="ReviewFragment" />
 </navigation>

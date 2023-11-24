@@ -15,9 +15,9 @@
     <color name="ssook">#A2B091</color>
     <color name="ivory">#FBFAF8</color>
 
-    <color name="level1">#E7BDBD</color>
+    <color name="level3">#E7BDBD</color>
     <color name="level2">#FFE7A9</color>
-    <color name="level3">#C1CFAF</color>
+    <color name="level1">#C1CFAF</color>
 
 
 </resources>

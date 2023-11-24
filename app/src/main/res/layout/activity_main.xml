@@ -20,13 +20,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/nav_graph_main" />
 
-        <com.google.android.material.navigation.NavigationView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:headerLayout="@layout/header_navigation_drawer"
-            app:menu="@menu/navigation_drawer"
-            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

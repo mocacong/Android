@@ -48,7 +48,7 @@ class MypageFragment : Fragment() {
         binding.editProfileBtn.setOnClickListener {
             val activity = requireActivity() as MainActivity
             val intent = Intent(requireContext(), EditProfileActivity::class.java)
-            activity.editProfileLauncher.launch(intent)
+//            activity.editProfileLauncher.launch(intent)
         }
     }
 

@@ -29,7 +29,6 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
@@ -145,36 +144,27 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             searchLauncher.launch(Intent(requireContext(), SearchActivity::class.java))
         }
 
-        binding.filteringSoloBtn.setOnClickListener {
-            it.isSelected = !it.isSelected
-            refreshMarkerList()
-        }
-
-        binding.filteringGroupBtn.setOnClickListener {
-            it.isSelected = !it.isSelected
-            refreshMarkerList()
-        }
 
     }
 
-    private fun requestFiltering(): Job {
-        val isGroupClicked = binding.filteringGroupBtn.isSelected
-        val isSoloClicked = binding.filteringSoloBtn.isSelected
-        return when {
-            isSoloClicked && isGroupClicked -> {
-                filterMarkers("both")
-            }
-            isSoloClicked -> {
-                filterMarkers("solo")
-            }
-            isGroupClicked -> {
-                filterMarkers("group")
-            }
-            else -> {
-                noFiltering()
-            }
-        }
-    }
+//    private fun requestFiltering(): Job {
+//        val isGroupClicked = binding.filteringGroupBtn.isSelected
+//        val isSoloClicked = binding.filteringSoloBtn.isSelected
+//        return when {
+//            isSoloClicked && isGroupClicked -> {
+//                filterMarkers("both")
+//            }
+//            isSoloClicked -> {
+//                filterMarkers("solo")
+//            }
+//            isGroupClicked -> {
+//                filterMarkers("group")
+//            }
+//            else -> {
+//                noFiltering()
+//            }
+//        }
+//    }
 
     private fun noFiltering() = lifecycleScope.launch {
         markers.forEach { (place, marker) ->
@@ -366,7 +356,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                             }
                             isLoading = false
                             filterFavs()
-                            requestFiltering().join()
+//                            requestFiltering().join()
                             addMarkersToMap()
                         }
                     }

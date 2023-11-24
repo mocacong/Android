@@ -304,7 +304,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="24dp"
                                 android:layout_weight="1"
-                                android:src="@drawable/detail_ic_restroom" />
+                                android:src="@drawable/detail_ic_toilet" />
 
                             <TextView
                                 android:layout_width="0dp"

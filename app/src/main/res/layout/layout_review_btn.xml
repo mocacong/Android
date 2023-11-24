@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="review"
+            type="com.konkuk.mocacong.data.entities.Review" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="15dp"
+            android:background="@drawable/shape_rect_r20_filled"
+            android:backgroundTint="#ECDAC6"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="5dp"
+            android:text="@{review.levelStrings[0]}"
+            android:textColor="@color/darkBrown"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <ImageButton
+                android:id="@+id/btn_lv1"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/review_lv3_selector" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:id="@+id/btn_lv2"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/review_lv2_selector" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:id="@+id/btn_lv3"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/review_lv1_selector" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:gravity="center"
+                android:text="@{review.levelStrings[1]}" />
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:gravity="center"
+                android:text="@{review.levelStrings[2]}" />
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:gravity="center"
+                android:text="@{review.levelStrings[3]}" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

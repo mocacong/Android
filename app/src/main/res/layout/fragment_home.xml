@@ -1,50 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.main.map.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <FrameLayout
+            android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/map"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.search.SearchBar
-            android:layout_width="match_parent"
             android:id="@+id/searchBar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="40dp"
             android:backgroundTint="@color/white"
             android:backgroundTintMode="add"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
+            android:id="@+id/menuIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/searchBar"
-            android:elevation="10dp"
             android:layout_marginEnd="20dp"
-            android:id="@+id/menuIcon"
-            android:src="@drawable/icon_menu"
             android:background="@color/transparent"
+            android:elevation="10dp"
+            android:src="@drawable/icon_menu"
             app:layout_constraintBottom_toBottomOf="@id/searchBar"
             app:layout_constraintEnd_toEndOf="@id/searchBar"
+            app:layout_constraintTop_toTopOf="@id/searchBar"
 
             />
 
+        <com.google.android.material.navigation.NavigationView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:headerLayout="@layout/header_navigation_drawer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:menu="@menu/navigation_drawer" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

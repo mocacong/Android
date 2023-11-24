@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            >
+
+
+            <Button
+                android:id="@+id/cancelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/transparent"
+                android:text="취소"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                />
+
+            <Button
+                android:id="@+id/completeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="완료"
+                android:textColor="@color/pblue"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@id/cancelBtn"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="카페 이름"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/cancelBtn" />
+
+            <com.willy.ratingbar.BaseRatingBar
+                android:id="@+id/ratingView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:srb_drawableEmpty="@drawable/false_cong"
+                app:srb_drawableFilled="@drawable/true_cong"
+                app:srb_isIndicator="false"
+                app:srb_rating="0"
+                app:srb_starHeight="30dp"
+                app:srb_starPadding="0dp"
+                app:srb_starWidth="30dp"
+                app:srb_stepSize="1" />
+
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ratingView">
+
+                <Button
+                    android:id="@+id/button1"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="혼자 코딩" />
+
+                <Button
+                    android:id="@+id/button2"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="같이 코딩" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:background="@drawable/shape_rect_r20_filled"
+                android:backgroundTint="@color/stroke"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toggleButton">
+
+                <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:category="desk" />
+
+                <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:category="power" />
+
+                <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:category="wifi" />
+
+                <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:category="sound" />
+
+                <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:category="toilet" />
+
+                <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:category="parking" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</layout>

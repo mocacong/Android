@@ -1,13 +1,14 @@
 package com.konkuk.mocacong.presentation.detail
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
 import com.konkuk.mocacong.R
-import com.konkuk.mocacong.databinding.ItemReviewButtonGroupBinding
+import com.konkuk.mocacong.data.entities.Review
+import com.konkuk.mocacong.databinding.LayoutReviewBtnBinding
 
 
 class ReviewButtonGroup @JvmOverloads constructor(
@@ -15,7 +16,7 @@ class ReviewButtonGroup @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val category: String
-    private val binding: ItemReviewButtonGroupBinding
+    private val binding: LayoutReviewBtnBinding
     private lateinit var levelStringArr: Array<String>
     private var selectedLevel = 0
 
@@ -30,44 +31,36 @@ class ReviewButtonGroup @JvmOverloads constructor(
                 }
             }
 
-        binding = ItemReviewButtonGroupBinding.inflate(LayoutInflater.from(context), this, true)
+        binding = LayoutReviewBtnBinding.inflate(LayoutInflater.from(context), this, true)
         setLevelText()
         setClickListeners()
 
     }
 
+    @SuppressLint("DiscouragedApi")
     private fun setLevelText() {
-        val resourceId = resources.getIdentifier("level_$category", "array", context.packageName)
+        val resourceId = resources.getIdentifier(category, "array", context.packageName)
 
         if (resourceId != 0) {
             levelStringArr = resources.getStringArray(resourceId)
-
-            Log.d("UI", "level_${category} 배열 가져옴 ${levelStringArr[0]}")
-
-            binding.apply {
-                labelText.text = levelStringArr[0]
-                firstText.text = levelStringArr[1]
-                secondText.text = levelStringArr[2]
-                thirdText.text = levelStringArr[3]
-            }
+            Log.d("UI", "${category} 배열 가져옴 ${levelStringArr[0]}")
+            binding.review = Review(category, levelStringArr.toList())
         } else {
-            // Handle the case where the resourceId is not found
-            Log.d("UI", "level_${category} ID 찾을 수 없음")
-
+            Log.d("UI", "${category} ID 찾을 수 없음")
         }
     }
 
     private fun setClickListeners() {
         binding.apply {
-            firstBtn.setOnClickListener {
+            btnLv1.setOnClickListener {
                 if (it.isSelected) selectButton(0)
                 else selectButton(1)
             }
-            secondBtn.setOnClickListener {
+            btnLv2.setOnClickListener {
                 if (it.isSelected) selectButton(0)
                 else selectButton(2)
             }
-            thirdBtn.setOnClickListener {
+            btnLv3.setOnClickListener {
                 if (it.isSelected) selectButton(0)
                 else selectButton(3)
             }
@@ -76,26 +69,24 @@ class ReviewButtonGroup @JvmOverloads constructor(
 
     private fun selectButton(level: Int) {
         binding.apply {
-
-            Log.d("UI", "[Level_${category}] : \'$level\' 선택됨")
-            firstBtn.isSelected = false
-            secondBtn.isSelected = false
-            thirdBtn.isSelected = false
+            btnLv1.isSelected = false
+            btnLv2.isSelected = false
+            btnLv3.isSelected = false
 
             when (level) {
                 0 -> {
                     selectedLevel = 0
                 }
                 1 -> {
-                    firstBtn.isSelected = true
+                    btnLv1.isSelected = true
                     selectedLevel = 1
                 }
                 2 -> {
-                    secondBtn.isSelected = true
+                    btnLv2.isSelected = true
                     selectedLevel = 2
                 }
                 3 -> {
-                    thirdBtn.isSelected = true
+                    btnLv3.isSelected = true
                     selectedLevel = 3
                 }
             }
@@ -110,20 +101,9 @@ class ReviewButtonGroup @JvmOverloads constructor(
         }
     }
 
-
-    fun getCategory(): String = this.category
-
     fun getSelectedLabel(): String? {
         return if (selectedLevel == 0) null
         else levelStringArr[selectedLevel]
     }
 
-    fun setRequiredView() {
-        binding.requiredCheckText.visibility = View.VISIBLE
-        setBadge()
-    }
-
-    private fun setBadge() {
-
-    }
 }

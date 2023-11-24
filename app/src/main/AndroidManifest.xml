@@ -30,12 +30,12 @@
         <activity
             android:name=".presentation.main.map.SearchActivity"
             android:exported="true" />
-        <activity
-            android:name=".presentation.detail.CafeDetailActivity"
-            android:exported="true" /> <!-- 네이버 지도 SDK -->
+        
+        <!-- 네이버 지도 SDK -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="h0q2yui3cy" /> <!-- 카카오로그인 SDK -->
+            android:value="h0q2yui3cy" />
+        <!-- 카카오로그인 SDK -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -53,15 +53,17 @@
         </activity>
         <activity
             android:name=".presentation.main.MainActivity"
-            android:exported="true" />
-        <activity
-            android:name=".presentation.login.LoginActivity"
-            android:exported="true">
+            android:exported="true" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".presentation.login.LoginActivity"
+            android:exported="true">
         </activity>
     </application>
 
