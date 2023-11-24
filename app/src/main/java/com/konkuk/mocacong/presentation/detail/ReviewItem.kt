@@ -25,12 +25,12 @@ class ReviewItem @JvmOverloads constructor(
     private lateinit var levelStringArr: Array<String>
 
     init {
-        context.theme.obtainStyledAttributes(attrs, R.styleable.ReviewItem, 0, 0)
+        context.theme.obtainStyledAttributes(attrs, R.styleable.CustomViewAttrs, 0, 0)
             .apply {
                 try {
-                    resId = getResourceIdOrThrow(R.styleable.ReviewItem_iconImg)
-                    category = getString(R.styleable.ReviewItem_category).toString()
-                    reviewStr = getString(R.styleable.ReviewItem_reviewString).toString()
+                    resId = getResourceIdOrThrow(R.styleable.CustomViewAttrs_reviewIconImg)
+                    category = getString(R.styleable.CustomViewAttrs_reviewCategory).toString()
+                    reviewStr = getString(R.styleable.CustomViewAttrs_reviewString).toString()
                 } finally {
                     recycle()
                 }

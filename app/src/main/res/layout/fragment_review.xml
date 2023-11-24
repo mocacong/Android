@@ -9,7 +9,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             >
 
 
@@ -106,32 +105,32 @@
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:category="desk" />
+                    app:reviewCategory="desk" />
 
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:category="power" />
+                    app:reviewCategory="power" />
 
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:category="wifi" />
+                    app:reviewCategory="wifi" />
 
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:category="sound" />
+                    app:reviewCategory="sound" />
 
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:category="toilet" />
+                    app:reviewCategory="toilet" />
 
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:category="parking" />
+                    app:reviewCategory="parking" />
 
             </LinearLayout>
 

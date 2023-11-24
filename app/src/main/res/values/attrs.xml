@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ReviewItem">
-        <attr name="category" format="string" />
-        <attr name="iconImg" format="reference" />
+    <declare-styleable name="CustomViewAttrs">
+        <attr name="reviewCategory" format="string"/>
+        <attr name="reviewIconImg" format="reference"/>
         <attr name="reviewString" format="string"/>
+        <attr name="commentNickname" format="string"/>
+        <attr name="commentContent" format="string"/>
+        <attr name="commentProfileImg" format="string"/>
+        <attr name="commentIsPreview" format="boolean"/>
     </declare-styleable>
+
 </resources>

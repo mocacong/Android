@@ -11,7 +11,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:paddingBottom="60dp"
             tools:context=".presentation.detail.CafeDetailActivity">
 
             <LinearLayout
@@ -209,8 +208,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="4"
-                                app:category="power"
-                                app:iconImg="@drawable/detail_ic_power"
+                                app:reviewCategory="power"
+                                app:reviewIconImg="@drawable/detail_ic_power"
                                 app:reviewString="" />
 
                             <View
@@ -222,36 +221,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="4"
-                                app:category="desk"
-                                app:iconImg="@drawable/detail_ic_desk" />
+                                app:reviewCategory="desk"
+                                app:reviewIconImg="@drawable/detail_ic_desk" />
 
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:padding="5dp">
-                            <com.konkuk.mocacong.presentation.detail.ReviewItem
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="4"
-                                app:category="wifi"
-                                app:iconImg="@drawable/detail_ic_wifi"
-                                app:reviewString="" />
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="0.5" />
-
-                            <com.konkuk.mocacong.presentation.detail.ReviewItem
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="4"
-                                app:category="sound"
-                                app:iconImg="@drawable/detail_ic_sound" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -265,8 +237,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="4"
-                                app:category="toilet"
-                                app:iconImg="@drawable/detail_ic_toilet"
+                                app:reviewCategory="wifi"
+                                app:reviewIconImg="@drawable/detail_ic_wifi"
                                 app:reviewString="" />
 
                             <View
@@ -278,8 +250,36 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="4"
-                                app:category="parking"
-                                app:iconImg="@drawable/detail_ic_parking" />
+                                app:reviewCategory="sound"
+                                app:reviewIconImg="@drawable/detail_ic_sound" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <com.konkuk.mocacong.presentation.detail.ReviewItem
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="4"
+                                app:reviewCategory="toilet"
+                                app:reviewIconImg="@drawable/detail_ic_toilet"
+                                app:reviewString="" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.5" />
+
+                            <com.konkuk.mocacong.presentation.detail.ReviewItem
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="4"
+                                app:reviewCategory="parking"
+                                app:reviewIconImg="@drawable/detail_ic_parking" />
 
                         </LinearLayout>
 
@@ -290,8 +290,43 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="40dp"
                         android:background="@color/stroke"
-                        app:layout_constraintTop_toBottomOf="@id/reviewsLayout"
-                        />
+                        app:layout_constraintTop_toBottomOf="@id/reviewsLayout" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="60dp"
+                        app:layout_constraintTop_toBottomOf="@id/reviewsLayout">
+
+                        <com.konkuk.mocacong.presentation.detail.CafeCommentView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:commentContent="나나나나낟"
+                            app:commentNickname="닉네임이지롱" />
+
+                        <com.konkuk.mocacong.presentation.detail.CafeCommentView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:commentContent="나나나나낟"
+                            app:commentNickname="닉네임이지롱" />
+
+                        <com.konkuk.mocacong.presentation.detail.CafeCommentView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:commentContent="나나나나낟"
+                            app:commentNickname="닉네임이지롱" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="댓글 전체 보기"
+                            android:padding="20dp"
+                            android:gravity="center"
+                            />
+
+                    </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

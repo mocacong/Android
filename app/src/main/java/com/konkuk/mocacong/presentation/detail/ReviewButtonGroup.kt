@@ -21,10 +21,10 @@ class ReviewButtonGroup @JvmOverloads constructor(
     private var selectedLevel = 0
 
     init {
-        context.theme.obtainStyledAttributes(attrs, R.styleable.ReviewItem, 0, 0)
+        context.theme.obtainStyledAttributes(attrs, R.styleable.CustomViewAttrs, 0, 0)
             .apply {
                 try {
-                    category = getString(R.styleable.ReviewItem_category).toString()
+                    category = getString(R.styleable.CustomViewAttrs_reviewCategory).toString()
 
                     Log.d("UI", "group [${category}] 생성")
                 } finally {

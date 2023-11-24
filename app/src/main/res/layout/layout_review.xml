@@ -26,9 +26,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            app:category="power"
+            app:reviewCategory="power"
             app:reviewString="@{reviews.power}"
-            app:iconImg="@drawable/detail_ic_power"
+            app:reviewIconImg="@drawable/detail_ic_power"
             />
 
         <View
@@ -41,8 +41,8 @@
             android:layout_height="wrap_content"
             app:reviewString="@{reviews.desk}"
             android:layout_weight="4"
-            app:category="desk"
-            app:iconImg="@drawable/detail_ic_desk" />
+            app:reviewCategory="desk"
+            app:reviewIconImg="@drawable/detail_ic_desk" />
 
 
 
@@ -60,8 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             app:reviewString="@{reviews.wifi}"
-            app:category="wifi"
-            app:iconImg="@drawable/detail_ic_wifi"
+            app:reviewCategory="wifi"
+            app:reviewIconImg="@drawable/detail_ic_wifi"
             />
 
         <View
@@ -74,8 +74,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             app:reviewString="@{reviews.sound}"
-            app:category="sound"
-            app:iconImg="@drawable/detail_ic_sound" />
+            app:reviewCategory="sound"
+            app:reviewIconImg="@drawable/detail_ic_sound" />
 
 
 
@@ -92,9 +92,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            app:category="toilet"
+            app:reviewCategory="toilet"
             app:reviewString="@{reviews.toilet}"
-            app:iconImg="@drawable/detail_ic_toilet"
+            app:reviewIconImg="@drawable/detail_ic_toilet"
             />
 
         <View
@@ -106,9 +106,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            app:category="parking"
+            app:reviewCategory="parking"
             app:reviewString="@{reviews.parking}"
-            app:iconImg="@drawable/detail_ic_parking" />
+            app:reviewIconImg="@drawable/detail_ic_parking" />
 
 
 
