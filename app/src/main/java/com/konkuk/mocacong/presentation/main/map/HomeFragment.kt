@@ -9,7 +9,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.konkuk.mocacong.R
@@ -17,7 +16,6 @@ import com.konkuk.mocacong.data.entities.MapMarker
 import com.konkuk.mocacong.databinding.FragmentHomeBinding
 import com.konkuk.mocacong.presentation.base.BaseFragment
 import com.konkuk.mocacong.presentation.main.mypage.MypageViewModel
-import com.konkuk.mocacong.util.Extensions.Companion.safeNavigate
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.OverlayImage
@@ -77,8 +75,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
         binding.navigationMenu.setNavigationItemSelectedListener {
             binding.drawerLayout.closeDrawers()
             mypageViewModel.type = enumValueOf(it.itemId.toString())
-            findNavController().safeNavigate(HomeFragmentDirections.actionHomeFragmentToMyCafesFragment())
-            return@setNavigationItemSelectedListener true
+            TODO("MyCafesFragment로 이동")
         }
     }
 
@@ -109,7 +106,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
     private val createPreview: (Unit) -> Unit = {
         mapViewModel.clickedMarker.value?.let {
             mapViewModel.requestPreviewInfo(it.mapId)
-            findNavController().safeNavigate(HomeFragmentDirections.actionHomeFragmentToCafePreviewFragment())
+            TODO("PreviewFragment show")
         }
     }
 

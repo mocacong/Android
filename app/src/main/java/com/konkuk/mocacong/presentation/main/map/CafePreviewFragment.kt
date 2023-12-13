@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.konkuk.mocacong.databinding.FragmentCafePreviewBinding
 import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
 import com.konkuk.mocacong.util.ApiState
-import com.konkuk.mocacong.util.Extensions.Companion.safeNavigate
 
 
 class CafePreviewFragment : BottomSheetDialogFragment() {
@@ -80,8 +78,7 @@ class CafePreviewFragment : BottomSheetDialogFragment() {
         binding.root.setOnClickListener {
             mapViewModel.clickedMarker.value?.let { mapMarker ->
                 detailViewModel.cafeBasicInfo = mapMarker.getPlaceInfo()
-                val action = CafePreviewFragmentDirections.actionPreviewToDetail()
-                findNavController().safeNavigate(action)
+                TODO("Detail로 이동")
                 mapViewModel._clickedMarker.value = null
             }
         }

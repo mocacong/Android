@@ -2,7 +2,6 @@ package com.konkuk.mocacong.presentation.login
 
 import android.util.Log
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -14,7 +13,6 @@ import com.konkuk.mocacong.presentation.base.BaseFragment
 import com.konkuk.mocacong.presentation.main.MainActivity
 import com.konkuk.mocacong.remote.models.response.KakaoLoginResponse
 import com.konkuk.mocacong.util.ApiState
-import com.konkuk.mocacong.util.Extensions.Companion.safeNavigate
 
 class LoginFragment : BaseFragment<FragmentLoginBinding>() {
     override val TAG: String = "LoginFragment"
@@ -46,7 +44,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
             //회원가입 페이지로
             showToast("회원 정보 없음. 가입을 시작합니다")
             viewModel.mKakaoLoginResponse.value = ApiState.Loading()
-            findNavController().safeNavigate(LoginFragmentDirections.actionLoginFragmentToJoinFragment())
+            TODO("JoinFragment로 이동")
         }
     }
 

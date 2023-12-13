@@ -2,15 +2,12 @@ package com.konkuk.mocacong.presentation.detail
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.FragmentDetailBinding
 import com.konkuk.mocacong.presentation.base.BaseFragment
 import com.konkuk.mocacong.presentation.models.CafeDetailUiModel
 import com.konkuk.mocacong.remote.models.response.CafeResponse
-import com.konkuk.mocacong.util.Extensions.Companion.safeNavigate
 import java.lang.Integer.min
 
 class DetailFragment : BaseFragment<FragmentDetailBinding>() {
@@ -20,9 +17,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
-            findNavController().safeNavigate(DetailFragmentDirections.actionDetailFragmentToHomeFragment())
-        }
+
     }
 
     override fun afterViewCreated() {
@@ -41,7 +36,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
             viewModel.requestFavoritePost(isRegister = !it.isSelected)
         }
         binding.editBtn.setOnClickListener {
-            findNavController().safeNavigate(DetailFragmentDirections.actionDetailFragmentToReviewFragment())
+            //TODO: 리뷰팝업
         }
     }
 
@@ -71,8 +66,6 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
                 comments[i].setComment(it.comments[i])
         }
     }
-
-
 
 
 }
