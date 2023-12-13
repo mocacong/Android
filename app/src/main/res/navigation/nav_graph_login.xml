@@ -3,9 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
     app:startDestination="@id/loginFragment">
+    <action
+        android:id="@+id/action_global_to_main"
+        app:destination="@id/nav_graph_main" />
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.konkuk.mocacong.presentation.login.LoginFragment"
-        android:label="LoginFragment" />
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_joinFragment"
+            app:destination="@id/joinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/joinFragment"
+        android:name="com.konkuk.mocacong.presentation.login.JoinFragment"
+        android:label="JoinFragment" />
+
+    <include app:graph="@navigation/nav_graph_main" />
+
 </navigation>

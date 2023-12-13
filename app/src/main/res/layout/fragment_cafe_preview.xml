@@ -2,6 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="model"
+            type="com.konkuk.mocacong.remote.models.response.CafePreviewResponse" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,7 +19,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingHorizontal="20dp"
-            android:text="모카콩카페"
+
             android:textColor="@color/darkBrown"
             android:textSize="25sp"
             android:textStyle="bold"
@@ -26,7 +31,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="서울시광진구 건국대학교 공학관 1층"
             android:textColor="@color/darkBrown"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/cafeName" />
@@ -44,10 +48,11 @@
             app:layout_constraintTop_toBottomOf="@id/addrText" />
 
         <TextView
+            android:id="@+id/reviewCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="11개"
+            android:text="리뷰가 없어요"
             android:textColor="@color/darkBrown"
             android:textSize="17sp"
             app:layout_constraintBaseline_toBaselineOf="@id/reviewText"
@@ -79,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="X 4.0"
+            android:text="X 0.0"
             android:textColor="@color/darkBrown"
             android:textSize="17sp"
             app:layout_constraintBaseline_toBaselineOf="@id/ratingText"

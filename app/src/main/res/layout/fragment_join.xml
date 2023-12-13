@@ -3,43 +3,58 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/ivory"
-        android:padding="20dp"
-        android:layout_height="match_parent">
+        android:padding="20dp">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/title"
-            android:text="환영합니다!"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="100dp"
-            />
-
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="사용하실 닉네임을 알려주세요"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            />
+            android:layout_marginTop="100dp"
+            android:gravity="center"
+            android:text="나만의 닉네임을 설정해보세요!"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toTopOf="@id/descriptionText" />
+
+        <TextView
+            android:id="@+id/descriptionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:gravity="center"
+            android:text="닉네임 형식은 한글 또는 영어로 2~6자 입니다"
+            app:layout_constraintBottom_toTopOf="@id/nicknameInputLayout" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            app:boxBackgroundColor="@color/ivory"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            android:layout_marginTop="100dp"
+            android:id="@+id/nicknameInputLayout"
             style="@style/Widget.Material3.TextInputLayout.FilledBox"
-            >
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            app:errorEnabled="true"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/ivory"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-                />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nicknameText"
+                android:inputType="text"
+                android:imeOptions="actionDone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/completeBtn"
+            android:enabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:text="완료"
+            app:layout_constraintTop_toBottomOf="@id/nicknameInputLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

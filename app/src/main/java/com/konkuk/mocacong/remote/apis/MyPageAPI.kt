@@ -1,8 +1,7 @@
 package com.konkuk.mocacong.remote.apis
 
 import com.konkuk.mocacong.objects.Member
-import com.konkuk.mocacong.remote.models.response.MypageCafesResponse
-import com.konkuk.mocacong.remote.models.response.ProfileResponse
+import com.konkuk.mocacong.remote.models.response.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -17,23 +16,23 @@ interface MyPageAPI {
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Query("page") page: Int,
         @Query("count") count: Int = 20
-    ): Response<MypageCafesResponse>
+    ): Response<MyReviewsResponse>
 
     @GET("/members/mypage/stars")
     suspend fun getMyFavorites(
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Query("page") page: Int,
         @Query("count") count: Int = 20
-    ): Response<MypageCafesResponse>
+    ): Response<MyFavResponse>
 
     @GET("/members/mypage/comments")
     suspend fun getMyComments(
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Query("page") page: Int,
         @Query("count") count: Int = 20
-    ): Response<MypageCafesResponse>
+    ): Response<MyCommentsResponse>
 
     @DELETE("/members")
-    suspend fun withdrawMember() : Response<Void>
+    suspend fun withdrawMember(): Response<Void>
 
 }

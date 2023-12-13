@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -102,4 +103,5 @@ dependencies {
     //hilt
     implementation 'com.google.dagger:hilt-android:2.48.1'
     annotationProcessor 'com.google.dagger:hilt-compiler:2.48.1'
+
 }

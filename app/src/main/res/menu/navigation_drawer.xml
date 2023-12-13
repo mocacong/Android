@@ -5,13 +5,13 @@
         android:id="@+id/group1"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/item1"
+            android:id="@+id/myReviews"
             android:title="내가 리뷰한 카페" />
         <item
-            android:id="@+id/item2"
+            android:id="@+id/myFavs"
             android:title="즐겨찾기 목록" />
         <item
-            android:id="@+id/item3"
+            android:id="@+id/myComments"
             android:title="작성 댓글 목록" />
     </group>
 
@@ -19,13 +19,13 @@
         android:id="@+id/group2"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/item4"
+            android:id="@+id/customerCenter"
             android:title="고객센터" />
         <item
-            android:id="@+id/item5"
+            android:id="@+id/appInfo"
             android:title="앱 정보" />
         <item
-            android:id="@+id/item6"
+            android:id="@+id/qna"
             android:title="도움말" />
     </group>
 </menu>

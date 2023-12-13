@@ -10,6 +10,8 @@
         <item name="colorSecondaryVariant">@color/mocaBrown</item>
         <item name="colorOnSecondary">@color/black</item>
 
+        <item name="colorSecondaryContainer">@color/mocaBrown</item>
+
         <item name="colorSurface">@color/white</item>
 
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>

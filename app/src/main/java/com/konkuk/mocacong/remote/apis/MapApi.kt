@@ -1,6 +1,8 @@
 package com.konkuk.mocacong.remote.apis
 
 import com.konkuk.mocacong.objects.Member
+import com.konkuk.mocacong.remote.models.request.FilteringRequest
+import com.konkuk.mocacong.remote.models.request.PostCafeRequest
 import com.konkuk.mocacong.remote.models.response.CafePreviewResponse
 import com.konkuk.mocacong.remote.models.response.FilteringResponse
 import retrofit2.Response
@@ -17,8 +19,13 @@ interface MapApi {
     @POST("/cafes/favorites")
     suspend fun getFavCafes(
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
-        @Body filteringRequest: com.konkuk.mocacong.remote.models.request.FilteringRequest
+        @Body filteringRequest: FilteringRequest
     ): Response<FilteringResponse>
+
+    @POST("/cafes")
+    suspend fun postCafe(
+        @Body cafe : PostCafeRequest
+    ) : Response<Unit>
 
     @GET("/cafes/{mapId}/preview")
     suspend fun getPreview(

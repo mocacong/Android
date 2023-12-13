@@ -22,6 +22,7 @@
         android:background="@color/transparent"
         android:layout_height="40dp"
         android:scaleType="fitCenter"
+        android:visibility="gone"
         android:src="@drawable/img_edit_btn"
         app:layout_constraintEnd_toEndOf="@id/profileImg"
         app:layout_constraintBottom_toBottomOf="@id/profileImg"

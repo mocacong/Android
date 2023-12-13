@@ -3,10 +3,12 @@ package com.konkuk.mocacong.presentation.detail
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.ItemCafeCommentBinding
+import com.konkuk.mocacong.remote.models.response.Comment
 
 class CafeCommentView @JvmOverloads constructor(
     context: Context,
@@ -42,6 +44,17 @@ class CafeCommentView @JvmOverloads constructor(
         addView(binding.root)
     }
 
+    fun setComment(comment: Comment?){
+        if(comment==null) binding.root.visibility = View.GONE
+        else {
+            binding.root.visibility = View.VISIBLE
+            if (comment.imgUrl.isNullOrBlank()) binding.profileImg.setImageResource(R.drawable.shape_circle)
+            else Glide.with(context).load(comment.imgUrl).into(binding.profileImg)
+
+            binding.nicknameText.text = comment.nickname
+            binding.contentText.text = comment.content
+        }
+    }
 
     private fun setProfileImg(){
         binding.profileImg.clipToOutline

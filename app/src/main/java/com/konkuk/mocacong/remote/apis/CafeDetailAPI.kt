@@ -15,24 +15,20 @@ interface CafeDetailAPI {
         @Path("cafeId") cafeId : String
     ) : Response<CafeResponse>
 
-    @POST("/cafes")
-    suspend fun postCafe(
-        @Body cafe : com.konkuk.mocacong.remote.models.request.CafeDetailRequest
-    ) : Response<Unit>
 
     @POST("/cafes/{cafeId}/comments")
     suspend fun postCafeComment(
         @Header("Authorization") token : String? = "Bearer ${Member.getAuthToken()}",
         @Path("cafeId") cafeId : String,
         @Body content : String
-    ) : Response<Void>
+    ) : Response<Unit>
 
     @POST("/cafes/{cafeId}")
     suspend fun postReview(
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Path("cafeId") cafeId: String,
         @Body myReview: com.konkuk.mocacong.remote.models.request.ReviewRequest
-    ) : Response<Void>
+    ) : Response<Unit>
 
     @GET("/cafes/{cafeId}/comments")
     suspend fun getCafeComment(
@@ -53,19 +49,19 @@ interface CafeDetailAPI {
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Path("cafeId") cafeId: String,
         @Body myReview: com.konkuk.mocacong.remote.models.request.ReviewRequest
-    ) : Response<Void>
+    ) : Response<Unit>
 
     @POST("/cafes/{cafeId}/favorites")
     suspend fun postFavorite(
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Path("cafeId") cafeId: String
-    ) : Response<Void>
+    ) : Response<Unit>
 
     @DELETE("/cafes/{cafeId}/favorites")
     suspend fun deleteFavorite(
         @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
         @Path("cafeId") cafeId: String
-    ) : Response<Void>
+    ) : Response<Unit>
 
 
 }

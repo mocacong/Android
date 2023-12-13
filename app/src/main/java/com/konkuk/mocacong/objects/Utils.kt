@@ -36,7 +36,7 @@ object Utils {
         }.show()
     }
 
-    fun EditText.handleEnterKey() {
+    fun EditText.handleEnterKey(onEnter: ()->(Unit) = {}) {
         val inputMethodManager =
             ContextCompat.getSystemService(context, InputMethodManager::class.java)
         this.setOnKeyListener { _, code, keyEvent ->
@@ -45,6 +45,7 @@ object Utils {
                     this.windowToken,
                     0
                 )
+                onEnter()
                 true
             }
             false
@@ -59,13 +60,6 @@ object Utils {
                 ContextCompat.getSystemService(context, InputMethodManager::class.java)
             inputMethodManager?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
         }, 30)
-    }
-
-
-    fun showToast(context: Context, msg: String) {
-        toast?.cancel()
-        toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
-        toast?.show()
     }
 
     fun <T : Serializable> Intent.intentSerializable(key: String, clazz: Class<T>): T? {

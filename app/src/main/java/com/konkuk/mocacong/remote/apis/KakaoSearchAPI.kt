@@ -22,6 +22,6 @@ interface KakaoSearchAPI {
         @Query("radius") radius : Int = 500,
         @Query("page") page : Int = 1,
         @Query("size") size : Int = 15,
-        @Query("sort") sort : String = "distance",
+        @Query("sort") sort : String = "accuracy",
     ) : Response<LocalSearchResponse>
 }

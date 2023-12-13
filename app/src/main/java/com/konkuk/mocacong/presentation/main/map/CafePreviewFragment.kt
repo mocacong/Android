@@ -1,101 +1,95 @@
 package com.konkuk.mocacong.presentation.main.map
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.konkuk.mocacong.databinding.FragmentCafePreviewBinding
-import com.konkuk.mocacong.objects.RetrofitClient
-import com.konkuk.mocacong.objects.Utils.bundleSerializable
-import com.konkuk.mocacong.remote.apis.CafeDetailAPI
-import com.konkuk.mocacong.remote.apis.MapApi
-import com.konkuk.mocacong.remote.models.response.CafePreviewResponse
-import com.konkuk.mocacong.remote.models.response.Place
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
+import com.konkuk.mocacong.util.ApiState
+import com.konkuk.mocacong.util.Extensions.Companion.safeNavigate
 
 
 class CafePreviewFragment : BottomSheetDialogFragment() {
-    private lateinit var cafe: Place
-    private var info: CafePreviewResponse? = null
+    private val mapViewModel: MapViewModel by activityViewModels()
+    private val detailViewModel: CafeDetailViewModel by activityViewModels()
     private var _binding: FragmentCafePreviewBinding? = null
     private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            cafe = it.bundleSerializable("cafe", Place::class.java)!!
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCafePreviewBinding.inflate(inflater, container, false)
-        lifecycleScope.launch {
-            withContext(Dispatchers.Default) {
-                postCafe()
-            }
-
-        }
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        setLayout()
+        initLayout()
     }
 
-    private fun setLayout() {
-        lifecycleScope.launch {
-            info = withContext(Dispatchers.IO) {
-                getPreviewInfo(cafe.id)
-            }
+    private fun initLayout() {
+        mapViewModel.cafePreviewResponse.observe(this) { state ->
+            when (state) {
+                is ApiState.Success -> {
+                    state.data?.let {
+                        mapViewModel.clickedMarker.value?.let { mapMarker ->
+                            binding.cafeName.text = mapMarker.name
+                            binding.addrText.text = mapMarker.roadAddress
+                        }
+                        if (it.reviewsCount == 0) return@let
+                        when (it.studyType) {
+                            "solo" -> {
+                                binding.soloBtn.visibility = View.VISIBLE
+                                binding.groupBtn.visibility = View.GONE
+                            }
+                            "group" -> {
+                                binding.soloBtn.visibility = View.GONE
+                                binding.groupBtn.visibility = View.VISIBLE
+                            }
+                            "both" -> {
+                                binding.soloBtn.visibility = View.VISIBLE
+                                binding.groupBtn.visibility = View.VISIBLE
+                            }
+                            else -> {
+                                binding.soloBtn.visibility = View.GONE
+                                binding.groupBtn.visibility = View.GONE
+                            }
+                        }
+                        binding.apply {
+                            val scoreText = String.format("X %.1f", it.score)
+                            rating.text = scoreText
+                            reviewCount.text = "${it.reviewsCount}개"
+                        }
+                    }
+                }
+                is ApiState.Error -> {
+                    state.errorResponse.let { er ->
 
+                    }
+                }
+                is ApiState.Loading -> {
+                }
+            }
         }
 
+        binding.root.setOnClickListener {
+            mapViewModel.clickedMarker.value?.let { mapMarker ->
+                detailViewModel.cafeBasicInfo = mapMarker.getPlaceInfo()
+                val action = CafePreviewFragmentDirections.actionPreviewToDetail()
+                findNavController().safeNavigate(action)
+                mapViewModel._clickedMarker.value = null
+            }
+        }
     }
 
 
     override fun onDestroy() {
-        (parentFragment as HomeFragment).revertMarker()
         _binding = null
         super.onDestroy()
-    }
-
-    private suspend fun getPreviewInfo(id: String): CafePreviewResponse? {
-        val filteringApi = RetrofitClient.create(MapApi::class.java)
-        Log.d("preview", "id: $id")
-        val response = filteringApi.getPreview(cafeId = id)
-        if (response.isSuccessful) return response.body()!!
-        else {
-            return null
-        }
-    }
-
-    private suspend fun postCafe() {
-        val api = RetrofitClient.create(CafeDetailAPI::class.java)
-        val postResponse = api.postCafe(
-            com.konkuk.mocacong.remote.models.request.CafeDetailRequest(
-                cafe.id,
-                cafe.place_name
-            )
-        )
-        if (postResponse.isSuccessful) return
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(cafe: Place) =
-            CafePreviewFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable("cafe", cafe)
-                }
-            }
     }
 }

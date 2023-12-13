@@ -2,13 +2,11 @@ package com.konkuk.mocacong.presentation.base
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.konkuk.mocacong.util.ViewModelFactory
 
 abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
@@ -18,6 +16,7 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     private var toast: Toast? = null //토스트 보관 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "OnCreate")
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, layoutRes)
         binding.lifecycleOwner = this
@@ -32,11 +31,6 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         startActivity(intent)
     }
 
-    //뷰모델 생성 함수
-    inline fun <reified VM : ViewModel, R> createViewModel(repository: R): VM {
-        val viewModelFactory = ViewModelFactory(repository)
-        return ViewModelProvider(this, viewModelFactory)[VM::class.java]
-    }
 
     abstract fun initViewModel()
     abstract fun afterViewCreated()

@@ -48,14 +48,13 @@ class ReviewItem @JvmOverloads constructor(
         setTextView()
     }
 
-    fun setReviewString(reviewString: String) {
-        this.reviewStr = reviewString
+    fun setReviewString(reviewString: String?) {
+        this.reviewStr = reviewString ?: "리뷰가 없어요"
         setTextView()
         this.invalidate()
         this.requestLayout()
         tag = reviewString
     }
-
 
     private fun setDrawable() {
         binding.imageView.setImageResource(resId)
@@ -81,7 +80,6 @@ class ReviewItem @JvmOverloads constructor(
             else -> {
                 binding.labelText.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(context, R.color.stroke))
-                binding.labelText.text = "리뷰가 없어요"
             }
         }
     }

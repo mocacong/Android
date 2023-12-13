@@ -11,9 +11,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
+import com.konkuk.mocacong.R
 import com.konkuk.mocacong.remote.models.response.ErrorResponse
 import com.konkuk.mocacong.util.ApiState
-import com.konkuk.mocacong.util.TokenExceptionHandler
 
 abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
 
@@ -46,7 +46,7 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
     }
 
     fun startNextActivity(activity: Class<*>?) {
-        val intent = Intent(requireContext(), activity)
+        val intent = Intent(requireActivity(), activity)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
@@ -58,27 +58,21 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
     }
 
 
-    fun <R> LiveData<ApiState<R>>.observeLiveData(
-        onSuccess: (R) -> (Unit),
-        onFailure: (ErrorResponse) -> (Unit),
+    fun <D, R> LiveData<ApiState<D>>.observeLiveData(
+        onSuccess: (D) -> (R?),
+        onFailure: (ErrorResponse) -> (Unit) = { Log.e(TAG, "Network error: $it")},
         onLoading: () -> (Unit) = {}
     ) {
         this.observe(this@BaseFragment) { state ->
-            when (state) {
-                is ApiState.Success -> {
-                    state.data?.let(onSuccess)
-                }
-                is ApiState.Error -> {
-                    state.errorResponse?.let { er ->
-                        TokenExceptionHandler.handleTokenException(requireContext(), er)
-                        Log.e(TAG, er.message)
-                        onFailure.invoke(er)
-                    }
-                }
-                is ApiState.Loading -> {
-                    onLoading.invoke()
-                }
-            }
+            state.byState(
+                onSuccess,
+                onFailure,
+                onLoading
+            )
         }
+    }
+
+    fun logging(msg: String){
+        Log.d(TAG, msg)
     }
 }

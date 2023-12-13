@@ -24,7 +24,7 @@ interface AuthAPI {
     suspend fun signUp(@Body member: SignUpRequest): Response<SignUpResponse>
 
     @POST("/members/oauth")
-    suspend fun oAuthSignUp(@Body request: OAuthRequest): Response<Void>
+    suspend fun oAuthSignUp(@Body request: OAuthRequest): Response<Unit>
 
     @GET("/members/check-duplicate/nickname")
     suspend fun checkNickname(

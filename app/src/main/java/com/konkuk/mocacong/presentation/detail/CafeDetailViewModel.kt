@@ -1,98 +1,89 @@
 package com.konkuk.mocacong.presentation.detail
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.mocacong.data.entities.BasicPlaceInfo
+import com.konkuk.mocacong.remote.models.request.ReviewRequest
 import com.konkuk.mocacong.remote.models.response.CafeResponse
 import com.konkuk.mocacong.remote.models.response.CommentsResponse
 import com.konkuk.mocacong.remote.models.response.MyReviewResponse
 import com.konkuk.mocacong.remote.repositories.CafeDetailRepository
 import com.konkuk.mocacong.util.ApiState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository) : ViewModel() {
 
-    var mCafeDetailInfosFlow: MutableStateFlow<ApiState<CafeResponse>> =
-        MutableStateFlow(ApiState.Loading())
-    var cafeDatailInfoFlow: StateFlow<ApiState<CafeResponse>> = mCafeDetailInfosFlow
+    lateinit var cafeBasicInfo: BasicPlaceInfo
+    lateinit var cafeId: String
 
-    var mPostFavoriteFlow: MutableStateFlow<ApiState<Void>> = MutableStateFlow(ApiState.Loading())
-    var postFavoriteFlow: StateFlow<ApiState<Void>> = mPostFavoriteFlow
+    val _cafeDetailInfoResponse = MutableLiveData<ApiState<CafeResponse>>()
+    val cafeDetailInfoResponse : LiveData<ApiState<CafeResponse>> = _cafeDetailInfoResponse
+    fun requestCafeDetailInfo() = viewModelScope.launch(Dispatchers.IO) {
+        _cafeDetailInfoResponse.postValue(ApiState.Loading())
+        _cafeDetailInfoResponse.postValue(cafeDetailRepository.getCafeDetailInfo(cafeId))
+    }
 
-    var mCommentsResponseFlow: MutableStateFlow<ApiState<CommentsResponse>> =
-        MutableStateFlow(ApiState.Loading())
-    var commentsResponseFlow: StateFlow<ApiState<CommentsResponse>> = mCommentsResponseFlow
+    var _favoriteResponse = MutableLiveData<ApiState<Unit>>()
+    var favoriteResponse : LiveData<ApiState<Unit>> = _favoriteResponse
 
-    var mCommentPostFlow: MutableStateFlow<ApiState<Void>> = MutableStateFlow(ApiState.Loading())
-    var commentPostFlow: StateFlow<ApiState<Void>> = mCommentPostFlow
 
-    var mPostReviewFlow: MutableStateFlow<ApiState<Void>> = MutableStateFlow(ApiState.Loading())
-    var postReviewFlow: StateFlow<ApiState<Void>> = mPostReviewFlow
+    var mCommentsResponseResponse: MutableLiveData<ApiState<CommentsResponse>> =
+        MutableLiveData(ApiState.Loading())
+    var commentsResponseResponse: LiveData<ApiState<CommentsResponse>> = mCommentsResponseResponse
 
-    var mPutReviewFlow: MutableStateFlow<ApiState<Void>> = MutableStateFlow(ApiState.Loading())
-    var putReviewFlow: StateFlow<ApiState<Void>> = mPutReviewFlow
+    var mCommentPostResponse: MutableLiveData<ApiState<Unit>> = MutableLiveData(ApiState.Loading())
+    var commentPostResponse: LiveData<ApiState<Unit>> = mCommentPostResponse
 
-    var mMyReviewFlow: MutableStateFlow<ApiState<MyReviewResponse>> =
-        MutableStateFlow(ApiState.Loading())
-    var myReviewFlow: StateFlow<ApiState<MyReviewResponse>> = mMyReviewFlow
+    var mPostReviewResponse: MutableLiveData<ApiState<Unit>> = MutableLiveData(ApiState.Loading())
+    var postReviewResponse: LiveData<ApiState<Unit>> = mPostReviewResponse
+
+    var mPutReviewResponse: MutableLiveData<ApiState<Unit>> = MutableLiveData(ApiState.Loading())
+    var putReviewResponse: LiveData<ApiState<Unit>> = mPutReviewResponse
+
+    var mMyReviewResponse: MutableLiveData<ApiState<MyReviewResponse>> =
+        MutableLiveData(ApiState.Loading())
+    var myReviewResponse: LiveData<ApiState<MyReviewResponse>> = mMyReviewResponse
 
     var isCommentEditing: Boolean = false
 
     //isLoading, errorState livedata로 한 번에 관리
 
-    fun requestCafeDetailInfo(cafeId: String) = viewModelScope.launch(Dispatchers.IO) {
-        mCafeDetailInfosFlow.value = ApiState.Loading()
-        mCafeDetailInfosFlow.value = cafeDetailRepository.getCafeDetailInfo(cafeId)
-    }
 
-    fun requestFavoritePost(cafeId: String, isPost: Boolean) =
+    fun requestFavoritePost(isRegister: Boolean) =
         viewModelScope.launch(Dispatchers.IO) {
-            mPostFavoriteFlow.value = ApiState.Loading()
-            if (isPost) {
-                mPostFavoriteFlow.value = cafeDetailRepository.postFavorite(cafeId)
+            _favoriteResponse.postValue(ApiState.Loading())
+            if (isRegister) {
+                _favoriteResponse.postValue(cafeDetailRepository.postFavorite(cafeId))
             } else {
-                mPostFavoriteFlow.value = cafeDetailRepository.deleteFavorite(cafeId)
+                _favoriteResponse.postValue(cafeDetailRepository.deleteFavorite(cafeId))
             }
         }
 
-    fun requestCafeComments(cafeId: String, page: Int) = viewModelScope.launch(Dispatchers.IO) {
-        mCommentsResponseFlow.value = ApiState.Loading()
-        mCommentsResponseFlow.value = cafeDetailRepository.getComments(cafeId, page)
+    fun requestCafeComments(page: Int) = viewModelScope.launch(Dispatchers.IO) {
+        mCommentsResponseResponse.postValue(ApiState.Loading())
+        mCommentsResponseResponse.postValue(cafeDetailRepository.getComments(cafeId, page))
     }
 
-    fun postMyComment(cafeId: String, content: String) = viewModelScope.launch(Dispatchers.IO) {
-        mCommentPostFlow.value = ApiState.Loading()
-        mCommentPostFlow.value = cafeDetailRepository.postComment(cafeId, content)
+    fun postMyComment(content: String) = viewModelScope.launch(Dispatchers.IO) {
+        mCommentPostResponse.postValue(ApiState.Loading())
+        mCommentPostResponse.postValue(cafeDetailRepository.postComment(cafeId, content))
     }
 
-    fun requestDeleteComment(cafeId: String, commentId: String) {
-
-        viewModelScope.launch(Dispatchers.IO) {
-
-        }
+    fun postMyReview(review: ReviewRequest) = viewModelScope.launch(Dispatchers.IO) {
+        mPostReviewResponse.postValue(ApiState.Loading())
+        mPostReviewResponse.postValue(cafeDetailRepository.postReview(cafeId, review))
     }
 
-    fun postMyReview(
-        cafeId: String,
-        review: com.konkuk.mocacong.remote.models.request.ReviewRequest
-    ) =
-        viewModelScope.launch(Dispatchers.IO) {
-            mPostReviewFlow.value = ApiState.Loading()
-            mPostReviewFlow.value = cafeDetailRepository.postReview(cafeId, review)
-        }
-
-    fun putMyReview(
-        cafeId: String,
-        review: com.konkuk.mocacong.remote.models.request.ReviewRequest
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        mPutReviewFlow.value = ApiState.Loading()
-        mPutReviewFlow.value = cafeDetailRepository.putReview(cafeId, review)
+    fun putMyReview(review: ReviewRequest) = viewModelScope.launch(Dispatchers.IO) {
+        mPutReviewResponse.postValue(ApiState.Loading())
+        mPutReviewResponse.postValue(cafeDetailRepository.putReview(cafeId, review))
     }
 
-    fun getMyReview(cafeId: String) = viewModelScope.launch(Dispatchers.IO) {
-        mMyReviewFlow.value = ApiState.Loading()
-        mMyReviewFlow.value = cafeDetailRepository.getMyReview(cafeId)
+    fun getMyReview() = viewModelScope.launch(Dispatchers.IO) {
+        mMyReviewResponse.postValue(ApiState.Loading())
+        mMyReviewResponse.postValue(cafeDetailRepository.getMyReview(cafeId))
     }
 }
