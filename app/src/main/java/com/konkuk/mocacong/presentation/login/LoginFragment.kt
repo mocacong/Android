@@ -24,7 +24,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
         binding.kakaoBtn.setOnClickListener {
             onKakaoBtnClicked()
         }
-
         observeData()
     }
 
@@ -37,14 +36,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
     private val onLoginSucceed: (kakaoLoginResponse: KakaoLoginResponse) -> Unit = {
         Log.d(TAG, "[onLoginSucceed] response: $it")
         if (it.isRegistered) {
-            Log.d(TAG, "[onLoginSucceed] token: ${it.token}")
-            Member.setAuthToken(it.token)
+            Log.d(TAG, "[onLoginSucceed] token: ${it.accessToken}")
+            Member.setAuthToken(it.accessToken)
             startNextActivity(MainActivity::class.java)
         } else {
             //회원가입 페이지로
             showToast("회원 정보 없음. 가입을 시작합니다")
             viewModel.mKakaoLoginResponse.value = ApiState.Loading()
-            TODO("JoinFragment로 이동")
+            viewModel.goto(LoginPage.JOIN)
         }
     }
 

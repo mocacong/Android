@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
@@ -15,12 +14,13 @@ import com.konkuk.mocacong.R
 import com.konkuk.mocacong.data.entities.MapMarker
 import com.konkuk.mocacong.databinding.FragmentHomeBinding
 import com.konkuk.mocacong.presentation.base.BaseFragment
+import com.konkuk.mocacong.presentation.main.MainPage
+import com.konkuk.mocacong.presentation.main.MainViewModel
 import com.konkuk.mocacong.presentation.main.mypage.MypageViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
@@ -28,6 +28,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
     override val layoutRes: Int = R.layout.fragment_home
     private val mapViewModel: MapViewModel by activityViewModels()
     private val mypageViewModel: MypageViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private lateinit var locationSource: FusedLocationSource
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -60,9 +61,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
 
     override fun afterViewCreated() {
         Log.d(TAG, "afterViewCreated")
-        setBackBtn()
         binding.searchBar.setOnClickListener {
-
         }
 
         binding.menuIcon.setOnClickListener {
@@ -72,10 +71,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
     }
 
     private fun setDrawer() {
-        binding.navigationMenu.setNavigationItemSelectedListener {
+        binding.navigationMenu.setNavigationItemSelectedListener { menuItem ->
             binding.drawerLayout.closeDrawers()
-            mypageViewModel.type = enumValueOf(it.itemId.toString())
-            TODO("MyCafesFragment로 이동")
+            mypageViewModel.type =
+                enumValues<MypageViewModel.ListType>().filter { it.menuId == menuItem.itemId }[0]
+            mainViewModel.goto(MainPage.MYCAFES)
+            return@setNavigationItemSelectedListener true
         }
     }
 
@@ -106,7 +107,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
     private val createPreview: (Unit) -> Unit = {
         mapViewModel.clickedMarker.value?.let {
             mapViewModel.requestPreviewInfo(it.mapId)
-            TODO("PreviewFragment show")
+            val previewFragment = CafePreviewFragment()
+            previewFragment.show(childFragmentManager, previewFragment.tag)
         }
     }
 
@@ -135,7 +137,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
         Log.d("MAP", "객체 초기화 완료")
         this.naverMap = naverMap
         setMapSettings(naverMap)
-        setCurrentLocation(mapViewModel.lastCameraLocation)
+        setCurrentLocation()
         val projection = naverMap.projection
 
         naverMap.addOnCameraIdleListener {
@@ -149,7 +151,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
 
         naverMap.setOnMapClickListener { _, _ ->
             mapViewModel.clickedMarker.value?.let {
-                setMarkersVisible(listOf(it))
+                Log.d(TAG, "mapclickListener clicked: ${it.name}")
+                mapViewModel.requestFiltering(listOf(it.mapId))
             }
         }
 
@@ -198,7 +201,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
     }
 
 
-    private fun setCurrentLocation(lastCameraLocation: LatLng?) {
+    private fun setCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -209,40 +212,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
             showToast("위치 권한 설정이 필요합니다")
             return
         }
-        if (lastCameraLocation == null) {
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener { loc ->
-                if (loc != null) {
-                    val cameraUpdate = CameraUpdate.scrollTo(LatLng(loc.latitude, loc.longitude))
-                    naverMap.moveCamera(cameraUpdate)
-                } else {
-                    showToast("현위치 정보를 가져올 수 없습니다")
-                }
-            }.addOnFailureListener { e ->
-                Log.d("TAG", "위치정보 못가져옴 ${e.message}")
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener { loc ->
+            if (loc != null) {
+                val cameraUpdate = CameraUpdate.scrollTo(LatLng(loc.latitude, loc.longitude))
+                naverMap.moveCamera(cameraUpdate)
+            } else {
+                showToast("현위치 정보를 가져올 수 없습니다")
             }
-        } else {
-            val cameraUpdate = CameraUpdate.scrollTo(lastCameraLocation)
-            naverMap.moveCamera(cameraUpdate)
+        }.addOnFailureListener { e ->
+            Log.d("TAG", "위치정보 못가져옴 ${e.message}")
         }
     }
 
-
-    private var backButtonPressedOnce = false
-    private fun setBackBtn() {
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (backButtonPressedOnce) requireActivity().finish()
-                else {
-                    backButtonPressedOnce = true
-                    showToast("한 번 더 누르면 종료됩니다")
-                    lifecycleScope.launch {
-                        delay(2000)
-                        backButtonPressedOnce = false
-                    }
-                }
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-    }
 
 }

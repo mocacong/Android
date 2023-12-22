@@ -25,7 +25,6 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
 
     val mapMarkers = HashMap<String, MapMarker>()
 
-    var lastCameraLocation : LatLng? = null
 
     val _newPlaces = MutableLiveData<List<String>>()
     val newPlaces : LiveData<List<String>> = _newPlaces
@@ -130,13 +129,11 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
 
     private fun onMarkerClicked(mapMarker: MapMarker) {
         clickedMarker.value?.let {
-            removeMarkers(listOf(it.mapId))
-            _filteredPlaces.value = listOf(it)
+            requestFiltering(listOf(it.mapId))
         }
         Log.d(TAG, "[Clicked] ${mapMarker.name}")
         _clickedMarker.value = mapMarker
         mapMarker.marker.icon = MarkerIcons.YELLOW
-        lastCameraLocation = mapMarker.marker.position
     }
 
     private val _postCafeResponse = MutableLiveData<ApiState<Unit>>()

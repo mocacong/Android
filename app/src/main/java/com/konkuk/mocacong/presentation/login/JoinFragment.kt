@@ -34,7 +34,7 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>() {
             onSuccess = {
                 showToast("로그인 성공. 환영합니다")
                 Log.d(TAG, "카카오 OAUTH 로그인 성공")
-                Member.setAuthToken(it.token)
+                Member.setAuthToken(it.accessToken)
 //            navigateAction(R.id.action_global_to_main)
                 startNextActivity(MainActivity::class.java)
             }

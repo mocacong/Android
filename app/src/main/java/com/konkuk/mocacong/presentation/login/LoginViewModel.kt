@@ -12,6 +12,9 @@ import com.konkuk.mocacong.remote.models.response.KakaoLoginResponse
 import com.konkuk.mocacong.remote.repositories.LoginRepository
 import com.konkuk.mocacong.util.ApiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class LoginViewModel(val repository: LoginRepository) : ViewModel() {
@@ -23,8 +26,9 @@ class LoginViewModel(val repository: LoginRepository) : ViewModel() {
     var mKakaoSignUpResponse: MutableLiveData<ApiState<Unit>> = MutableLiveData(ApiState.Loading())
     var kakaoSignUpResponse: LiveData<ApiState<Unit>> = mKakaoSignUpResponse
 
-    var mNickDupResponse : MutableLiveData<ApiState<CheckDuplicateResponse>> = MutableLiveData(ApiState.Loading())
-    var nickDupResponse : LiveData<ApiState<CheckDuplicateResponse>> = mNickDupResponse
+    var mNickDupResponse: MutableLiveData<ApiState<CheckDuplicateResponse>> =
+        MutableLiveData(ApiState.Loading())
+    var nickDupResponse: LiveData<ApiState<CheckDuplicateResponse>> = mNickDupResponse
 
     var kakaoID: String = ""
     var kakaoEmail: String = ""
@@ -38,7 +42,8 @@ class LoginViewModel(val repository: LoginRepository) : ViewModel() {
     }
 
     fun requestKakaoSignUp(nickname: String) = viewModelScope.launch(Dispatchers.IO) {
-        val oAuthRequest = OAuthRequest(nickname = nickname, platformId = kakaoID, email = kakaoEmail)
+        val oAuthRequest =
+            OAuthRequest(nickname = nickname, platformId = kakaoID, email = kakaoEmail)
         Log.d(TAG, "requestKakaoSignUp 실행 request = $oAuthRequest")
         mKakaoSignUpResponse.postValue(ApiState.Loading())
         mKakaoSignUpResponse.postValue(repository.postKakaoSignUp(oAuthRequest))
@@ -49,10 +54,20 @@ class LoginViewModel(val repository: LoginRepository) : ViewModel() {
         return nickname.matches(pattern)
     }
 
-    fun requestNicknameCheck(nickname: String) = viewModelScope.launch(Dispatchers.IO){
+    fun requestNicknameCheck(nickname: String) = viewModelScope.launch(Dispatchers.IO) {
         Log.d(TAG, "뷰모델 닉네임 체크")
         mNickDupResponse.postValue(ApiState.Loading())
         mNickDupResponse.postValue(repository.isNicknameDuplicate(nickname))
+    }
+
+    val _pageFlow = MutableStateFlow(LoginPage.LOGIN)
+    val pageFlow = _pageFlow
+        .stateIn(viewModelScope, SharingStarted.Eagerly, LoginPage.LOGIN)
+
+    fun goto(page: LoginPage) {
+        viewModelScope.launch {
+            _pageFlow.emit(page)
+        }
     }
 
 }

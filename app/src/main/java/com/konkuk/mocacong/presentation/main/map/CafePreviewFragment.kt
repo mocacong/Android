@@ -8,12 +8,15 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.konkuk.mocacong.databinding.FragmentCafePreviewBinding
 import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
+import com.konkuk.mocacong.presentation.main.MainPage
+import com.konkuk.mocacong.presentation.main.MainViewModel
 import com.konkuk.mocacong.util.ApiState
 
 
 class CafePreviewFragment : BottomSheetDialogFragment() {
     private val mapViewModel: MapViewModel by activityViewModels()
     private val detailViewModel: CafeDetailViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private var _binding: FragmentCafePreviewBinding? = null
     private val binding get() = _binding!!
 
@@ -78,8 +81,8 @@ class CafePreviewFragment : BottomSheetDialogFragment() {
         binding.root.setOnClickListener {
             mapViewModel.clickedMarker.value?.let { mapMarker ->
                 detailViewModel.cafeBasicInfo = mapMarker.getPlaceInfo()
-                TODO("Detail로 이동")
-                mapViewModel._clickedMarker.value = null
+                mainViewModel.goto(MainPage.DETAIL)
+                dismiss()
             }
         }
     }
