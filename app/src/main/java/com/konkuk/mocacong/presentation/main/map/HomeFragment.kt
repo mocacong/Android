@@ -115,9 +115,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
     private fun setMarkersVisible(mapMarkers: List<MapMarker>) = lifecycleScope.launch {
         mapMarkers.forEach {
             when (it.type) {
-                MapMarker.Type.FAV -> {
-                    it.marker.icon = markerFav
-                }
                 MapMarker.Type.NONE -> {
                     it.marker.icon = markerNone
                 }
@@ -126,6 +123,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
                     it.marker.icon = markerMocacong
                 }
             }
+            if(it.isFavorite) it.marker.icon = markerFav
             it.marker.map = naverMap
             logging("[Filtered Marker] : $it")
         }

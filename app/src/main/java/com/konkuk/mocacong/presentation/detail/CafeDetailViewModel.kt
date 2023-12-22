@@ -5,29 +5,58 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.mocacong.data.entities.BasicPlaceInfo
+import com.konkuk.mocacong.presentation.models.CafeDetailUiModel
 import com.konkuk.mocacong.remote.models.request.ReviewRequest
-import com.konkuk.mocacong.remote.models.response.CafeResponse
 import com.konkuk.mocacong.remote.models.response.CommentsResponse
 import com.konkuk.mocacong.remote.models.response.MyReviewResponse
 import com.konkuk.mocacong.remote.repositories.CafeDetailRepository
 import com.konkuk.mocacong.util.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository) : ViewModel() {
-
-    lateinit var cafeBasicInfo: BasicPlaceInfo
     lateinit var cafeId: String
 
-    val _cafeDetailInfoResponse = MutableLiveData<ApiState<CafeResponse>>()
-    val cafeDetailInfoResponse : LiveData<ApiState<CafeResponse>> = _cafeDetailInfoResponse
-    fun requestCafeDetailInfo() = viewModelScope.launch(Dispatchers.IO) {
-        _cafeDetailInfoResponse.postValue(ApiState.Loading())
-        _cafeDetailInfoResponse.postValue(cafeDetailRepository.getCafeDetailInfo(cafeId))
+    private val _cafeBasicInfo = MutableLiveData<BasicPlaceInfo>()
+    val cafeBasicInfo: LiveData<BasicPlaceInfo> = _cafeBasicInfo
+
+    private val _cafeDetailInfo = MutableLiveData<CafeDetailUiModel>()
+    val cafeDetailInfo: LiveData<CafeDetailUiModel> = _cafeDetailInfo
+
+    fun setBasicInfo(placeInfo: BasicPlaceInfo) {
+        _cafeBasicInfo.value = placeInfo
     }
 
-    var _favoriteResponse = MutableLiveData<ApiState<Unit>>()
-    var favoriteResponse : LiveData<ApiState<Unit>> = _favoriteResponse
+    fun requestCafeDetailInfo() = viewModelScope.launch {
+        val response = withContext(Dispatchers.IO) {
+            cafeDetailRepository.getCafeDetailInfo(cafeId)
+        }
+        response.byState(
+            onSuccess = {
+                _cafeDetailInfo.value = CafeDetailUiModel.responseToModel(it)
+                _isFavorite.value = it.favorite
+            }
+        )
+    }
+
+    private val _isFavorite = MutableLiveData<Boolean>()
+    val isFavorite = _isFavorite
+
+    fun requestFavoritePost(isPost: Boolean) =
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO){
+                if (isPost) {
+                    cafeDetailRepository.postFavorite(cafeId)
+                } else {
+                    cafeDetailRepository.deleteFavorite(cafeId)
+                }
+            }
+            response.byState(
+                onSuccess = {
+                    _isFavorite.value = isPost
+                })
+        }
 
 
     var mCommentsResponseResponse: MutableLiveData<ApiState<CommentsResponse>> =
@@ -51,16 +80,6 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
 
     //isLoading, errorState livedata로 한 번에 관리
 
-
-    fun requestFavoritePost(isRegister: Boolean) =
-        viewModelScope.launch(Dispatchers.IO) {
-            _favoriteResponse.postValue(ApiState.Loading())
-            if (isRegister) {
-                _favoriteResponse.postValue(cafeDetailRepository.postFavorite(cafeId))
-            } else {
-                _favoriteResponse.postValue(cafeDetailRepository.deleteFavorite(cafeId))
-            }
-        }
 
     fun requestCafeComments(page: Int) = viewModelScope.launch(Dispatchers.IO) {
         mCommentsResponseResponse.postValue(ApiState.Loading())

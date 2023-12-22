@@ -11,6 +11,7 @@ data class Comment(
     val imgUrl: String?,
     val nickname: String?,
     val content: String,
+    val likeCount: Int,
     var isMe: Boolean
 ) {
     override fun equals(other: Any?): Boolean {

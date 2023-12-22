@@ -6,19 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.konkuk.mocacong.data.entities.BasicPlaceInfo
 import com.konkuk.mocacong.databinding.FragmentCafePreviewBinding
 import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
 import com.konkuk.mocacong.presentation.main.MainPage
 import com.konkuk.mocacong.presentation.main.MainViewModel
-import com.konkuk.mocacong.util.ApiState
+import com.konkuk.mocacong.presentation.models.CafePreviewUiModel
 
 
 class CafePreviewFragment : BottomSheetDialogFragment() {
     private val mapViewModel: MapViewModel by activityViewModels()
     private val detailViewModel: CafeDetailViewModel by activityViewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
+
     private var _binding: FragmentCafePreviewBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var placeInfo: BasicPlaceInfo
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,56 +38,24 @@ class CafePreviewFragment : BottomSheetDialogFragment() {
     }
 
     private fun initLayout() {
+        mapViewModel.clickedMarker.value?.let { mapMarker ->
+            placeInfo = mapMarker.getPlaceInfo()
+        }
+        binding.place = placeInfo
         mapViewModel.cafePreviewResponse.observe(this) { state ->
-            when (state) {
-                is ApiState.Success -> {
-                    state.data?.let {
-                        mapViewModel.clickedMarker.value?.let { mapMarker ->
-                            binding.cafeName.text = mapMarker.name
-                            binding.addrText.text = mapMarker.roadAddress
-                        }
-                        if (it.reviewsCount == 0) return@let
-                        when (it.studyType) {
-                            "solo" -> {
-                                binding.soloBtn.visibility = View.VISIBLE
-                                binding.groupBtn.visibility = View.GONE
-                            }
-                            "group" -> {
-                                binding.soloBtn.visibility = View.GONE
-                                binding.groupBtn.visibility = View.VISIBLE
-                            }
-                            "both" -> {
-                                binding.soloBtn.visibility = View.VISIBLE
-                                binding.groupBtn.visibility = View.VISIBLE
-                            }
-                            else -> {
-                                binding.soloBtn.visibility = View.GONE
-                                binding.groupBtn.visibility = View.GONE
-                            }
-                        }
-                        binding.apply {
-                            val scoreText = String.format("X %.1f", it.score)
-                            rating.text = scoreText
-                            reviewCount.text = "${it.reviewsCount}개"
-                        }
-                    }
+            state.byState(
+                onSuccess = {
+                    binding.preview = CafePreviewUiModel.responseToUIModel(it)
                 }
-                is ApiState.Error -> {
-                    state.errorResponse.let { er ->
-
-                    }
-                }
-                is ApiState.Loading -> {
-                }
-            }
+            )
         }
 
         binding.root.setOnClickListener {
-            mapViewModel.clickedMarker.value?.let { mapMarker ->
-                detailViewModel.cafeBasicInfo = mapMarker.getPlaceInfo()
-                mainViewModel.goto(MainPage.DETAIL)
-                dismiss()
-            }
+            detailViewModel.setBasicInfo(placeInfo)
+            detailViewModel.cafeId = placeInfo.id
+            detailViewModel.requestCafeDetailInfo()
+            mainViewModel.goto(MainPage.DETAIL)
+            dismiss()
         }
     }
 

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
     <data>
+
         <variable
-            name="model"
-            type="com.konkuk.mocacong.remote.models.response.CafePreviewResponse" />
+            name="place"
+            type="com.konkuk.mocacong.data.entities.BasicPlaceInfo" />
+
+        <variable
+            name="preview"
+            type="com.konkuk.mocacong.presentation.models.CafePreviewUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +25,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingHorizontal="20dp"
-
+            android:text="@{place.name}"
             android:textColor="@color/darkBrown"
             android:textSize="25sp"
             android:textStyle="bold"
@@ -31,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
+            android:text="@{place.addressString}"
             android:textColor="@color/darkBrown"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/cafeName" />
@@ -52,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="리뷰가 없어요"
+            android:text="@{preview.reviewsCount}"
             android:textColor="@color/darkBrown"
             android:textSize="17sp"
             app:layout_constraintBaseline_toBaselineOf="@id/reviewText"
@@ -84,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="X 0.0"
+            android:text="@{preview.score}"
             android:textColor="@color/darkBrown"
             android:textSize="17sp"
             app:layout_constraintBaseline_toBaselineOf="@id/ratingText"
@@ -96,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="스터디 타입"
+            android:text="코딩 타입"
             android:textColor="@color/darkBrown"
             android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -106,6 +113,7 @@
             android:id="@+id/soloBtn"
             android:layout_width="60dp"
             android:layout_height="25dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/shape_rect_r10_filled"
             android:backgroundTint="@color/mocaBrown"
@@ -113,8 +121,17 @@
             android:text="혼자"
             android:textColor="@color/white"
             android:textSize="14sp"
+            android:visibility="@{preview.soloVisibility}"
             app:layout_constraintBaseline_toBaselineOf="@id/typeText"
             app:layout_constraintEnd_toEndOf="parent" />
+        <View
+            android:layout_width="10dp"
+            android:visibility="@{preview.groupVisibility}"
+            android:layout_height="10dp"
+            android:id="@+id/blank"
+            app:layout_constraintBaseline_toBaselineOf="@id/typeText"
+            app:layout_constraintEnd_toStartOf="@id/soloBtn"
+            />
 
         <TextView
             android:id="@+id/groupBtn"
@@ -127,9 +144,26 @@
             android:text="같이"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:layout_marginEnd="10dp"
+            android:visibility="@{preview.groupVisibility}"
             app:layout_constraintBaseline_toBaselineOf="@id/typeText"
-            app:layout_constraintEnd_toStartOf="@id/soloBtn" />
+            app:layout_constraintEnd_toStartOf="@id/blank" />
+
+        <TextView
+            android:id="@+id/noType"
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shape_rect_r10_filled"
+            android:backgroundTint="@color/mocaBrown"
+            android:gravity="center"
+            android:text="아직 없어요"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:visibility="@{preview.noVisibility}"
+            app:layout_constraintBaseline_toBaselineOf="@id/typeText"
+            app:layout_constraintEnd_toStartOf="@id/blank" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -21,5 +21,5 @@
         android:gravity="center"
         android:text="리뷰가 없어요"
         android:textColor="@color/black"
-        android:textSize="15sp" />
+        android:textSize="12sp" />
 </LinearLayout>

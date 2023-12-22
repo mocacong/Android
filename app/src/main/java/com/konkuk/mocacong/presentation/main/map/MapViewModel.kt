@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kakao.sdk.common.KakaoSdk.type
 import com.konkuk.mocacong.data.entities.MapMarker
 import com.konkuk.mocacong.remote.models.request.FilteringRequest
 import com.konkuk.mocacong.remote.models.request.PostCafeRequest
@@ -27,14 +28,14 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
 
 
     val _newPlaces = MutableLiveData<List<String>>()
-    val newPlaces : LiveData<List<String>> = _newPlaces
+    val newPlaces: LiveData<List<String>> = _newPlaces
 
     fun updateMarkers(x: String, y: String, radius: Int) = viewModelScope.launch(Dispatchers.IO) {
         withContext(Dispatchers.Main) {
             if (mapMarkers.size > 70) removeMarkers(mapMarkers.keys.toList())
         }
         Log.d(TAG, "updateMarkers")
-        mapRepository.getPlaces(x, y, radius).byState({ response->
+        mapRepository.getPlaces(x, y, radius).byState({ response ->
             response.documents.let {
                 Log.d(TAG, "카카오 검색 결과: $it")
                 _newPlaces.postValue(it.filter { place ->
@@ -57,7 +58,9 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
             mapId = place.id,
             name = place.place_name,
             roadAddress = place.road_address_name.toString(),
-            phoneNumber = place.phone.toString()
+            phoneNumber = place.phone.toString(),
+            type = MapMarker.Type.NONE,
+            isFavorite = false
         )
         mapMarkers[place.id] = mapMarker
         marker.apply {
@@ -75,9 +78,8 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
     }
 
 
-
     val _filteredPlaces = MutableLiveData<List<MapMarker>>()
-    val filteredPlaces : LiveData<List<MapMarker>> = _filteredPlaces
+    val filteredPlaces: LiveData<List<MapMarker>> = _filteredPlaces
     fun requestFiltering(ids: List<String>) {
         val fr = FilteringRequest(ids)
         viewModelScope.launch {
@@ -88,9 +90,7 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
             withContext(Dispatchers.IO) {
                 filteringAsync(fr, MapMarker.Type.BOTH)
             }
-            withContext(Dispatchers.IO) {
-                filteringAsync(fr, MapMarker.Type.FAV)
-            }
+            filteringFav(fr)
 
             _filteredPlaces.value = mapMarkers.filter {
                 ids.contains(it.key)
@@ -99,37 +99,39 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
         }
     }
 
+    private suspend fun filteringFav(fr: FilteringRequest) =
+        withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
+            mapRepository.filterFavorite(fr).byState(
+                onSuccess = { response ->
+                    Log.d(TAG, "[Fav Response] Type = $type, markers = $response")
+                    mapMarkers.filter {
+                        fr.mapIds.contains(it.key)
+                    }.forEach {
+                        it.value.isFavorite = response.mapIds.contains(it.key)
+                    }
+                }
+            )
+        }
+
     private suspend fun filteringAsync(fr: FilteringRequest, type: MapMarker.Type) =
         viewModelScope.async(Dispatchers.IO) {
-            if (type == MapMarker.Type.FAV) {
-                mapRepository.filterFavorite(fr).byState(
-                    onSuccess = { response ->
-                        Log.d(TAG, "[Filtered Response] Type = $type, markers = $response")
-                        val markers = response.mapIds.map { id ->
-                            mapMarkers[id]?.type = type
-                            mapMarkers[id]
-                        }
-                        return@byState markers
-                    })
-            } else {
-                mapRepository.filterStudyType(type.name.lowercase(), fr).byState(
-                    onSuccess = { response ->
-                        Log.d(TAG, "[Filtered Response] Type = $type, markers = $response")
-                        val markers = response.mapIds.map { id ->
-                            mapMarkers[id]?.type = type
-                            mapMarkers[id]
-                        }
-                        return@byState markers
-                    })
-            }
+            mapRepository.filterStudyType(type.name.lowercase(), fr).byState(
+                onSuccess = { response ->
+                    Log.d(TAG, "[Filtered Response] Type = $type, markers = $response")
+                    val markers = response.mapIds.map { id ->
+                        mapMarkers[id]?.type = type
+                        mapMarkers[id]
+                    }
+                    return@byState markers
+                })
         }.await()
 
-    val _clickedMarker = MutableLiveData<MapMarker?>(null)
-    val clickedMarker : LiveData<MapMarker?> = _clickedMarker
+    private val _clickedMarker = MutableLiveData<MapMarker?>(null)
+    val clickedMarker: LiveData<MapMarker?> = _clickedMarker
 
     private fun onMarkerClicked(mapMarker: MapMarker) {
         clickedMarker.value?.let {
-            requestFiltering(listOf(it.mapId))
+            _filteredPlaces.value = listOf(it)
         }
         Log.d(TAG, "[Clicked] ${mapMarker.name}")
         _clickedMarker.value = mapMarker
@@ -137,9 +139,14 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
     }
 
     private val _postCafeResponse = MutableLiveData<ApiState<Unit>>()
-    val postCafeResponse : LiveData<ApiState<Unit>> = _postCafeResponse
+    val postCafeResponse: LiveData<ApiState<Unit>> = _postCafeResponse
     fun postCafe(mapMarker: MapMarker) = viewModelScope.launch(Dispatchers.IO) {
-        val request = PostCafeRequest(mapId = mapMarker.mapId, name = mapMarker.name, roadAddress = mapMarker.roadAddress, phoneNumber = mapMarker.phoneNumber)
+        val request = PostCafeRequest(
+            mapId = mapMarker.mapId,
+            name = mapMarker.name,
+            roadAddress = mapMarker.roadAddress,
+            phoneNumber = mapMarker.phoneNumber
+        )
         Log.d(TAG, "[Post Cafe] $request")
         this@MapViewModel._postCafeResponse.postValue(mapRepository.postCafe(request))
     }

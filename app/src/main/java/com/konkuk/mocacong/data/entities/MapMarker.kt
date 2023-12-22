@@ -8,7 +8,8 @@ data class MapMarker(
     val name: String,
     val roadAddress: String,
     val phoneNumber: String,
-    var type: Type = Type.NONE
+    var type: Type = Type.NONE,
+    var isFavorite: Boolean = false
 ) {
     fun getPlaceInfo(): BasicPlaceInfo = BasicPlaceInfo(id = mapId, name = name, roadAddress, phoneNumber)
 
@@ -28,5 +29,5 @@ data class MapMarker(
         return "[장소: $name, type: $type]"
     }
 
-    enum class Type { SOLO, GROUP, BOTH, NONE, FAV }
+    enum class Type { SOLO, GROUP, BOTH, NONE}
 }
