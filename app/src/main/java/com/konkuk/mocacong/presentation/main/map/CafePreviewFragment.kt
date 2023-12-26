@@ -1,39 +1,25 @@
 package com.konkuk.mocacong.presentation.main.map
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.konkuk.mocacong.R
 import com.konkuk.mocacong.data.entities.BasicPlaceInfo
 import com.konkuk.mocacong.databinding.FragmentCafePreviewBinding
+import com.konkuk.mocacong.presentation.base.BaseBottomSheet
 import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
 import com.konkuk.mocacong.presentation.main.MainPage
 import com.konkuk.mocacong.presentation.main.MainViewModel
 import com.konkuk.mocacong.presentation.models.CafePreviewUiModel
 
-
-class CafePreviewFragment : BottomSheetDialogFragment() {
+class CafePreviewFragment : BaseBottomSheet<FragmentCafePreviewBinding>() {
     private val mapViewModel: MapViewModel by activityViewModels()
     private val detailViewModel: CafeDetailViewModel by activityViewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
-    private var _binding: FragmentCafePreviewBinding? = null
-    private val binding get() = _binding!!
-
     private lateinit var placeInfo: BasicPlaceInfo
+    override val TAG: String = "CafePreview"
+    override val layoutRes: Int = R.layout.fragment_cafe_preview
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCafePreviewBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
+    override fun afterViewCreated() {
         initLayout()
     }
 
@@ -49,7 +35,6 @@ class CafePreviewFragment : BottomSheetDialogFragment() {
                 }
             )
         }
-
         binding.root.setOnClickListener {
             detailViewModel.setBasicInfo(placeInfo)
             detailViewModel.cafeId = placeInfo.id
@@ -59,9 +44,4 @@ class CafePreviewFragment : BottomSheetDialogFragment() {
         }
     }
 
-
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
-    }
 }

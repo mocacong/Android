@@ -13,7 +13,7 @@ import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.ActivityMainBinding
 import com.konkuk.mocacong.presentation.base.BaseActivity
 import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
-import com.konkuk.mocacong.presentation.detail.DetailFragment
+import com.konkuk.mocacong.presentation.detail.CafeDetailFragment
 import com.konkuk.mocacong.presentation.main.map.HomeFragment
 import com.konkuk.mocacong.presentation.main.map.MapViewModel
 import com.konkuk.mocacong.presentation.main.map.SearchFragment
@@ -41,9 +41,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private val homeFragment by lazy {
         supportFragmentManager.findFragmentByTag(HomeFragment::class.java.name) ?: HomeFragment()
     }
-    private val detailFragment by lazy {
-        supportFragmentManager.findFragmentByTag(DetailFragment::class.java.name)
-            ?: DetailFragment()
+    private val cafeDetailFragment by lazy {
+        supportFragmentManager.findFragmentByTag(CafeDetailFragment::class.java.name)
+            ?: CafeDetailFragment()
     }
     private val myCafesFragment by lazy {
         supportFragmentManager.findFragmentByTag(MyCafesFragment::class.java.name)
@@ -101,7 +101,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         return when (page) {
             MainPage.HOME -> homeFragment
             MainPage.MYCAFES -> myCafesFragment
-            MainPage.DETAIL -> detailFragment
+            MainPage.DETAIL -> cafeDetailFragment
             MainPage.SEARCH -> searchFragment
         }
     }

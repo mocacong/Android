@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    >
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.konkuk.mocacong.presentation.detail.CafeDetailViewModel" />
+    </data>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        style="@style/BottomSheetDialogStyle"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/cancelBtn"
@@ -33,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
                 android:text="완료"
-                android:textColor="@color/pblue"
+                android:textColor="@color/ssook"
                 android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@id/cancelBtn"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -43,48 +47,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="20dp"
-                android:text="카페 이름"
+                android:textColor="@color/black"
+                android:text="@{vm.cafeBasicInfo.name}"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:paddingHorizontal="20dp"
                 app:layout_constraintTop_toBottomOf="@id/cancelBtn" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:layout_marginTop="4dp"
+                android:paddingHorizontal="20dp"
+                android:text="@{vm.cafeBasicInfo.addressString}"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                />
 
             <com.willy.ratingbar.BaseRatingBar
                 android:id="@+id/ratingView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="50dp"
+                cafe_rating="@{vm.myReview.fScore}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title"
                 app:srb_drawableEmpty="@drawable/false_cong"
                 app:srb_drawableFilled="@drawable/true_cong"
                 app:srb_isIndicator="false"
-                app:srb_rating="0"
-                app:srb_starHeight="30dp"
+                app:srb_starHeight="40dp"
                 app:srb_starPadding="0dp"
-                app:srb_starWidth="30dp"
+                app:srb_starWidth="40dp"
                 app:srb_stepSize="1" />
-
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/toggleButton"
                 android:layout_width="wrap_content"
+                studyType="@{vm.myReview.myStudyType}"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ratingView">
 
                 <Button
-                    android:id="@+id/button1"
+                    android:id="@+id/grouped_soloBtn"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="혼자 코딩" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/grouped_groupBtn"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -95,40 +111,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="10dp"
                 android:background="@drawable/shape_rect_r20_filled"
                 android:backgroundTint="@color/stroke"
                 android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toggleButton">
 
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    myLabel="@{vm.myReview.myDesk}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:reviewCategory="desk" />
 
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    myLabel="@{vm.myReview.myPower}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:reviewCategory="power" />
 
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    myLabel="@{vm.myReview.myWifi}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:reviewCategory="wifi" />
 
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    myLabel="@{vm.myReview.mySound}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:reviewCategory="sound" />
 
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    myLabel="@{vm.myReview.myToilet}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:reviewCategory="toilet" />
 
                 <com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+                    myLabel="@{vm.myReview.myParking}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:reviewCategory="parking" />

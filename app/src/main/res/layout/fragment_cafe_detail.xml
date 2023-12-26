@@ -3,18 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <variable
-            name="basic"
-            type="com.konkuk.mocacong.data.entities.BasicPlaceInfo" />
-
         <variable
             name="vm"
             type="com.konkuk.mocacong.presentation.detail.CafeDetailViewModel" />
-
-        <variable
-            name="detail"
-            type="com.konkuk.mocacong.presentation.models.CafeDetailUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -136,11 +127,11 @@
 
                     <com.willy.ratingbar.BaseRatingBar
                         android:id="@+id/ratingView"
+                        cafe_rating="@{vm.cafeDetailInfo.score}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:clickable="false"
-                        android:rating="@{vm.cafeDetailInfo.score}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/reviewText"
@@ -167,10 +158,10 @@
 
                     <ImageButton
                         android:id="@+id/favBtn"
+                        isSelected="@{vm.isFavorite()}"
                         android:layout_width="80dp"
                         android:layout_height="40dp"
                         android:layout_marginStart="10dp"
-                        isSelected="@{vm.isFavorite()}"
                         android:background="@color/transparent"
                         android:scaleType="fitCenter"
                         android:src="@drawable/detail_favorite_selector"
@@ -268,43 +259,14 @@
 
         </ScrollView>
 
-        <LinearLayout
-            android:id="@+id/commentInputBar"
+        <include
+            layout="@layout/layout_comment_input"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="@drawable/shape_rect_r10_empty"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <ImageView
-                android:id="@+id/myProfileImg"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/shape_circle"
-                android:scaleType="fitCenter" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                android:gravity="center|start"
-                android:paddingHorizontal="20dp"
-                android:text="000님의 댓글 쓰기"
-                android:textColor="#898888" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:gravity="center"
-                android:text="전송"
-                android:textColor="@color/ssook"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:id="@+id/commentInputLayout"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </layout>

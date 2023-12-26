@@ -1,5 +1,7 @@
 package com.konkuk.mocacong.remote.models.response
 
+import com.konkuk.mocacong.data.entities.Comment
+
 data class CafeResponse(
     val favorite: Boolean,
     val favoriteId: Long,
@@ -17,6 +19,7 @@ data class CafeResponse(
     val comments: List<Comment>,
     val cafeImages: List<CafeImage>
 )
+
 data class CafeImage(
     val id: Int, val imageUrl: String?, val isMe: Boolean
 )

@@ -1,8 +1,8 @@
 package com.konkuk.mocacong.presentation.models
 
 import android.view.View
+import com.konkuk.mocacong.data.entities.Comment
 import com.konkuk.mocacong.remote.models.response.CafeResponse
-import com.konkuk.mocacong.remote.models.response.Comment
 
 class CafeDetailUiModel(
     val score: Float,
@@ -39,7 +39,7 @@ class CafeDetailUiModel(
     }
 
     companion object {
-        fun responseToModel(cafeResponse: CafeResponse): CafeDetailUiModel {
+        fun responseToUIModel(cafeResponse: CafeResponse): CafeDetailUiModel {
             val reviews = ReviewsUiModel(
                 wifi = cafeResponse.wifi,
                 parking = cafeResponse.parking,

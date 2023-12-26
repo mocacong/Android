@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/cafeName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingEnd="20dp"
+            android:text="카페이름"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="@id/ratingImg"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/addrText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ"
+            android:textColor="#A7A4A2"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cafeName" />
+
+        <ImageView
+            android:id="@+id/ratingImg"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/true_cong"
+            app:layout_constraintBottom_toBottomOf="@id/rating"
+            app:layout_constraintEnd_toStartOf="@id/rating"
+            app:layout_constraintTop_toTopOf="@id/rating" />
+
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="X 0.0"
+            android:textColor="@color/darkBrown"
+            android:textSize="15sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/cafeName"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <TextView
+            android:id="@+id/soloBtn"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shape_rect_r10_filled"
+            android:backgroundTint="@color/mocaBrown"
+            android:gravity="center"
+            android:text="혼자"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/addrText"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:id="@+id/blank"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/soloBtn"
+            app:layout_constraintEnd_toStartOf="@id/soloBtn" />
+
+        <TextView
+            android:id="@+id/groupBtn"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shape_rect_r10_filled"
+            android:backgroundTint="@color/mocaBrown"
+            android:gravity="center"
+            android:text="같이"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/soloBtn"
+            app:layout_constraintEnd_toStartOf="@id/blank" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

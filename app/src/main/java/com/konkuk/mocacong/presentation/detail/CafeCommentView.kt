@@ -7,8 +7,8 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.konkuk.mocacong.R
-import com.konkuk.mocacong.databinding.ItemCafeCommentBinding
-import com.konkuk.mocacong.remote.models.response.Comment
+import com.konkuk.mocacong.data.entities.Comment
+import com.konkuk.mocacong.databinding.LayoutCafeCommentBinding
 
 class CafeCommentView @JvmOverloads constructor(
     context: Context,
@@ -16,10 +16,10 @@ class CafeCommentView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private var binding: ItemCafeCommentBinding
+    private var binding: LayoutCafeCommentBinding
     init {
-        binding = ItemCafeCommentBinding.bind(
-            LayoutInflater.from(context).inflate(R.layout.item_cafe_comment, this, false)
+        binding = LayoutCafeCommentBinding.bind(
+            LayoutInflater.from(context).inflate(R.layout.layout_cafe_comment, this, false)
         )
         addView(binding.root)
     }

@@ -1,21 +1,20 @@
 package com.konkuk.mocacong.presentation.detail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.mocacong.data.entities.BasicPlaceInfo
 import com.konkuk.mocacong.presentation.models.CafeDetailUiModel
-import com.konkuk.mocacong.remote.models.request.ReviewRequest
-import com.konkuk.mocacong.remote.models.response.CommentsResponse
 import com.konkuk.mocacong.remote.models.response.MyReviewResponse
 import com.konkuk.mocacong.remote.repositories.CafeDetailRepository
-import com.konkuk.mocacong.util.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository) : ViewModel() {
+    val TAG = "CafeDetailViewModel"
     lateinit var cafeId: String
 
     private val _cafeBasicInfo = MutableLiveData<BasicPlaceInfo>()
@@ -34,14 +33,14 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
         }
         response.byState(
             onSuccess = {
-                _cafeDetailInfo.value = CafeDetailUiModel.responseToModel(it)
+                _cafeDetailInfo.value = CafeDetailUiModel.responseToUIModel(it)
                 _isFavorite.value = it.favorite
             }
         )
     }
 
     private val _isFavorite = MutableLiveData<Boolean>()
-    val isFavorite = _isFavorite
+    val isFavorite : LiveData<Boolean> = _isFavorite
 
     fun requestFavoritePost(isPost: Boolean) =
         viewModelScope.launch {
@@ -58,51 +57,20 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
                 })
         }
 
+    private val _myReview = MutableLiveData<MyReviewResponse>()
+    val myReview : LiveData<MyReviewResponse> = _myReview
 
-    var mCommentsResponseResponse: MutableLiveData<ApiState<CommentsResponse>> =
-        MutableLiveData(ApiState.Loading())
-    var commentsResponseResponse: LiveData<ApiState<CommentsResponse>> = mCommentsResponseResponse
-
-    var mCommentPostResponse: MutableLiveData<ApiState<Unit>> = MutableLiveData(ApiState.Loading())
-    var commentPostResponse: LiveData<ApiState<Unit>> = mCommentPostResponse
-
-    var mPostReviewResponse: MutableLiveData<ApiState<Unit>> = MutableLiveData(ApiState.Loading())
-    var postReviewResponse: LiveData<ApiState<Unit>> = mPostReviewResponse
-
-    var mPutReviewResponse: MutableLiveData<ApiState<Unit>> = MutableLiveData(ApiState.Loading())
-    var putReviewResponse: LiveData<ApiState<Unit>> = mPutReviewResponse
-
-    var mMyReviewResponse: MutableLiveData<ApiState<MyReviewResponse>> =
-        MutableLiveData(ApiState.Loading())
-    var myReviewResponse: LiveData<ApiState<MyReviewResponse>> = mMyReviewResponse
-
-    var isCommentEditing: Boolean = false
-
-    //isLoading, errorState livedata로 한 번에 관리
-
-
-    fun requestCafeComments(page: Int) = viewModelScope.launch(Dispatchers.IO) {
-        mCommentsResponseResponse.postValue(ApiState.Loading())
-        mCommentsResponseResponse.postValue(cafeDetailRepository.getComments(cafeId, page))
-    }
-
-    fun postMyComment(content: String) = viewModelScope.launch(Dispatchers.IO) {
-        mCommentPostResponse.postValue(ApiState.Loading())
-        mCommentPostResponse.postValue(cafeDetailRepository.postComment(cafeId, content))
-    }
-
-    fun postMyReview(review: ReviewRequest) = viewModelScope.launch(Dispatchers.IO) {
-        mPostReviewResponse.postValue(ApiState.Loading())
-        mPostReviewResponse.postValue(cafeDetailRepository.postReview(cafeId, review))
-    }
-
-    fun putMyReview(review: ReviewRequest) = viewModelScope.launch(Dispatchers.IO) {
-        mPutReviewResponse.postValue(ApiState.Loading())
-        mPutReviewResponse.postValue(cafeDetailRepository.putReview(cafeId, review))
-    }
-
-    fun getMyReview() = viewModelScope.launch(Dispatchers.IO) {
-        mMyReviewResponse.postValue(ApiState.Loading())
-        mMyReviewResponse.postValue(cafeDetailRepository.getMyReview(cafeId))
+    fun requestMyReview() {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO){
+                cafeDetailRepository.getMyReview(cafeId)
+            }
+            response.byState(
+                onSuccess = {
+                    Log.d(TAG, "$it")
+                    _myReview.value = it
+                }
+            )
+        }
     }
 }

@@ -1,20 +1,16 @@
 package com.konkuk.mocacong.presentation.detail
 
-import androidx.fragment.app.activityViewModels
-import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.FragmentCafeCommentsBinding
-import com.konkuk.mocacong.presentation.base.BaseFragment
+import com.konkuk.mocacong.presentation.base.BaseBottomSheet
 
-class CafeCommentsFragment : BaseFragment<FragmentCafeCommentsBinding>(){
-    override val TAG = "CafeCommentsFragment"
-    override val layoutRes: Int= R.layout.fragment_cafe_comments
-
-    private val cafeViewModel: CafeDetailViewModel by activityViewModels()
+class CafeCommentsFragment : BaseBottomSheet<FragmentCafeCommentsBinding>() {
+    override val TAG: String
+        get() = TODO("Not yet implemented")
+    override val layoutRes: Int
+        get() = TODO("Not yet implemented")
 
     override fun afterViewCreated() {
-
+        TODO("Not yet implemented")
     }
-
-
 
 }

@@ -9,4 +9,6 @@ data class MyReviewResponse(
     val myPower: String?,
     val mySound: String?,
     val myDesk: String?
-)
+){
+    val fScore = myScore.toFloat()
+}

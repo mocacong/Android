@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="darkBrown">#4E483C</color>
+    <color name="darkBrown2">#4F4A44</color>
     <color name="mocaBrown">#C2B8AF</color>
     <color name="jinBrown">#FF958B7C</color>
     <color name="jingray">#BABABA</color>
@@ -14,7 +15,7 @@
     <color name="red">#FF7474</color>
     <color name="ssook">#A2B091</color>
     <color name="ivory">#FBFAF8</color>
-
+    <color name="brownGray">#EDECE8</color>
     <color name="level3">#E7BDBD</color>
     <color name="level2">#FFE7A9</color>
     <color name="level1">#C1CFAF</color>
