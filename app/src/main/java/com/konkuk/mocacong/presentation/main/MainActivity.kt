@@ -19,7 +19,10 @@ import com.konkuk.mocacong.presentation.detail.CafeImagesFragment
 import com.konkuk.mocacong.presentation.main.map.HomeFragment
 import com.konkuk.mocacong.presentation.main.map.MapViewModel
 import com.konkuk.mocacong.presentation.main.map.SearchFragment
-import com.konkuk.mocacong.presentation.main.mypage.*
+import com.konkuk.mocacong.presentation.main.mypage.MyCommentsFragment
+import com.konkuk.mocacong.presentation.main.mypage.MyFavsFragment
+import com.konkuk.mocacong.presentation.main.mypage.MyReviewsFragment
+import com.konkuk.mocacong.presentation.main.mypage.MypageViewModel
 import com.konkuk.mocacong.remote.repositories.CafeDetailRepository
 import com.konkuk.mocacong.remote.repositories.MapRepository
 import com.konkuk.mocacong.remote.repositories.MypageRepository
@@ -45,10 +48,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private val cafeDetailFragment by lazy {
         supportFragmentManager.findFragmentByTag(CafeDetailFragment::class.java.name)
             ?: CafeDetailFragment()
-    }
-    private val myCafesFragment by lazy {
-        supportFragmentManager.findFragmentByTag(MyCafesFragment::class.java.name)
-            ?: MyCafesFragment()
     }
     private val searchFragment by lazy {
         supportFragmentManager.findFragmentByTag(SearchFragment::class.java.name)

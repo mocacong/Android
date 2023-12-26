@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="review"
+            type="com.konkuk.mocacong.presentation.models.ReviewsUiModel" />
+
+        <variable
+            name="myReview"
+            type="com.konkuk.mocacong.remote.models.response.MyReviews" />
+    </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
+        android:layout_marginVertical="15dp"
+        android:layout_marginHorizontal="10dp"
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,6 +25,7 @@
             <include
                 android:id="@+id/basicLayout"
                 layout="@layout/layout_cafe_basic"
+                app:myCafe="@{myReview.toBasicModel()}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toStartOf="@id/goBtn"
@@ -33,6 +45,7 @@
                 layout="@layout/layout_reviews"
                 android:layout_width="0dp"
                 android:layout_marginTop="10dp"
+                app:reviews="@{review}"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/goBtn"

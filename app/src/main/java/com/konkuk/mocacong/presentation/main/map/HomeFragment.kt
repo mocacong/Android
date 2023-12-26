@@ -73,23 +73,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
     private fun setDrawer() {
         binding.navigationMenu.setNavigationItemSelectedListener { menuItem ->
             binding.drawerLayout.closeDrawers()
-            when(menuItem.itemId){
-                R.id.myReviews->{
-                    mypageViewModel.requestReviewsLaunch(0)
+            when (menuItem.itemId) {
+                R.id.myReviews -> {
+                    mypageViewModel.reviewPage = 0
+                    mypageViewModel.requestMyReviews()
                     mainViewModel.goto(MainPage.MyReview)
                 }
                 R.id.myFavs -> {
-                    mypageViewModel.requestFavsLaunch(0)
+                    mypageViewModel.favPage = 0
+                    mypageViewModel.requestMyFavs()
                     mainViewModel.goto(MainPage.MyFav)
                 }
 
                 R.id.myComments -> {
-                    mypageViewModel.requestCommentsLaunch(0)
+                    mypageViewModel.commentPage = 0
+                    mypageViewModel.requestMyComments()
                     mainViewModel.goto(MainPage.MyComment)
                 }
             }
 
-            return@setNavigationItemSelectedListener true
+            return@setNavigationItemSelectedListener false
         }
     }
 
@@ -136,7 +139,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
                     it.marker.icon = markerMocacong
                 }
             }
-            if(it.isFavorite) it.marker.icon = markerFav
+            if (it.isFavorite) it.marker.icon = markerFav
             it.marker.map = naverMap
             logging("[Filtered Marker] : $it")
         }

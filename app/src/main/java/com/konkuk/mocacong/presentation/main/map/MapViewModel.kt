@@ -26,7 +26,6 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
 
     val mapMarkers = HashMap<String, MapMarker>()
 
-
     val _newPlaces = MutableLiveData<List<String>>()
     val newPlaces: LiveData<List<String>> = _newPlaces
 

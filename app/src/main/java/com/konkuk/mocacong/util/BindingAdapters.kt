@@ -12,8 +12,11 @@ import com.konkuk.mocacong.presentation.detail.CafeCommentView
 import com.konkuk.mocacong.presentation.detail.CafeCommentsAdapter
 import com.konkuk.mocacong.presentation.detail.ImageAdapter
 import com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+import com.konkuk.mocacong.presentation.main.mypage.MyCommentsAdapter
+import com.konkuk.mocacong.presentation.main.mypage.MyFavsAdapter
+import com.konkuk.mocacong.presentation.main.mypage.MyReviewsAdapter
 import com.konkuk.mocacong.presentation.models.CafeCommentsUiModel
-import com.konkuk.mocacong.remote.models.response.CafeImageResponse
+import com.konkuk.mocacong.remote.models.response.*
 import com.willy.ratingbar.ScaleRatingBar
 
 object BindingAdapters {
@@ -83,6 +86,52 @@ object BindingAdapters {
             }
         }
     }
+
+    @BindingAdapter("myFavorites")
+    @JvmStatic
+    fun setMyFavs(recyclerView: RecyclerView, response: MyFavResponse?) {
+        if (response != null) {
+            if (recyclerView.adapter is MyFavsAdapter) {
+                with(recyclerView.adapter as MyFavsAdapter) {
+                    this.isEnd = response.isEnd
+                    this.myCafes = response.cafes
+                    notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    @BindingAdapter("myReviews")
+    @JvmStatic
+    fun setMyReviews(recyclerView: RecyclerView, response: MyReviewsResponse?) {
+        if (response != null) {
+            if (recyclerView.adapter is MyReviewsAdapter) {
+                with(recyclerView.adapter as MyReviewsAdapter) {
+                    this.isEnd = response.isEnd
+                    this.myReviews = response.cafes
+                    notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    @BindingAdapter("myComments")
+    @JvmStatic
+    fun setMyComments(recyclerView: RecyclerView, response: MyCommentsResponse?) {
+        if (response != null) {
+            if (recyclerView.adapter is MyCommentsAdapter) {
+                with(recyclerView.adapter as MyCommentsAdapter) {
+                    this.isEnd = response.isEnd
+                    this.myCafes = response.cafes
+                    notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+
+
+
 
     @BindingAdapter("comment")
     @JvmStatic

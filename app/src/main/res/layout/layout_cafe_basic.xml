@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="myCafe"
+            type="com.konkuk.mocacong.presentation.models.MyCafeBasicUiModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -11,7 +16,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingEnd="20dp"
-            android:text="카페이름"
+            android:text="@{myCafe.name}"
             android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@id/ratingImg"
             app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ"
+            android:text="@{myCafe.addrString}"
             android:textColor="#A7A4A2"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="X 0.0"
+            android:text="@{myCafe.scoreString}"
             android:textColor="@color/darkBrown"
             android:textSize="15sp"
             app:layout_constraintBaseline_toBaselineOf="@id/cafeName"
@@ -59,6 +64,7 @@
             android:backgroundTint="@color/mocaBrown"
             android:gravity="center"
             android:text="혼자"
+            android:visibility="@{myCafe.soloVisibility}"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintBaseline_toBaselineOf="@id/addrText"
@@ -75,6 +81,7 @@
             android:id="@+id/groupBtn"
             android:layout_width="50dp"
             android:layout_height="25dp"
+            android:visibility="@{myCafe.groupVisibility}"
             android:layout_marginTop="20dp"
             android:background="@drawable/shape_rect_r10_filled"
             android:backgroundTint="@color/mocaBrown"

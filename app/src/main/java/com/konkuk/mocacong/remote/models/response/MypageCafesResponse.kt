@@ -1,52 +1,69 @@
 package com.konkuk.mocacong.remote.models.response
 
+import com.konkuk.mocacong.presentation.models.MyCafeBasicUiModel
+
 data class MyReviewsResponse(
     val isEnd: Boolean,
-    val cafes: List<MyCafe.MyReviews>
+    val cafes: List<MyReviews>
 )
 
 data class MyCommentsResponse(
     val isEnd: Boolean,
-    val cafes: List<MyCafe.MyComments>
+    val cafes: List<MyComments>
 )
 
 data class MyFavResponse(
     val isEnd: Boolean,
-    val cafes: List<MyCafe.MyFavorites>
+    val cafes: List<MyFavorites>
 )
 
-
-sealed class MyCafe(
-    open val name: String,
-    open val mapId: String,
-    open val roadAddress: String?,
-    open val score: Double?
-) {
-    val addrString get() = if(roadAddress.isNullOrBlank()) "주소 정보 없음" else roadAddress.toString()
-
-    class MyReviews(
-        override val name: String, override val mapId: String, override val roadAddress: String?,
-        val myStudyType: String,
-        val myScore: Int,
-        val wifi: String?,
-        val parking: String?,
-        val toilet: String?,
-        val power: String?,
-        val sound: String?,
-        val desk: String?,
-    ) : MyCafe(name, mapId, roadAddress, myScore.toDouble())
-
-    class MyFavorites(
-        override val name: String, override val mapId: String, override val roadAddress: String?,
-        override val score: Double?
-    ) : MyCafe(name, mapId, roadAddress, score)
-
-    class MyComments(
-        override val name: String, override
-        val mapId: String, override
-        val roadAddress: String?,
-        val comment: List<String>,
-        val studyType: String?,
-        override val score: Double
-    ) : MyCafe(name, mapId, roadAddress, score)
+data class MyReviews(
+    val name: String,
+    val mapId: String,
+    val roadAddress: String?,
+    val myStudyType: String,
+    val myScore: Int,
+    val myWifi: String?,
+    val myParking: String?,
+    val myToilet: String?,
+    val myPower: String?,
+    val mySound: String?,
+    val myDesk: String?,
+){
+    fun toBasicModel() : MyCafeBasicUiModel{
+        return MyCafeBasicUiModel(
+            name, mapId, roadAddress, myScore.toDouble(), myStudyType
+        )
+    }
 }
+
+
+data class MyFavorites(
+    val name: String,
+    val mapId: String,
+    val roadAddress: String?,
+    val score: Double?,
+    val studyType: String?
+) {
+    fun toBasicModel() : MyCafeBasicUiModel{
+        return MyCafeBasicUiModel(
+            name, mapId, roadAddress, score, studyType
+        )
+    }
+}
+
+data class MyComments(
+    val name: String,
+    val mapId: String,
+    val roadAddress: String?,
+    val commentContents: List<String>,
+    val studyType: String?,
+    val score: Double
+) {
+    fun toBasicModel() : MyCafeBasicUiModel{
+        return MyCafeBasicUiModel(
+            name, mapId, roadAddress, score, studyType
+        )
+    }
+}
+

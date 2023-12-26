@@ -170,7 +170,6 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
                         _cafeImages.value = it.copy(cafeImages = prev)
                     }
                     Log.d(TAG, "ImageResponse: $it")
-                    _cafeImages.value = it
                 }
             )
         }
