@@ -75,7 +75,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
             binding.drawerLayout.closeDrawers()
             mypageViewModel.type =
                 enumValues<MypageViewModel.ListType>().filter { it.menuId == menuItem.itemId }[0]
-            mainViewModel.goto(MainPage.MYCAFES)
+            mainViewModel.goto(MainPage.MYPAGE)
             return@setNavigationItemSelectedListener true
         }
     }
@@ -141,7 +141,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
         naverMap.addOnCameraIdleListener {
             val y = naverMap.cameraPosition.target.latitude.toString()
             val x = naverMap.cameraPosition.target.longitude.toString()
-            val radius = projection.metersPerDp.toInt() * 150
+            val radius = projection.metersPerDp.toInt() * 200
             logging("카메라 멈춤 x: $x, y: $y")
             mapViewModel.updateMarkers(x = x, y = y, radius)
             Log.d(TAG, "현재 축적: 1dp당 ${projection.metersPerDp}m")
