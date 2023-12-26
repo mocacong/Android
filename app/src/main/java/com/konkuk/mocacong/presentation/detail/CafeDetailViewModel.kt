@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.mocacong.data.entities.BasicPlaceInfo
 import com.konkuk.mocacong.presentation.models.CafeCommentsUiModel
 import com.konkuk.mocacong.presentation.models.CafeDetailUiModel
+import com.konkuk.mocacong.remote.models.request.ReviewRequest
 import com.konkuk.mocacong.remote.models.response.MyReviewResponse
 import com.konkuk.mocacong.remote.repositories.CafeDetailRepository
 import com.konkuk.mocacong.util.ApiState
@@ -71,10 +72,26 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
                 onSuccess = {
                     Log.d(TAG, "$it")
                     _myReview.value = it
+                    isMyFirstReview = it.myScore == 0
                 }
             )
         }
     }
+
+    var isMyFirstReview = true
+    val saveReviewResponse = MutableLiveData<ApiState<Unit>>()
+    fun saveMyReview(reviewRequest: ReviewRequest) {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                return@withContext if (isMyFirstReview)
+                    cafeDetailRepository.postReview(cafeId, reviewRequest)
+                else
+                    cafeDetailRepository.putReview(cafeId, reviewRequest)
+            }
+            saveReviewResponse.value = response
+        }
+    }
+
 
     var commentPage = 0
 

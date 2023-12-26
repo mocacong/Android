@@ -10,10 +10,10 @@ import com.konkuk.mocacong.databinding.ItemMyCafesBinding
 import com.konkuk.mocacong.remote.models.response.MyCafe
 
 
-class MyCafesAdapter(
+class MyFavsAdapter(
     val itemClickedListener: OnSearchItemClickedListener,
     val context: Context
-) : RecyclerView.Adapter<MyCafesAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<MyFavsAdapter.MyViewHolder>() {
 
     lateinit var cafeList : MutableList<MyCafe>
 

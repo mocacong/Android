@@ -12,7 +12,7 @@ import com.konkuk.mocacong.presentation.detail.CafeCommentView
 import com.konkuk.mocacong.presentation.detail.CafeCommentsAdapter
 import com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
 import com.konkuk.mocacong.presentation.models.CafeCommentsUiModel
-import com.willy.ratingbar.BaseRatingBar
+import com.willy.ratingbar.ScaleRatingBar
 
 object BindingAdapters {
 
@@ -80,9 +80,9 @@ object BindingAdapters {
 
     @BindingAdapter("cafe_rating")
     @JvmStatic
-    fun setRating(baseRatingBar: BaseRatingBar, rating: Float?) {
+    fun setRating(ratingBar: ScaleRatingBar, rating: Float?) {
         if (rating != null) {
-            baseRatingBar.rating = rating
+            ratingBar.rating = rating
         }
     }
 

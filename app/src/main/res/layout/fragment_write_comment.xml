@@ -4,6 +4,7 @@
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <data>
+
         <variable
             name="vm"
             type="com.konkuk.mocacong.presentation.detail.CafeDetailViewModel" />
@@ -69,6 +70,7 @@
             app:layout_constraintTop_toBottomOf="@id/cafeName" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/contentLayout"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,18 +78,19 @@
             android:layout_marginBottom="30dp"
             android:hint="댓글을 1~200자로 작성해주세요"
             android:textColorHint="@color/textGray"
+            app:boxStrokeColor="@color/brownGray"
             app:boxStrokeWidth="0.2dp"
             app:boxStrokeWidthFocused="0.2dp"
             app:counterEnabled="true"
             app:counterMaxLength="200"
-            android:id="@+id/contentLayout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addrText">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:gravity="start" />
+                android:gravity="start"
+                android:text="ddd" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
