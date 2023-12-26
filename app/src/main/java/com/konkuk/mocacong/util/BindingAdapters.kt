@@ -3,12 +3,15 @@ package com.konkuk.mocacong.util
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.data.entities.Comment
 import com.konkuk.mocacong.presentation.detail.CafeCommentView
+import com.konkuk.mocacong.presentation.detail.CafeCommentsAdapter
 import com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+import com.konkuk.mocacong.presentation.models.CafeCommentsUiModel
 import com.willy.ratingbar.BaseRatingBar
 
 object BindingAdapters {
@@ -43,7 +46,7 @@ object BindingAdapters {
         }
     }
 
-//    @BindingAdapter("foods")
+    //    @BindingAdapter("foods")
 //    @JvmStatic
 //    fun setFoodList(recyclerView: RecyclerView, foods: List<Food>?) {
 //        with(recyclerView.adapter as FoodsAdapter) {
@@ -54,6 +57,20 @@ object BindingAdapters {
 //            }
 //        }
 //    }
+
+
+    @BindingAdapter("comments")
+    @JvmStatic
+    fun setCafeComments(recyclerView: RecyclerView, model: CafeCommentsUiModel?) {
+        if (model != null) {
+            with(recyclerView.adapter as CafeCommentsAdapter) {
+                this.isEnd = model.isEnd
+                this.comments = model.comments
+                notifyDataSetChanged()
+                if(model.page==0) recyclerView.layoutManager?.scrollToPosition(0)
+            }
+        }
+    }
 
     @BindingAdapter("comment")
     @JvmStatic

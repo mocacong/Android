@@ -28,6 +28,7 @@ class CafeCommentView @JvmOverloads constructor(
         if(comment==null) binding.root.visibility = View.GONE
         else {
             binding.root.visibility = View.VISIBLE
+            binding.commentMenuBtn.visibility = View.GONE
             if (comment.imgUrl.isNullOrBlank()) binding.profileImg.setImageResource(R.drawable.img_no_profile)
             else Glide.with(context).load(comment.imgUrl).into(binding.profileImg)
             if(comment.nickname.isNullOrBlank()) binding.nicknameText.text = "알 수 없음"

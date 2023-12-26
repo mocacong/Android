@@ -6,9 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.mocacong.data.entities.BasicPlaceInfo
+import com.konkuk.mocacong.presentation.models.CafeCommentsUiModel
 import com.konkuk.mocacong.presentation.models.CafeDetailUiModel
 import com.konkuk.mocacong.remote.models.response.MyReviewResponse
 import com.konkuk.mocacong.remote.repositories.CafeDetailRepository
+import com.konkuk.mocacong.util.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,11 +42,11 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
     }
 
     private val _isFavorite = MutableLiveData<Boolean>()
-    val isFavorite : LiveData<Boolean> = _isFavorite
+    val isFavorite: LiveData<Boolean> = _isFavorite
 
     fun requestFavoritePost(isPost: Boolean) =
         viewModelScope.launch {
-            val response = withContext(Dispatchers.IO){
+            val response = withContext(Dispatchers.IO) {
                 if (isPost) {
                     cafeDetailRepository.postFavorite(cafeId)
                 } else {
@@ -58,11 +60,11 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
         }
 
     private val _myReview = MutableLiveData<MyReviewResponse>()
-    val myReview : LiveData<MyReviewResponse> = _myReview
+    val myReview: LiveData<MyReviewResponse> = _myReview
 
     fun requestMyReview() {
         viewModelScope.launch {
-            val response = withContext(Dispatchers.IO){
+            val response = withContext(Dispatchers.IO) {
                 cafeDetailRepository.getMyReview(cafeId)
             }
             response.byState(
@@ -73,4 +75,49 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
             )
         }
     }
+
+    var commentPage = 0
+
+    private val _cafeComments = MutableLiveData<CafeCommentsUiModel>()
+    val cafeComments: LiveData<CafeCommentsUiModel> = _cafeComments
+
+    fun requestCafeComments(page: Int = commentPage) {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                cafeDetailRepository.getComments(cafeId = cafeId, page = page)
+            }
+            response.byState(
+                onSuccess = { commentsResponse ->
+                    if (page == 0) {
+                        val model = CafeCommentsUiModel.newInstance(page, commentsResponse)
+                        _cafeComments.value = model
+                    } else {
+                        cafeComments.value?.let {
+                            val comments = cafeComments.value
+                            if (comments != null) {
+                                _cafeComments.value = CafeCommentsUiModel.addComments(
+                                    comments,
+                                    page,
+                                    commentsResponse
+                                )
+                            }
+                        }
+                    }
+                    if (!commentsResponse.isEnd) commentPage++
+                }
+            )
+        }
+    }
+
+    val postCommentResponse = MutableLiveData<ApiState<Unit>>()
+    fun postComment(content: String) {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                cafeDetailRepository.postComment(cafeId, content)
+            }
+            postCommentResponse.value = response
+        }
+    }
+
+
 }

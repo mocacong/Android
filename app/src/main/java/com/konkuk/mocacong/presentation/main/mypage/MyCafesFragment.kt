@@ -12,7 +12,7 @@ class MyCafesFragment : BaseFragment<FragmentMyCafesBinding>() {
     private val mypageViewModel: MypageViewModel by activityViewModels()
 
     private val favDescription = listOf("즐겨찾는 카페", "즐겨찾기 한 카페를 한 눈에 확인해보세요")
-    private val reviewsDescription = listOf("나의 리뷰", "카페에 남긴 나의 리뷰를 확인해보세요")
+    private val reviewsDescription = listOf("나의 리뷰", "카페별로 작성한 리뷰를 확인해볼까요?")
     private val commentsDescription = listOf("나의 댓글", "내가 남긴 댓글을 카페 별로 모아보세요")
 
     override fun afterViewCreated() {

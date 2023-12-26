@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
+    <data>
+        <variable
+            name="vm"
+            type="com.konkuk.mocacong.presentation.detail.CafeDetailViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -36,7 +42,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingHorizontal="20dp"
-            android:text="모카콩카페"
+            android:text="@{vm.cafeBasicInfo.name}"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +64,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:padding="10dp"
-            android:text="주소주소"
+            android:text="@{vm.cafeBasicInfo.addressString}"
             android:textColor="@color/jinBrown"
             app:layout_constraintTop_toBottomOf="@id/cafeName" />
 
@@ -67,12 +73,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:layout_marginBottom="30dp"
             android:hint="댓글을 1~200자로 작성해주세요"
             android:textColorHint="@color/textGray"
             app:boxStrokeWidth="0.2dp"
             app:boxStrokeWidthFocused="0.2dp"
             app:counterEnabled="true"
             app:counterMaxLength="200"
+            android:id="@+id/contentLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addrText">
 
             <com.google.android.material.textfield.TextInputEditText

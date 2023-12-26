@@ -40,7 +40,9 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
                 Log.d(TAG, "카카오 검색 결과: $it")
                 _newPlaces.postValue(it.filter { place ->
                     //현 지도 없는 마커만 필터링
-                    !mapMarkers.containsKey(place.id)
+                    val isDuplicate = !mapMarkers.containsKey(place.id)
+                    val isThemeCafe = filterString(place.category_name)
+                    isDuplicate && isThemeCafe
                 }.map { place ->
                     //장소 추가, newMarkers값 바꿈
                     createMarker(place)
@@ -48,6 +50,21 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
                 })
             }
         })
+    }
+
+    private fun filterString(s: String): Boolean {
+        // 조건 1: "음식점 > 카페 > 테마카페"가 포함되면서 "음식점 > 카페 > 테마카페>디저트카페"는 포함되지 않을 때 false
+        if ("음식점 > 카페 > 테마카페" in s && "음식점 > 카페 > 테마카페 > 디저트카페" !in s) {
+            return false
+        }
+
+        // 조건 2: "가정,생활 > 여가시설 >" 포함 시 false 리턴
+        if ("가정,생활 > 여가시설" in s) {
+            return false
+        }
+
+        // 위 조건에 해당하지 않으면 true 리턴
+        return true
     }
 
     private fun createMarker(place: Place): MapMarker {

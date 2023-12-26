@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="vm"
             type="com.konkuk.mocacong.presentation.detail.CafeDetailViewModel" />
@@ -85,7 +86,7 @@
                         android:gravity="center"
                         android:text="@{vm.cafeBasicInfo.name}"
                         android:textColor="@color/darkBrown"
-                        android:textSize="25sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -245,6 +246,7 @@
                             android:visibility="@{vm.cafeDetailInfo.noCommentVisibility}" />
 
                         <TextView
+                            android:id="@+id/allCommentText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -260,11 +262,11 @@
         </ScrollView>
 
         <include
+            android:id="@+id/commentInputLayout"
             layout="@layout/layout_comment_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:id="@+id/commentInputLayout"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

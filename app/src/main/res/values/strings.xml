@@ -9,7 +9,7 @@
 
     <string name="scoreFormatString">x %.1f</string>
     <string name="reviewCountFormatString">%d Reviewers Answered : </string>
-    <string name="commentsCountFormatString">%d Commnets : </string>
+    <string name="commentsCountFormatString">댓글 %d개</string>
 
     <string-array name="wifi">
         <item>와이파이</item>

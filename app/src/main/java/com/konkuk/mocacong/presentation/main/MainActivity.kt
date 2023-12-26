@@ -12,8 +12,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.ActivityMainBinding
 import com.konkuk.mocacong.presentation.base.BaseActivity
-import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
+import com.konkuk.mocacong.presentation.detail.CafeCommentsFragment
 import com.konkuk.mocacong.presentation.detail.CafeDetailFragment
+import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
 import com.konkuk.mocacong.presentation.main.map.HomeFragment
 import com.konkuk.mocacong.presentation.main.map.MapViewModel
 import com.konkuk.mocacong.presentation.main.map.SearchFragment
@@ -53,6 +54,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         supportFragmentManager.findFragmentByTag(SearchFragment::class.java.name)
             ?: SearchFragment()
     }
+    private val commentsFragment by lazy {
+        supportFragmentManager.findFragmentByTag(CafeCommentsFragment::class.java.name)
+            ?: CafeCommentsFragment()
+    }
 
     private var backButtonPressedOnce = false
 
@@ -69,6 +74,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                             backButtonPressedOnce = false
                         }
                     }
+                }
+                is CafeCommentsFragment -> {
+                    mainViewModel.goto(MainPage.DETAIL)
                 }
                 else -> {
                     mainViewModel.goto(MainPage.HOME)
@@ -100,9 +108,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun getFragment(page: MainPage): Fragment {
         return when (page) {
             MainPage.HOME -> homeFragment
-            MainPage.MYCAFES -> myCafesFragment
+            MainPage.MYPAGE -> myCafesFragment
             MainPage.DETAIL -> cafeDetailFragment
             MainPage.SEARCH -> searchFragment
+            MainPage.COMMENTS -> commentsFragment
         }
     }
 

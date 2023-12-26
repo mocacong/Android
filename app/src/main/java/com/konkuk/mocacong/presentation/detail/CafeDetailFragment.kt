@@ -4,30 +4,43 @@ import androidx.fragment.app.activityViewModels
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.FragmentCafeDetailBinding
 import com.konkuk.mocacong.presentation.base.BaseFragment
+import com.konkuk.mocacong.presentation.main.MainPage
+import com.konkuk.mocacong.presentation.main.MainViewModel
 
 class CafeDetailFragment : BaseFragment<FragmentCafeDetailBinding>() {
     override val TAG: String = "DetailFragment"
     override val layoutRes: Int = R.layout.fragment_cafe_detail
-    private val viewModel: CafeDetailViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
+    private val detailViewModel: CafeDetailViewModel by activityViewModels()
 
     override fun afterViewCreated() {
-        binding.vm = viewModel
+        binding.vm = detailViewModel
         initObservers()
         initLayout()
     }
 
     private fun initLayout() {
         binding.commentInputLayout.root.setOnClickListener {
-            //TODO: 댓글 입력창
+            val writeCommentFragment = WriteCommentFragment()
+            writeCommentFragment.show(childFragmentManager, writeCommentFragment.tag)
         }
+
         binding.favBtn.setOnClickListener {
-            viewModel.requestFavoritePost(!it.isSelected)
+            detailViewModel.requestFavoritePost(!it.isSelected)
         }
         binding.editBtn.setOnClickListener {
-            viewModel.requestMyReview()
+            detailViewModel.requestMyReview()
             val editReviewFragment = EditReviewFragment()
-            editReviewFragment.show(childFragmentManager,editReviewFragment.TAG)
+            editReviewFragment.show(childFragmentManager, editReviewFragment.TAG)
         }
+
+        binding.allCommentText.setOnClickListener {
+            detailViewModel.commentPage = 0
+            detailViewModel.requestCafeComments()
+
+            mainViewModel.goto(MainPage.COMMENTS)
+        }
+
     }
 
     private fun initObservers() {
