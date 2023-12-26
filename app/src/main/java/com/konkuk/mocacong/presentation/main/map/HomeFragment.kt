@@ -73,9 +73,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
     private fun setDrawer() {
         binding.navigationMenu.setNavigationItemSelectedListener { menuItem ->
             binding.drawerLayout.closeDrawers()
-            mypageViewModel.type =
-                enumValues<MypageViewModel.ListType>().filter { it.menuId == menuItem.itemId }[0]
-            mainViewModel.goto(MainPage.MYPAGE)
+            when(menuItem.itemId){
+                R.id.myReviews->{
+                    mypageViewModel.requestReviewsLaunch(0)
+                    mainViewModel.goto(MainPage.MyReview)
+                }
+                R.id.myFavs -> {
+                    mypageViewModel.requestFavsLaunch(0)
+                    mainViewModel.goto(MainPage.MyFav)
+                }
+
+                R.id.myComments -> {
+                    mypageViewModel.requestCommentsLaunch(0)
+                    mainViewModel.goto(MainPage.MyComment)
+                }
+            }
+
             return@setNavigationItemSelectedListener true
         }
     }

@@ -1,4 +1,6 @@
 package com.konkuk.mocacong.presentation.main.mypage
 
-class MyFavsFragment {
+import androidx.fragment.app.Fragment
+
+class MyFavsFragment: Fragment() {
 }

@@ -15,11 +15,11 @@ import com.konkuk.mocacong.presentation.base.BaseActivity
 import com.konkuk.mocacong.presentation.detail.CafeCommentsFragment
 import com.konkuk.mocacong.presentation.detail.CafeDetailFragment
 import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
+import com.konkuk.mocacong.presentation.detail.CafeImagesFragment
 import com.konkuk.mocacong.presentation.main.map.HomeFragment
 import com.konkuk.mocacong.presentation.main.map.MapViewModel
 import com.konkuk.mocacong.presentation.main.map.SearchFragment
-import com.konkuk.mocacong.presentation.main.mypage.MyCafesFragment
-import com.konkuk.mocacong.presentation.main.mypage.MypageViewModel
+import com.konkuk.mocacong.presentation.main.mypage.*
 import com.konkuk.mocacong.remote.repositories.CafeDetailRepository
 import com.konkuk.mocacong.remote.repositories.MapRepository
 import com.konkuk.mocacong.remote.repositories.MypageRepository
@@ -58,6 +58,26 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         supportFragmentManager.findFragmentByTag(CafeCommentsFragment::class.java.name)
             ?: CafeCommentsFragment()
     }
+    private val imagesFragment by lazy {
+        supportFragmentManager.findFragmentByTag(CafeImagesFragment::class.java.name)
+            ?: CafeImagesFragment()
+    }
+
+    private val myFavsFragment by lazy {
+        supportFragmentManager.findFragmentByTag(MyFavsFragment::class.java.name)
+            ?: MyFavsFragment()
+    }
+
+    private val myCommentsFragment by lazy {
+        supportFragmentManager.findFragmentByTag(MyCommentsFragment::class.java.name)
+            ?: MyCommentsFragment()
+    }
+
+    private val myReviewsFragment by lazy {
+        supportFragmentManager.findFragmentByTag(MyReviewsFragment::class.java.name)
+            ?: MyReviewsFragment()
+    }
+
 
     private var backButtonPressedOnce = false
 
@@ -75,7 +95,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         }
                     }
                 }
-                is CafeCommentsFragment -> {
+                is CafeCommentsFragment, is CafeImagesFragment -> {
                     mainViewModel.goto(MainPage.DETAIL)
                 }
                 else -> {
@@ -108,10 +128,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun getFragment(page: MainPage): Fragment {
         return when (page) {
             MainPage.HOME -> homeFragment
-            MainPage.MYPAGE -> myCafesFragment
             MainPage.DETAIL -> cafeDetailFragment
             MainPage.SEARCH -> searchFragment
             MainPage.COMMENTS -> commentsFragment
+            MainPage.IMAGES-> imagesFragment
+            MainPage.MyFav -> myFavsFragment
+            MainPage.MyComment -> myCommentsFragment
+            MainPage.MyReview -> myReviewsFragment
         }
     }
 

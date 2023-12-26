@@ -5,7 +5,6 @@
     tools:context=".presentation.detail.CafeCommentsFragment">
 
     <data>
-
         <variable
             name="vm"
             type="com.konkuk.mocacong.presentation.detail.CafeDetailViewModel" />

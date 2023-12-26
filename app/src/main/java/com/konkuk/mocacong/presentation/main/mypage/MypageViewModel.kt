@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.mocacong.R
 import com.konkuk.mocacong.remote.models.response.MyCommentsResponse
 import com.konkuk.mocacong.remote.models.response.MyFavResponse
 import com.konkuk.mocacong.remote.models.response.MyReviewsResponse
@@ -15,13 +14,6 @@ import kotlinx.coroutines.launch
 
 class MypageViewModel(val repository: MypageRepository) : ViewModel() {
 
-    enum class ListType(val menuId: Int) {
-        STARS(R.id.myFavs),
-        REVIEWS(R.id.myReviews),
-        COMMENTS(R.id.myComments)
-    }
-
-    lateinit var type: ListType
 
     val mFavResponse = MutableLiveData<ApiState<MyFavResponse>>()
     val favResponse: LiveData<ApiState<MyFavResponse>> = mFavResponse

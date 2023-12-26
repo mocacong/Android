@@ -1,9 +1,11 @@
 package com.konkuk.mocacong.remote.apis
 
 import com.konkuk.mocacong.objects.Member
+import com.konkuk.mocacong.remote.models.response.CafeImageResponse
 import com.konkuk.mocacong.remote.models.response.CafeResponse
 import com.konkuk.mocacong.remote.models.response.CommentsResponse
 import com.konkuk.mocacong.remote.models.response.MyReviewResponse
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -63,5 +65,21 @@ interface CafeDetailAPI {
         @Path("cafeId") cafeId: String
     ) : Response<Unit>
 
+    @GET("/cafes/{cafeId}/img")
+    suspend fun getCafeImages(
+        @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
+        @Path("cafeId") cafeId: String,
+        @Query("page") page: Int = 0,
+        @Query("count") count: Int = 20
+    ): Response<CafeImageResponse>
+
+    @Multipart
+    @POST("/cafes/{cafeId}/img")
+    suspend fun postCafeImages(
+        @Header("Authorization") token: String? = "Bearer ${Member.getAuthToken()}",
+        @Header("header") header: String = "MULTIPART_FORM_DATA_VALUE",
+        @Path("cafeId") cafeId: String,
+        @Part files: List<MultipartBody.Part>
+    ): Response<Unit>
 
 }

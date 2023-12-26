@@ -9,12 +9,14 @@ import com.konkuk.mocacong.data.entities.BasicPlaceInfo
 import com.konkuk.mocacong.presentation.models.CafeCommentsUiModel
 import com.konkuk.mocacong.presentation.models.CafeDetailUiModel
 import com.konkuk.mocacong.remote.models.request.ReviewRequest
+import com.konkuk.mocacong.remote.models.response.CafeImageResponse
 import com.konkuk.mocacong.remote.models.response.MyReviewResponse
 import com.konkuk.mocacong.remote.repositories.CafeDetailRepository
 import com.konkuk.mocacong.util.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
 
 class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository) : ViewModel() {
     val TAG = "CafeDetailViewModel"
@@ -136,5 +138,42 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
         }
     }
 
+    var imagePage = 0
+
+    val _cafeImages = MutableLiveData<CafeImageResponse>()
+    val cafeImages: LiveData<CafeImageResponse> = _cafeImages
+
+    val postImagesResponse = MutableLiveData<ApiState<Unit>>()
+    fun postMyImage(parts: List<MultipartBody.Part>) {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                cafeDetailRepository.postCafeImage(cafeId, parts)
+            }
+            postImagesResponse.value = response
+        }
+    }
+
+    fun requestCafeImages(currentPage: Int = imagePage) {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                cafeDetailRepository.getCafeImages(cafeId, page = currentPage)
+            }
+            response.byState(
+                onSuccess = {
+                    if (imagePage == 0) {
+                        //새로생성
+                        _cafeImages.value = it
+                    } else {
+                        //기존에 add
+                        val prev = cafeImages.value!!.cafeImages.toMutableList()
+                        prev.addAll(it.cafeImages)
+                        _cafeImages.value = it.copy(cafeImages = prev)
+                    }
+                    Log.d(TAG, "ImageResponse: $it")
+                    _cafeImages.value = it
+                }
+            )
+        }
+    }
 
 }

@@ -1,4 +1,6 @@
 package com.konkuk.mocacong.presentation.main.mypage
 
-class MyCommentsFragment {
+import androidx.fragment.app.Fragment
+
+class MyCommentsFragment: Fragment() {
 }

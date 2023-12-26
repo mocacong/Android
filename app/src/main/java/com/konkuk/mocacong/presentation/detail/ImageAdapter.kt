@@ -1,39 +1,80 @@
 package com.konkuk.mocacong.presentation.detail
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.ItemImageBinding
+import com.konkuk.mocacong.databinding.LayoutMoreFooterBinding
 import com.konkuk.mocacong.remote.models.response.CafeImage
 
-class ImageAdapter(private val imageList: List<CafeImage>) :
-    RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+class ImageAdapter(
+    val btnClickListener: ButtonClickListener
+) :
+    RecyclerView.Adapter<ViewHolder>() {
 
-    class ImageViewHolder(private val binding: ItemImageBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    companion object {
+        const val VIEW_TYPE_ITEM = 0
+        const val VIEW_TYPE_MORE = 1
+    }
+
+    interface ButtonClickListener {
+        fun onMoreClicked()
+        fun onMenuClicked(cafeImage: CafeImage)
+    }
+
+    var images: List<CafeImage> = emptyList()
+    var isEnd = false
+
+    inner class ItemViewHolder(private val binding: ItemImageBinding) :
+        ViewHolder(binding.root) {
         fun bind(image: CafeImage) {
-            if (image.imageUrl == null) binding.imageView.setImageResource(R.drawable.profile_no_image)
+            if (image.imageUrl == null) binding.imageView.setImageResource(R.drawable.img_nothing)
             else Glide.with(binding.imageView.context).load(image.imageUrl).into(binding.imageView)
         }
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ImageViewHolder {
-        val binding = ItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ImageViewHolder(binding)
+    inner class FooterViewHolder(private val binding: LayoutMoreFooterBinding) :
+        ViewHolder(binding.root) {
+
+        fun bind() {
+            binding.root.visibility = if (isEnd) View.GONE else View.VISIBLE
+            binding.root.setOnClickListener {
+                btnClickListener.onMoreClicked()
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val imageItem = imageList[position]
-        holder.bind(imageItem)
+    override fun getItemViewType(position: Int): Int {
+        return if (position == images.size) VIEW_TYPE_MORE else VIEW_TYPE_ITEM
     }
 
-    override fun getItemCount(): Int {
-        return imageList.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return if (viewType == VIEW_TYPE_MORE) FooterViewHolder(
+            LayoutMoreFooterBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
+        else
+            ItemViewHolder(
+                ItemImageBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
     }
 
+    override fun getItemCount(): Int = images.size + 1
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (holder is FooterViewHolder) {
+            holder.bind()
+        } else if (holder is ItemViewHolder) {
+            holder.bind(images[position])
+        }
+    }
 }

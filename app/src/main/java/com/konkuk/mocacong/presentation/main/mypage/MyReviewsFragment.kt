@@ -1,4 +1,6 @@
 package com.konkuk.mocacong.presentation.main.mypage
 
-class MyReviewsFragment {
+import androidx.fragment.app.Fragment
+
+class MyReviewsFragment : Fragment(){
 }

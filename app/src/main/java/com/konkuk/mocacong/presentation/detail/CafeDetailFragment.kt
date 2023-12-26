@@ -15,11 +15,17 @@ class CafeDetailFragment : BaseFragment<FragmentCafeDetailBinding>() {
 
     override fun afterViewCreated() {
         binding.vm = detailViewModel
-        initObservers()
         initLayout()
     }
 
     private fun initLayout() {
+        //TODO: images preview
+        binding.imagesLayout.setOnClickListener {
+            detailViewModel.imagePage = 0
+            detailViewModel.requestCafeImages()
+            mainViewModel.goto(MainPage.IMAGES)
+        }
+
         binding.commentInputLayout.root.setOnClickListener {
             val writeCommentFragment = WriteCommentFragment()
             writeCommentFragment.show(childFragmentManager, writeCommentFragment.tag)
@@ -40,10 +46,6 @@ class CafeDetailFragment : BaseFragment<FragmentCafeDetailBinding>() {
 
             mainViewModel.goto(MainPage.COMMENTS)
         }
-
-    }
-
-    private fun initObservers() {
 
     }
 

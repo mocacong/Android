@@ -3,11 +3,12 @@ package com.konkuk.mocacong.data.entities
 data class Comment(
     val id: Long,
     val imgUrl: String?,
-    val nickname: String? = "알 수 없음",
+    val nickname: String?,
     val content: String,
     val likeCount: Int,
     var isMe: Boolean
 ) {
+    val nicknameText = if(nickname.isNullOrBlank()) "(알 수 없음)" else nickname
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

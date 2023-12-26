@@ -36,7 +36,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="@{comment.nickname}"
+            android:text="@{comment.nicknameText}"
             android:textColor="@color/darkBrown"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"

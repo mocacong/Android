@@ -1,57 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/round_bottom_sheet"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    app:layout_behavior="@string/bottom_sheet_behavior"
     tools:context=".presentation.detail.CafeImagesFragment">
 
-    <TextView
-        android:id="@+id/cafeTitleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="이미지"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        <variable
+            name="vm"
+            type="com.konkuk.mocacong.presentation.detail.CafeDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginVertical="20dp"
-        android:padding="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cafeTitleText" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/plusBtn"
-        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_margin="30dp"
-        android:backgroundTint="@color/white"
-        android:text="이미지 등록하기"
-        android:textColor="@color/black"
-        android:textSize="10sp"
-        app:icon="@drawable/icon_image_plus"
-        app:iconSize="15dp"
-        app:strokeColor="@color/ssook"
-        app:iconTint="@color/black"
-        app:iconPadding="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        <View
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/brownGray"
+            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/cafeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingHorizontal="20dp"
+            android:text="@{vm.cafeBasicInfo.name}"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/darkBrown"
+            app:layout_constraintEnd_toEndOf="@id/cafeName"
+            app:layout_constraintStart_toStartOf="@id/cafeName"
+            app:layout_constraintTop_toBottomOf="@id/cafeName" />
+
+        <TextView
+            android:id="@+id/addrText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:text="@{vm.cafeBasicInfo.addressString}"
+            android:textColor="@color/darkBrown2"
+            app:layout_constraintTop_toBottomOf="@id/cafeName" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            comments="@{vm.cafeComments}"
+            images="@{vm.cafeImages}"
+            android:layout_width="match_parent"
+            android:background="@color/brownGray"
+            android:layout_height="0dp"
+            android:paddingBottom="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header" />
+
+        <Button
+            android:id="@+id/plusBtn"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="30dp"
+            android:backgroundTint="@color/white"
+            android:text="추가하기"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            app:icon="@drawable/icon_image_plus"
+            app:iconPadding="10dp"
+            app:iconSize="15dp"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:ignore="SmallSp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

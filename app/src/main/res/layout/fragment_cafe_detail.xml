@@ -36,33 +36,34 @@
                     <ImageView
                         android:layout_height="match_parent"
                         android:layout_rowSpan="2"
+
                         android:layout_columnWeight="1"
-                        android:background="@drawable/shape_bordered_rect"
+                        android:background="@drawable/img_nothing"
                         android:scaleType="centerCrop" />
 
 
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:background="@drawable/shape_bordered_rect"
+                        android:background="@drawable/img_nothing"
                         android:scaleType="centerCrop" />
 
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:background="@drawable/shape_bordered_rect"
+                        android:background="@drawable/img_nothing"
                         android:scaleType="centerCrop" />
 
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:background="@drawable/shape_bordered_rect"
+                        android:background="@drawable/img_nothing"
                         android:scaleType="centerCrop" />
 
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:background="@drawable/shape_bordered_rect"
+                        android:background="@drawable/img_nothing"
                         android:scaleType="centerCrop" />
                 </GridLayout>
 

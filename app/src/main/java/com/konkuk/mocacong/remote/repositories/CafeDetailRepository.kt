@@ -3,10 +3,12 @@ package com.konkuk.mocacong.remote.repositories
 import com.konkuk.mocacong.objects.RetrofitClient
 import com.konkuk.mocacong.remote.apis.CafeDetailAPI
 import com.konkuk.mocacong.remote.models.request.ReviewRequest
+import com.konkuk.mocacong.remote.models.response.CafeImageResponse
 import com.konkuk.mocacong.remote.models.response.CafeResponse
 import com.konkuk.mocacong.remote.models.response.CommentsResponse
 import com.konkuk.mocacong.remote.models.response.MyReviewResponse
 import com.konkuk.mocacong.util.ApiState
+import okhttp3.MultipartBody
 
 class CafeDetailRepository : BaseRepository() {
 
@@ -36,4 +38,9 @@ class CafeDetailRepository : BaseRepository() {
     suspend fun getMyReview(cafeId: String): ApiState<MyReviewResponse> =
         makeRequest { api.getMyReview(cafeId = cafeId) }
 
+    suspend fun postCafeImage(cafeId: String, body: List<MultipartBody.Part>): ApiState<Unit> =
+        makeRequest { api.postCafeImages(cafeId = cafeId, files = body) }
+
+    suspend fun getCafeImages(cafeId: String, page: Int): ApiState<CafeImageResponse> =
+        makeRequest { api.getCafeImages(cafeId = cafeId, page = page) }
 }

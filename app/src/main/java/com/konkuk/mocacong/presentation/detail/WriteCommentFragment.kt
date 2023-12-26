@@ -77,6 +77,7 @@ class WriteCommentFragment : BaseBottomSheet<FragmentWriteCommentBinding>() {
                 onSuccess = {
                     showToast("댓글이 등록되었습니다")
                     detailViewModel.requestCafeDetailInfo()
+                    detailViewModel.requestCafeComments()
                     dismiss()
                 },
                 onFailure = {

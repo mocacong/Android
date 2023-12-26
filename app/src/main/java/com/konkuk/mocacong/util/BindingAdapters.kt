@@ -10,8 +10,10 @@ import com.konkuk.mocacong.R
 import com.konkuk.mocacong.data.entities.Comment
 import com.konkuk.mocacong.presentation.detail.CafeCommentView
 import com.konkuk.mocacong.presentation.detail.CafeCommentsAdapter
+import com.konkuk.mocacong.presentation.detail.ImageAdapter
 import com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
 import com.konkuk.mocacong.presentation.models.CafeCommentsUiModel
+import com.konkuk.mocacong.remote.models.response.CafeImageResponse
 import com.willy.ratingbar.ScaleRatingBar
 
 object BindingAdapters {
@@ -31,6 +33,13 @@ object BindingAdapters {
         else Glide.with(imageView.context).load(url).into(imageView)
     }
 
+    @BindingAdapter("imageUrl")
+    @JvmStatic
+    fun setImageUrl(imageView: ImageView, url: String?) {
+        if (url.isNullOrBlank()) imageView.setImageResource(R.drawable.img_nothing)
+        else Glide.with(imageView.context).load(url).into(imageView)
+    }
+
     @BindingAdapter("isSelected")
     @JvmStatic
     fun setIsSelected(view: View, isSelected: Boolean?) {
@@ -46,28 +55,31 @@ object BindingAdapters {
         }
     }
 
-    //    @BindingAdapter("foods")
-//    @JvmStatic
-//    fun setFoodList(recyclerView: RecyclerView, foods: List<Food>?) {
-//        with(recyclerView.adapter as FoodsAdapter) {
-//            if (foods != null) {
-//                this.foods = foods
-//                this.deselect()
-//                notifyDataSetChanged()
-//            }
-//        }
-//    }
-
-
     @BindingAdapter("comments")
     @JvmStatic
     fun setCafeComments(recyclerView: RecyclerView, model: CafeCommentsUiModel?) {
         if (model != null) {
-            with(recyclerView.adapter as CafeCommentsAdapter) {
-                this.isEnd = model.isEnd
-                this.comments = model.comments
-                notifyDataSetChanged()
-                if(model.page==0) recyclerView.layoutManager?.scrollToPosition(0)
+            if (recyclerView.adapter is CafeCommentsAdapter) {
+                with(recyclerView.adapter as CafeCommentsAdapter) {
+                    this.isEnd = model.isEnd
+                    this.comments = model.comments
+                    notifyDataSetChanged()
+                    if (model.page == 0) recyclerView.layoutManager?.scrollToPosition(0)
+                }
+            }
+        }
+    }
+
+    @BindingAdapter("images")
+    @JvmStatic
+    fun setCafeImages(recyclerView: RecyclerView, response: CafeImageResponse?) {
+        if (response != null) {
+            if (recyclerView.adapter is ImageAdapter) {
+                with(recyclerView.adapter as ImageAdapter) {
+                    this.isEnd = response.isEnd
+                    this.images = response.cafeImages
+                    notifyDataSetChanged()
+                }
             }
         }
     }
