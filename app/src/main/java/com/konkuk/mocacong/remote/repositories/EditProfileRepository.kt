@@ -1,10 +1,10 @@
 package com.konkuk.mocacong.remote.repositories
 
 import com.konkuk.mocacong.objects.NetworkUtil
-import com.konkuk.mocacong.objects.RetrofitClient
 import com.konkuk.mocacong.remote.apis.MembersAPI
 import com.konkuk.mocacong.remote.models.response.ProfileResponse
 import com.konkuk.mocacong.util.ApiState
+import com.konkuk.mocacong.util.RetrofitClient
 import okhttp3.MultipartBody
 
 class EditProfileRepository {

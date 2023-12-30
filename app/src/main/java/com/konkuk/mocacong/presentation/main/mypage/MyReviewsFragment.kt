@@ -23,7 +23,11 @@ class MyReviewsFragment : BaseFragment<FragmentMyReviewsBinding>() {
             }
 
             override fun onItemClicked(myReviews: MyReviews) {
-                //TODO: 지도 연결
+                if(myReviews.roadAddress!=null) {
+                    mypageViewModel.requestSearchAddress(myReviews.roadAddress, myReviews.mapId)
+                }else{
+                    mypageViewModel.requestSearchAddress(myReviews.name, myReviews.mapId)
+                }
             }
 
         })

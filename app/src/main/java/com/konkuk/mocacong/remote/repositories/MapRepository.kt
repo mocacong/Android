@@ -1,7 +1,7 @@
 package com.konkuk.mocacong.remote.repositories
 
 import com.konkuk.mocacong.objects.KakaoLocalClient
-import com.konkuk.mocacong.objects.RetrofitClient
+import com.konkuk.mocacong.util.RetrofitClient
 import com.konkuk.mocacong.remote.apis.KakaoSearchAPI
 import com.konkuk.mocacong.remote.apis.MapApi
 import com.konkuk.mocacong.remote.models.request.FilteringRequest
@@ -18,6 +18,13 @@ class MapRepository : BaseRepository() {
 
     suspend fun getPlaces(x: String, y: String, radius: Int): ApiState<LocalSearchResponse> =
         makeRequest { kakaoApi.getLocalSearchResponse(x = x, y = y, radius = radius) }
+
+    suspend fun getSearchResult(
+        x: String,
+        y: String,
+        keyword: String
+    ): ApiState<LocalSearchResponse> =
+        makeRequest { kakaoApi.getKeywordSearchResponse(query = keyword, x = x, y = y) }
 
     suspend fun filterStudyType(type: String, fr: FilteringRequest): ApiState<FilteringResponse> =
         makeRequest { mapApi.getFilteredCafes(studyType = type, filteringRequest = fr) }

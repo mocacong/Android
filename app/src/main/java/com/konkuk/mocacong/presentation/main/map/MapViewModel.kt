@@ -14,6 +14,7 @@ import com.konkuk.mocacong.remote.models.response.Place
 import com.konkuk.mocacong.remote.repositories.MapRepository
 import com.konkuk.mocacong.util.ApiState
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.MarkerIcons
 import kotlinx.coroutines.Dispatchers
@@ -181,4 +182,26 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
     fun requestPreviewInfo(id: String) = viewModelScope.launch(Dispatchers.IO) {
         _cafePreviewResponse.postValue(mapRepository.getPreview(id))
     }
+
+    lateinit var currentLocation: CameraPosition
+    private val _searchedPlaces = MutableLiveData<List<Place>>()
+    val searchedPlaces: LiveData<List<Place>> = _searchedPlaces
+    fun requestSearchByKeyword(keyword: String) {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                mapRepository.getSearchResult(
+                    keyword = keyword,
+                    y = currentLocation.target.latitude.toString(),
+                    x = currentLocation.target.longitude.toString()
+                )
+            }
+            response.byState(
+                onSuccess = {
+                    _searchedPlaces.value = it.documents
+                }
+            )
+        }
+    }
+
+
 }

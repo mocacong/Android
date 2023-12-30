@@ -74,6 +74,7 @@ class EditReviewFragment : BaseBottomSheet<FragmentEditReviewBinding>() {
         viewModel.saveReviewResponse.observe(this) {
             it.byState(
                 onSuccess = {
+                    viewModel.requestCafeDetailInfo()
                     showToast("리뷰가 성공적으로 저장되었습니다.")
                     dismiss()
                 },

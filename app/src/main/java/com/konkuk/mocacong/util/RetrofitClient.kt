@@ -1,7 +1,10 @@
-package com.konkuk.mocacong.objects
+package com.konkuk.mocacong.util
 
 import android.util.Log
 import com.google.gson.GsonBuilder
+import com.kakao.sdk.common.Constants.AUTHORIZATION
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -20,6 +23,7 @@ object RetrofitClient {
         .connectTimeout(5, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(15, TimeUnit.SECONDS)
+        .authenticator(TokenAuthenticator())
         .addInterceptor(ResponseInterceptor())
         .build()
 
@@ -45,15 +49,20 @@ object RetrofitClient {
 
 class ResponseInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        val response = chain.proceed(request)
 
+        val token : String? = runBlocking {
+            TokenManager.getAccessToken().first()
+        }
+
+        val request = chain.request().newBuilder().header(AUTHORIZATION, "Bearer $token").build()
+
+        val response = chain.proceed(request)
         return if (response.isSuccessful) response
         else {
             val errorJson = JSONObject(response.peekBody(2048).string())
             val code = errorJson.getInt("code")
             val message = errorJson.getString("message")
-            Log.d("interceptor", "Network Error 발생! code = $code, message = $message")
+            Log.e("interceptor", "Network Error 발생! code = $code, message = $message")
 
             response
         }

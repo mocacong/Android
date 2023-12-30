@@ -7,7 +7,9 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.konkuk.mocacong.R
@@ -21,7 +23,9 @@ import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.Integer.min
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
     override val TAG: String = "HomeFragment"
@@ -39,10 +43,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
     private val markerNone: OverlayImage = OverlayImage.fromResource(R.drawable.map_ic_none)
     private val markerMocacong: OverlayImage = OverlayImage.fromResource(R.drawable.map_ic_mocacong)
 
-    override fun onResume() {
-        super.onResume()
-        mapViewModel.removeMarkers(mapViewModel.mapMarkers.keys.toList())
-    }
 
     companion object {
         private val PERMISSIONS = arrayOf(
@@ -62,12 +62,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
     override fun afterViewCreated() {
         Log.d(TAG, "afterViewCreated")
         binding.searchBar.setOnClickListener {
+            mapViewModel.currentLocation = naverMap.cameraPosition
+            mainViewModel.goto(MainPage.SEARCH)
         }
 
         binding.menuIcon.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.END)
+            binding.navigationMenu.getHeaderView(0)
         }
         setDrawer()
+
     }
 
     private fun setDrawer() {
@@ -152,14 +156,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
         this.naverMap = naverMap
         setMapSettings(naverMap)
         setCurrentLocation()
+        collectLocation()
+
         val projection = naverMap.projection
 
         naverMap.addOnCameraIdleListener {
             val y = naverMap.cameraPosition.target.latitude.toString()
             val x = naverMap.cameraPosition.target.longitude.toString()
-            val radius = projection.metersPerDp.toInt() * 200
+            val radius = min(projection.metersPerDp.toInt() * 200, 20000)
             logging("카메라 멈춤 x: $x, y: $y")
             mapViewModel.updateMarkers(x = x, y = y, radius)
+
             Log.d(TAG, "현재 축적: 1dp당 ${projection.metersPerDp}m")
         }
 
@@ -238,5 +245,29 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
         }
     }
 
+
+    private fun collectLocation() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.locationFlow.collect { place ->
+                    if (place != null) {
+                        Log.d(TAG, "Place Changed COLLECTED: $place")
+                        if (place.id.isBlank()) return@collect
+
+                        val cameraUpdate = CameraUpdate.scrollAndZoomTo(
+                            LatLng(place.y.toDouble(), place.x.toDouble()),
+                            18.0
+                        )
+                        naverMap.moveCamera(cameraUpdate)
+
+                        delay(500)
+                        mapViewModel.mapMarkers[place.id]?.marker?.performClick()
+                    } else {
+                        showToast("죄송합니다. 정보를 찾지 못했습니다.")
+                    }
+                }
+            }
+        }
+    }
 
 }

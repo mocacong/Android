@@ -49,7 +49,7 @@ class ReviewItem @JvmOverloads constructor(
     }
 
     fun setReviewString(reviewString: String?) {
-        this.reviewStr = reviewString ?: "리뷰가 없어요"
+        this.reviewStr = if(reviewString.isNullOrBlank()) "리뷰가 없어요" else reviewString
         setTextView()
         this.invalidate()
         this.requestLayout()
@@ -80,6 +80,7 @@ class ReviewItem @JvmOverloads constructor(
             else -> {
                 binding.labelText.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(context, R.color.stroke))
+                binding.labelText.text = "리뷰가 없어요"
             }
         }
     }

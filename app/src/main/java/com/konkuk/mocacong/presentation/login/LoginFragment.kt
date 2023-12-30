@@ -2,17 +2,19 @@ package com.konkuk.mocacong.presentation.login
 
 import android.util.Log
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.FragmentLoginBinding
-import com.konkuk.mocacong.objects.Member
 import com.konkuk.mocacong.presentation.base.BaseFragment
 import com.konkuk.mocacong.presentation.main.MainActivity
 import com.konkuk.mocacong.remote.models.response.KakaoLoginResponse
 import com.konkuk.mocacong.util.ApiState
+import com.konkuk.mocacong.util.TokenManager
+import kotlinx.coroutines.launch
 
 class LoginFragment : BaseFragment<FragmentLoginBinding>() {
     override val TAG: String = "LoginFragment"
@@ -36,8 +38,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
     private val onLoginSucceed: (kakaoLoginResponse: KakaoLoginResponse) -> Unit = {
         Log.d(TAG, "[onLoginSucceed] response: $it")
         if (it.isRegistered) {
-            Log.d(TAG, "[onLoginSucceed] token: ${it.accessToken}")
-            Member.setAuthToken(it.accessToken)
+            lifecycleScope.launch {
+                TokenManager.saveAccessToken(it.accessToken)
+                TokenManager.saveRefreshToken(it.refreshToken)
+            }
             startNextActivity(MainActivity::class.java)
         } else {
             //회원가입 페이지로

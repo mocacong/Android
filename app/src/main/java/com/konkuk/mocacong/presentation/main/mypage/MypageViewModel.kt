@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.mocacong.remote.models.response.MyCommentsResponse
-import com.konkuk.mocacong.remote.models.response.MyFavResponse
-import com.konkuk.mocacong.remote.models.response.MyReviewsResponse
+import com.konkuk.mocacong.remote.models.response.*
 import com.konkuk.mocacong.remote.repositories.MypageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,7 +62,7 @@ class MypageViewModel(val repository: MypageRepository) : ViewModel() {
                         prev.addAll(it.cafes)
                         _reviewResponse.value = it.copy(cafes = prev)
                     }
-                reviewPage++
+                    reviewPage++
                 }
             )
         }
@@ -95,5 +93,42 @@ class MypageViewModel(val repository: MypageRepository) : ViewModel() {
         }
     }
 
+    private val _selectedPlaces = MutableLiveData<Place?>()
+    val selectedPlaces: LiveData<Place?> = _selectedPlaces
+    fun requestSearchAddress(keyword: String, id: String) {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                repository.getSearchResult(
+                    keyword = keyword
+                )
+            }
+            response.byState(
+                onSuccess = { lr ->
+                    if (lr.documents.isNotEmpty()) {
+                        _selectedPlaces.value = lr.documents.filter {
+                            it.id == id
+                        }[0]
+                    }else{
+                        _selectedPlaces.value =null
+                    }
+                }
+            )
+        }
+    }
 
+    private val _myProfile = MutableLiveData<ProfileResponse>()
+    val myProfile : LiveData<ProfileResponse>  = _myProfile
+
+    fun requestMyProfile(){
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO){
+                repository.getMyProfile()
+            }
+            response.byState(
+                onSuccess = {
+                    _myProfile.value = it
+                }
+            )
+        }
+    }
 }

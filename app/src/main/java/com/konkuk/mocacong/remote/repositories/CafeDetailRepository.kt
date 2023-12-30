@@ -1,6 +1,5 @@
 package com.konkuk.mocacong.remote.repositories
 
-import com.konkuk.mocacong.objects.RetrofitClient
 import com.konkuk.mocacong.remote.apis.CafeDetailAPI
 import com.konkuk.mocacong.remote.models.request.ReviewRequest
 import com.konkuk.mocacong.remote.models.response.CafeImageResponse
@@ -8,6 +7,7 @@ import com.konkuk.mocacong.remote.models.response.CafeResponse
 import com.konkuk.mocacong.remote.models.response.CommentsResponse
 import com.konkuk.mocacong.remote.models.response.MyReviewResponse
 import com.konkuk.mocacong.util.ApiState
+import com.konkuk.mocacong.util.RetrofitClient
 import okhttp3.MultipartBody
 
 class CafeDetailRepository : BaseRepository() {

@@ -32,7 +32,7 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     }
 
 
-    abstract fun initViewModel()
+    open fun initViewModel() {}
     abstract fun afterViewCreated()
 
     //  토스트 생성

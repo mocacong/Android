@@ -36,7 +36,7 @@
                     <ImageView
                         android:layout_height="match_parent"
                         android:layout_rowSpan="2"
-
+                        cafeImage="@{vm.cafeDetailInfo.images[0]}"
                         android:layout_columnWeight="1"
                         android:background="@drawable/img_nothing"
                         android:scaleType="centerCrop" />
@@ -45,24 +45,28 @@
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        cafeImage="@{vm.cafeDetailInfo.images[1]}"
                         android:background="@drawable/img_nothing"
                         android:scaleType="centerCrop" />
 
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        cafeImage="@{vm.cafeDetailInfo.images[2]}"
                         android:background="@drawable/img_nothing"
                         android:scaleType="centerCrop" />
 
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        cafeImage="@{vm.cafeDetailInfo.images[3]}"
                         android:background="@drawable/img_nothing"
                         android:scaleType="centerCrop" />
 
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        cafeImage="@{vm.cafeDetailInfo.images[4]}"
                         android:background="@drawable/img_nothing"
                         android:scaleType="centerCrop" />
                 </GridLayout>

@@ -122,6 +122,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun afterViewCreated() {
         onBackPressedDispatcher.addCallback(this, callback)
         collectPage()
+        observeMyPlace()
     }
 
     private fun getFragment(page: MainPage): Fragment {
@@ -152,6 +153,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     prevPage = page
                 }
             }
+        }
+    }
+
+    private fun observeMyPlace(){
+        mypageViewModel.selectedPlaces.observe(this){
+            mainViewModel.gotoMap(it)
         }
     }
 

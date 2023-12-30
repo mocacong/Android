@@ -4,12 +4,14 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.FragmentJoinBinding
-import com.konkuk.mocacong.objects.Member
 import com.konkuk.mocacong.objects.Utils.handleEnterKey
 import com.konkuk.mocacong.presentation.base.BaseFragment
 import com.konkuk.mocacong.presentation.main.MainActivity
+import com.konkuk.mocacong.util.TokenManager
+import kotlinx.coroutines.launch
 
 class JoinFragment : BaseFragment<FragmentJoinBinding>() {
     override val TAG: String = javaClass.simpleName
@@ -34,8 +36,10 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>() {
             onSuccess = {
                 showToast("로그인 성공. 환영합니다")
                 Log.d(TAG, "카카오 OAUTH 로그인 성공")
-                Member.setAuthToken(it.accessToken)
-//            navigateAction(R.id.action_global_to_main)
+                lifecycleScope.launch {
+                    TokenManager.saveAccessToken(it.accessToken)
+                    TokenManager.saveRefreshToken(it.refreshToken)
+                }
                 startNextActivity(MainActivity::class.java)
             }
         )

@@ -8,7 +8,7 @@ data class Comment(
     val likeCount: Int,
     var isMe: Boolean
 ) {
-    val nicknameText = if(nickname.isNullOrBlank()) "(알 수 없음)" else nickname
+    val nicknameText get() = if(nickname.isNullOrBlank()) "(알 수 없음)" else nickname
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

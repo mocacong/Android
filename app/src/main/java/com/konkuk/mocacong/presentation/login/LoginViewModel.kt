@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.mocacong.remote.apis.KakaoRequest
 import com.konkuk.mocacong.remote.models.request.OAuthRequest
+import com.konkuk.mocacong.remote.models.request.ReIssueRequest
 import com.konkuk.mocacong.remote.models.response.CheckDuplicateResponse
 import com.konkuk.mocacong.remote.models.response.KakaoLoginResponse
 import com.konkuk.mocacong.remote.repositories.LoginRepository
@@ -33,6 +34,7 @@ class LoginViewModel(val repository: LoginRepository) : ViewModel() {
     var kakaoID: String = ""
     var kakaoEmail: String = ""
 
+    suspend fun postRefresh(token: String) = repository.refresh(ReIssueRequest(token))
 
     fun postKakaoLogin() = viewModelScope.launch(Dispatchers.IO) {
         val kakaoRequest = KakaoRequest(email = kakaoEmail, platformId = kakaoID)

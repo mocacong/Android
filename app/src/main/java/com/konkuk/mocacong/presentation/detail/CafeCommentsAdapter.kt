@@ -39,7 +39,7 @@ class CafeCommentsAdapter(
         }
 
         fun clear() {
-            binding.nicknameText.text = "알 수 없음"
+            binding.nicknameText.text = "(알 수 없음)"
             binding.profileImg.setImageResource(R.drawable.img_no_profile)
             binding.contentText.text = ""
         }

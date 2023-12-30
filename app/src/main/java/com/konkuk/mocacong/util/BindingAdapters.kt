@@ -36,12 +36,16 @@ object BindingAdapters {
         else Glide.with(imageView.context).load(url).into(imageView)
     }
 
-    @BindingAdapter("imageUrl")
+
+    @BindingAdapter("cafeImage")
     @JvmStatic
-    fun setImageUrl(imageView: ImageView, url: String?) {
-        if (url.isNullOrBlank()) imageView.setImageResource(R.drawable.img_nothing)
-        else Glide.with(imageView.context).load(url).into(imageView)
+    fun setImageUrl(imageView: ImageView, image: CafeImage?) {
+        if (image != null) {
+            if (image.imageUrl.isNullOrBlank()) imageView.setImageResource(R.drawable.img_nothing)
+            else Glide.with(imageView.context).load(image.imageUrl).into(imageView)
+        }
     }
+
 
     @BindingAdapter("isSelected")
     @JvmStatic
@@ -128,9 +132,6 @@ object BindingAdapters {
             }
         }
     }
-
-
-
 
 
     @BindingAdapter("comment")

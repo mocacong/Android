@@ -23,7 +23,11 @@ class MyFavsFragment : BaseFragment<FragmentMyFavsBinding>() {
             }
 
             override fun onItemClicked(myCafe: MyFavorites) {
-                //TODO: 지도 연결
+                if(myCafe.roadAddress!=null) {
+                    mypageViewModel.requestSearchAddress(myCafe.roadAddress, myCafe.mapId)
+                }else{
+                    mypageViewModel.requestSearchAddress(myCafe.name, myCafe.mapId)
+                }
             }
 
         })

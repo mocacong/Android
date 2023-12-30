@@ -2,6 +2,7 @@ package com.konkuk.mocacong.presentation.models
 
 import android.view.View
 import com.konkuk.mocacong.data.entities.Comment
+import com.konkuk.mocacong.remote.models.response.CafeImage
 import com.konkuk.mocacong.remote.models.response.CafeResponse
 
 class CafeDetailUiModel(
@@ -10,7 +11,8 @@ class CafeDetailUiModel(
     val reviewsCount: Int,
     val reviews: ReviewsUiModel,
     val commentsCount: Int,
-    val comments: List<Comment?>
+    val comments: List<Comment?>,
+    val images : List<CafeImage?>
 ) {
     val studyTypeString: String = when (studyType) {
         "solo" -> {
@@ -53,6 +55,10 @@ class CafeDetailUiModel(
             cafeResponse.comments.forEachIndexed { index, comment ->
                 comments[index] = comment
             }
+            val images = MutableList<CafeImage?>(5){null}
+            cafeResponse.cafeImages.forEachIndexed { index, cafeImage ->
+                images[index] = cafeImage
+            }
 
             return CafeDetailUiModel(
                 cafeResponse.score,
@@ -60,7 +66,8 @@ class CafeDetailUiModel(
                 cafeResponse.reviewsCount,
                 reviews,
                 cafeResponse.commentsCount,
-                comments
+                comments,
+                images
             )
         }
     }

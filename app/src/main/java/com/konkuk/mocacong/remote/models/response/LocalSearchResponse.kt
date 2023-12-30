@@ -20,8 +20,8 @@ data class Place(
     val road_address_name: String?,
     val x: String,
     val y: String,
-    var isFavorite: Boolean = false
 ) : Serializable {
+    constructor() : this("", "", "", "", "", "", "", "", "", "", "", "")
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

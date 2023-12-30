@@ -14,6 +14,7 @@ class MyCommentsFragment : BaseFragment<FragmentMyCommentsBinding>() {
         get() = R.layout.fragment_my_comments
 
     val mypageViewModel: MypageViewModel by activityViewModels()
+
     override fun afterViewCreated() {
         binding.vm = mypageViewModel
 
@@ -23,10 +24,12 @@ class MyCommentsFragment : BaseFragment<FragmentMyCommentsBinding>() {
             }
 
             override fun onItemClicked(myCafe: MyComments) {
-                //TODO: 지도연결
+                if(myCafe.roadAddress!=null) {
+                    mypageViewModel.requestSearchAddress(myCafe.roadAddress, myCafe.mapId)
+                }else{
+                    mypageViewModel.requestSearchAddress(myCafe.name, myCafe.mapId)
+                }
             }
-
-
         })
 
         binding.recyclerView.layoutManager = LinearLayoutManager(

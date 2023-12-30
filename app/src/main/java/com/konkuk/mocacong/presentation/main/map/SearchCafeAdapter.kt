@@ -3,20 +3,20 @@ package com.konkuk.mocacong.presentation.main.map
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.konkuk.mocacong.databinding.ItemCafeListsBinding
+import com.konkuk.mocacong.databinding.ItemSearchBinding
 import com.konkuk.mocacong.remote.models.response.Place
 
 class SearchCafeAdapter(
     val itemClickedListener: OnSearchItemClickedListener
 ) : RecyclerView.Adapter<SearchCafeAdapter.MyViewHolder>() {
 
-    var cafeList = listOf<Place>()
+    var cafeList: List<Place> = emptyList()
 
     interface OnSearchItemClickedListener {
         fun onItemClicked(place: Place)
     }
 
-    inner class MyViewHolder(private val binding: ItemCafeListsBinding) :
+    inner class MyViewHolder(private val binding: ItemSearchBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(place: Place) {
             binding.cafe.text = place.place_name
@@ -30,7 +30,7 @@ class SearchCafeAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding =
-            ItemCafeListsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 

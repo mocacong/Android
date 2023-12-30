@@ -23,9 +23,6 @@
         <activity
             android:name=".presentation.login.WebViewActivity"
             android:exported="true" />
-        <activity
-            android:name=".presentation.main.map.SearchActivity"
-            android:exported="true" />
 
         <!-- 네이버 지도 SDK -->
         <meta-data
@@ -47,24 +44,23 @@
                     android:scheme="kakaoeb2cc1ff484fdd2ba0934a003fd80b3b" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
+
         <activity
             android:name=".presentation.login.LoginActivity"
-            android:exported="true">
+            android:theme="@style/SplashActivityTheme"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
