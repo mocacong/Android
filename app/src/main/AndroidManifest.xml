@@ -47,11 +47,18 @@
 
         <activity
             android:name=".presentation.main.MainActivity"
+            android:theme="@style/Theme.Mocacong"
             android:exported="true">
         </activity>
 
         <activity
             android:name=".presentation.login.LoginActivity"
+            android:theme="@style/Theme.Mocacong"
+            android:exported="true" >
+        </activity>
+
+        <activity
+            android:name=".presentation.splash.SplashActivity"
             android:theme="@style/SplashActivityTheme"
             android:exported="true" >
             <intent-filter>

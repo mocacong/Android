@@ -12,7 +12,7 @@ class CafeDetailUiModel(
     val reviews: ReviewsUiModel,
     val commentsCount: Int,
     val comments: List<Comment?>,
-    val images : List<CafeImage?>
+    val images: List<CafeImage?>
 ) {
     val studyTypeString: String = when (studyType) {
         "solo" -> {
@@ -55,7 +55,7 @@ class CafeDetailUiModel(
             cafeResponse.comments.forEachIndexed { index, comment ->
                 comments[index] = comment
             }
-            val images = MutableList<CafeImage?>(5){null}
+            val images = MutableList<CafeImage?>(5) { CafeImage(0, null, false) }
             cafeResponse.cafeImages.forEachIndexed { index, cafeImage ->
                 images[index] = cafeImage
             }
