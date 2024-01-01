@@ -31,7 +31,7 @@ class CafeCommentView @JvmOverloads constructor(
             binding.commentMenuBtn.visibility = View.GONE
             if (comment.imgUrl.isNullOrBlank()) binding.profileImg.setImageResource(R.drawable.img_no_profile)
             else Glide.with(context).load(comment.imgUrl).into(binding.profileImg)
-            if(comment.nickname.isNullOrBlank()) binding.nicknameText.text = "(알 수 없음)"
+            binding.nicknameText.text = comment.nicknameText
             binding.contentText.text = comment.content
             invalidate()
             requestLayout()

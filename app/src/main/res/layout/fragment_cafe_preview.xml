@@ -26,7 +26,7 @@
             android:paddingHorizontal="20dp"
             android:text="@{place.name}"
             android:textColor="@color/darkBrown"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +38,7 @@
             android:gravity="center"
             android:text="@{place.addressString}"
             android:textColor="@color/darkBrown"
-            android:textSize="16sp"
+            android:textSize="12sp"
             app:layout_constraintTop_toBottomOf="@id/cafeName" />
 
         <TextView
@@ -49,7 +49,7 @@
             android:gravity="center"
             android:text="리뷰 개수"
             android:textColor="@color/darkBrown"
-            android:textSize="17sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addrText" />
 
@@ -60,7 +60,7 @@
             android:layout_marginTop="20dp"
             android:text="@{preview.reviewsCount}"
             android:textColor="@color/darkBrown"
-            android:textSize="17sp"
+            android:textSize="14sp"
             app:layout_constraintBaseline_toBaselineOf="@id/reviewText"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -73,7 +73,7 @@
             android:gravity="center"
             android:text="평점"
             android:textColor="@color/darkBrown"
-            android:textSize="17sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/reviewText" />
 
@@ -92,7 +92,7 @@
             android:layout_marginTop="20dp"
             android:text="@{preview.score}"
             android:textColor="@color/darkBrown"
-            android:textSize="17sp"
+            android:textSize="14sp"
             app:layout_constraintBaseline_toBaselineOf="@id/ratingText"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -104,7 +104,7 @@
             android:gravity="center"
             android:text="코딩 타입"
             android:textColor="@color/darkBrown"
-            android:textSize="17sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ratingText" />
 

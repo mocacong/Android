@@ -72,7 +72,6 @@ class SplashActivity : AppCompatActivity() {
 
     private suspend fun postRefresh(token: String) = repository.refresh(ReIssueRequest(token))
 
-
     private fun gotoActivity(activity: Class<*>?, startTime: Int) = lifecycleScope.launch {
         val endTime = System.currentTimeMillis()  // 종료 시간 기록
         val elapsedTime = endTime - startTime  // 경과 시간 계산

@@ -38,7 +38,6 @@ class CafePreviewFragment : BaseBottomSheet<FragmentCafePreviewBinding>() {
         binding.root.setOnClickListener {
             detailViewModel.setBasicInfo(placeInfo)
             detailViewModel.cafeId = placeInfo.id
-            detailViewModel.requestCafeDetailInfo()
             mainViewModel.goto(MainPage.DETAIL)
             dismiss()
         }

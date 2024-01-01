@@ -15,6 +15,7 @@ class CafeDetailFragment : BaseFragment<FragmentCafeDetailBinding>() {
 
     override fun afterViewCreated() {
         binding.vm = detailViewModel
+        detailViewModel.requestCafeDetailInfo()
         initLayout()
     }
 

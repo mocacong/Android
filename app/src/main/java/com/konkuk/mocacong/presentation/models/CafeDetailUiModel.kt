@@ -32,7 +32,7 @@ class CafeDetailUiModel(
     val reviewsCountString: String
     val commentsCountString: String
     val noCommentVisibility: Int = if (commentsCount > 0) View.GONE else View.VISIBLE
-    val allCommentsVisibility: Int = if (commentsCount > 2) View.VISIBLE else View.GONE
+    val allCommentsVisibility: Int = if (commentsCount > 0) View.VISIBLE else View.GONE
 
     init {
         scoreString = String.format("%.1f / 5", score)

@@ -147,7 +147,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     val fragment = getFragment(page)
                     supportFragmentManager.commit {
                         if (preFragment != fragment) hide(preFragment)
-                        if (fragment.isAdded) show(fragment)
+                        if (fragment.isAdded) {
+                            if(fragment is CafeDetailFragment) detailViewModel.requestCafeDetailInfo()
+                            show(fragment)
+                        }
                         else add(R.id.fragmentContainer, fragment, fragment.javaClass.name)
                     }
                     prevPage = page

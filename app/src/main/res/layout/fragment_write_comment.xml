@@ -89,8 +89,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:gravity="start"
-                android:text="ddd" />
+                android:gravity="start"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
