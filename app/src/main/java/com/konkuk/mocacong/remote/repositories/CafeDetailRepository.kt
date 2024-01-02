@@ -43,4 +43,7 @@ class CafeDetailRepository : BaseRepository() {
 
     suspend fun getCafeImages(cafeId: String, page: Int): ApiState<CafeImageResponse> =
         makeRequest { api.getCafeImages(cafeId = cafeId, page = page) }
+
+    suspend fun deleteCafeComment(cafeId: String, commentId: String): ApiState<Unit> =
+        makeRequest { api.deleteComment(cafeId = cafeId, commentId = commentId) }
 }

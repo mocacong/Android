@@ -123,7 +123,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         onBackPressedDispatcher.addCallback(this, callback)
         collectPage()
         observeMyPlace()
+        getUserProfile()
     }
+
+    private fun getUserProfile() {
+        mypageViewModel.requestMyProfile()
+    }
+
 
     private fun getFragment(page: MainPage): Fragment {
         return when (page) {
@@ -131,7 +137,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             MainPage.DETAIL -> cafeDetailFragment
             MainPage.SEARCH -> searchFragment
             MainPage.COMMENTS -> commentsFragment
-            MainPage.IMAGES-> imagesFragment
+            MainPage.IMAGES -> imagesFragment
             MainPage.MyFav -> myFavsFragment
             MainPage.MyComment -> myCommentsFragment
             MainPage.MyReview -> myReviewsFragment
@@ -148,10 +154,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     supportFragmentManager.commit {
                         if (preFragment != fragment) hide(preFragment)
                         if (fragment.isAdded) {
-                            if(fragment is CafeDetailFragment) detailViewModel.requestCafeDetailInfo()
+                            if (fragment is CafeDetailFragment) detailViewModel.requestCafeDetailInfo()
                             show(fragment)
-                        }
-                        else add(R.id.fragmentContainer, fragment, fragment.javaClass.name)
+                        } else add(R.id.fragmentContainer, fragment, fragment.javaClass.name)
                     }
                     prevPage = page
                 }
@@ -159,8 +164,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    private fun observeMyPlace(){
-        mypageViewModel.selectedPlaces.observe(this){
+
+
+    private fun observeMyPlace() {
+        mypageViewModel.selectedPlaces.observe(this) {
             mainViewModel.gotoMap(it)
         }
     }

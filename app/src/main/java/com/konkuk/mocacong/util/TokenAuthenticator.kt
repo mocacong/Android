@@ -19,9 +19,9 @@ class TokenAuthenticator : Authenticator {
             TokenManager.getRefreshToken().first()
         }
         if (refreshToken.isNullOrBlank()) {
-            response.close()
             return null
         }
+
         val newToken = getUpdatedToken(refreshToken)
 
         return if (!newToken.isNullOrBlank()) {

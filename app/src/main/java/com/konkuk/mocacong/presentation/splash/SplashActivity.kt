@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.konkuk.mocacong.presentation.login.LoginActivity
@@ -58,11 +57,6 @@ class SplashActivity : AppCompatActivity() {
                         gotoActivity(MainActivity::class.java, startTime)
                     }
                     else -> {
-                        Toast.makeText(
-                            this@SplashActivity,
-                            "${it.code} 오류로 로그인에 실패하였습니다. 다시 로그인해주세요.",
-                            Toast.LENGTH_SHORT
-                        ).show()
                         gotoActivity(LoginActivity::class.java, startTime)
                     }
                 }

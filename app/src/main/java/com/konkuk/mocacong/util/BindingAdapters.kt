@@ -21,14 +21,6 @@ import com.willy.ratingbar.ScaleRatingBar
 
 object BindingAdapters {
 
-    @BindingAdapter("clipImage")
-    @JvmStatic
-    fun setClipToOutline(imageView: ImageView, clip: Boolean?) {
-        if (clip != null) {
-            imageView.clipToOutline = clip
-        }
-    }
-
     @BindingAdapter("profileImgUrl")
     @JvmStatic
     fun setProfileImageUrl(imageView: ImageView, url: String?) {

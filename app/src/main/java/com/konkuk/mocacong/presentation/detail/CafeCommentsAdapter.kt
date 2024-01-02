@@ -22,7 +22,7 @@ class CafeCommentsAdapter(
 
 
     interface ButtonClickListener {
-        fun onMenuClicked(comment: Comment)
+        fun onMenuClicked(comment: Comment, menu: View)
         fun onMoreClicked(isEnd: Boolean)
     }
 
@@ -33,8 +33,9 @@ class CafeCommentsAdapter(
         ViewHolder(binding.root) {
         fun bind(comment: Comment) {
             binding.comment = comment
+            binding.profileImg.clipToOutline = true
             binding.commentMenuBtn.setOnClickListener {
-                btnClickListener.onMenuClicked(comment)
+                btnClickListener.onMenuClicked(comment, it)
             }
         }
 

@@ -6,6 +6,7 @@ import com.konkuk.mocacong.remote.apis.MyPageAPI
 import com.konkuk.mocacong.remote.models.response.LocalSearchResponse
 import com.konkuk.mocacong.util.ApiState
 import com.konkuk.mocacong.util.RetrofitClient
+import okhttp3.MultipartBody
 
 class MypageRepository : BaseRepository() {
 
@@ -33,4 +34,7 @@ class MypageRepository : BaseRepository() {
 
     suspend fun getMyProfile() =
         makeRequest { mypageApi.getMyProfile() }
+
+    suspend fun putMyProfileImg(part: MultipartBody.Part) =
+        makeRequest { mypageApi.putMyProfileImage(file = part) }
 }

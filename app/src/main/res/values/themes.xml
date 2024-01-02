@@ -33,6 +33,15 @@
         <item name="android:editTextStyle">@style/customEditTextFontStyle</item>
         <item name="android:radioButtonStyle">@style/customRadioButtonFontStyle</item>
         <item name="android:checkboxStyle">@style/customCheckboxFontStyle</item>
+
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.App.BodySmall</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.App.BodySmall</item>
+        <item name="popupMenuBackground">@drawable/custom_popup_background</item>
     </style>
 
+    <style name="TextAppearance.App.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/inter</item>
+        <item name="android:fontFamily">@font/inter_medium</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

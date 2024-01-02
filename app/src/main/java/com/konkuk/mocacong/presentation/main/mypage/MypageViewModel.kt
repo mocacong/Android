@@ -1,5 +1,6 @@
 package com.konkuk.mocacong.presentation.main.mypage
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.konkuk.mocacong.remote.repositories.MypageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
 
 enum class MyPage {
     FAVS, REVIEWS, COMMENTS
@@ -108,8 +110,8 @@ class MypageViewModel(val repository: MypageRepository) : ViewModel() {
                         _selectedPlaces.value = lr.documents.filter {
                             it.id == id
                         }[0]
-                    }else{
-                        _selectedPlaces.value =null
+                    } else {
+                        _selectedPlaces.value = null
                     }
                 }
             )
@@ -117,18 +119,34 @@ class MypageViewModel(val repository: MypageRepository) : ViewModel() {
     }
 
     private val _myProfile = MutableLiveData<ProfileResponse>()
-    val myProfile : LiveData<ProfileResponse>  = _myProfile
+    val myProfile: LiveData<ProfileResponse> = _myProfile
 
-    fun requestMyProfile(){
+    fun requestMyProfile() {
+        Log.d("Profile", "requestMyProfile")
         viewModelScope.launch {
-            val response = withContext(Dispatchers.IO){
+            val response = withContext(Dispatchers.IO) {
                 repository.getMyProfile()
             }
             response.byState(
                 onSuccess = {
                     _myProfile.value = it
+                    Log.d("Profile", "requestMyProfile 성공. $it")
                 }
             )
         }
     }
+
+    fun putMyProfileImg(part: MultipartBody.Part) {
+        Log.d("Profile", "putMyProfileImg 들어옴")
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                repository.putMyProfileImg(part)
+            }
+            response.byState(onSuccess = {
+                Log.d("Profile", "putMyProfileImg 성공")
+                requestMyProfile()
+            })
+        }
+    }
+
 }

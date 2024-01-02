@@ -67,7 +67,7 @@
             comments="@{vm.cafeComments}"
             images="@{vm.cafeImages}"
             android:layout_width="match_parent"
-            android:background="@color/brownGray"
+            android:background="@color/white"
             android:layout_height="0dp"
             android:paddingBottom="30dp"
             app:layout_constraintBottom_toBottomOf="parent"

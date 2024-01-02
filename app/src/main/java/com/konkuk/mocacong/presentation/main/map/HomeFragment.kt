@@ -2,14 +2,20 @@ package com.konkuk.mocacong.presentation.main.map
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.konkuk.mocacong.R
@@ -23,8 +29,14 @@ import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import gun0912.tedimagepicker.builder.TedImagePicker
+import gun0912.tedimagepicker.builder.type.MediaType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.lang.Integer.min
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
@@ -56,7 +68,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         getMapFragment()
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
-
     }
 
     override fun afterViewCreated() {
@@ -68,13 +79,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
 
         binding.menuIcon.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.END)
-            binding.navigationMenu.getHeaderView(0)
         }
         setDrawer()
-
     }
 
     private fun setDrawer() {
+
+        setNavHeader()
+
         binding.navigationMenu.setNavigationItemSelectedListener { menuItem ->
             binding.drawerLayout.closeDrawers()
             when (menuItem.itemId) {
@@ -122,6 +134,49 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
                 }
             }
         )
+
+        mypageViewModel.myProfile.observe(this) {
+            Log.d("Profile", "ProfileResposne SUCCEED")
+
+            val header = binding.navigationMenu.getHeaderView(0)
+            val imageView = header.findViewById<ImageButton>(R.id.nav_header_profileImg)
+            if (it.imgUrl.isNullOrBlank()) imageView.setImageResource(R.drawable.img_no_profile)
+            else Glide.with(imageView.context).load(it.imgUrl).into(imageView)
+            val nickname = header.findViewById<TextView>(R.id.nav_header_nickname)
+            nickname.text = it.nickname
+
+            imageView.invalidate()
+            imageView.requestLayout()
+
+            header.invalidate()
+            header.requestLayout()
+        }
+    }
+
+    private fun setNavHeader() {
+        val header = binding.navigationMenu.getHeaderView(0)
+        val profileClickedListener = {
+            TedImagePicker.with(requireContext())
+                .mediaType(MediaType.IMAGE)
+                .start { uri ->
+
+                    val file = File(absolutePath(uri))
+                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                    val part = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+                    mypageViewModel.putMyProfileImg(part)
+                }
+        }
+
+        val pfImg = header.findViewById<ImageButton>(R.id.nav_header_profileImg)
+        pfImg.setOnClickListener {
+            profileClickedListener()
+        }
+        pfImg.clipToOutline = true
+
+        header.findViewById<ImageButton>(R.id.nav_header_editbtn).setOnClickListener {
+            profileClickedListener()
+        }
     }
 
     private val createPreview: (Unit) -> Unit = {
@@ -270,4 +325,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
         }
     }
 
+    private fun absolutePath(uri: Uri?): String {
+        val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        val c: Cursor? = requireActivity().contentResolver.query(uri!!, proj, null, null, null)
+        val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c?.moveToFirst()
+
+        val result = c?.getString(index!!)
+        c?.close()
+
+        return result!!
+    }
 }

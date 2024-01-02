@@ -140,7 +140,7 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
 
     var imagePage = 0
 
-    val _cafeImages = MutableLiveData<CafeImageResponse>()
+    private val _cafeImages = MutableLiveData<CafeImageResponse>()
     val cafeImages: LiveData<CafeImageResponse> = _cafeImages
 
     val postImagesResponse = MutableLiveData<ApiState<Unit>>()
@@ -170,6 +170,22 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
                         _cafeImages.value = it.copy(cafeImages = prev)
                     }
                     Log.d(TAG, "ImageResponse: $it")
+                }
+            )
+        }
+    }
+
+
+
+    fun deleteComment(id: Long) {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                cafeDetailRepository.deleteCafeComment(cafeId = cafeId, commentId = id.toString())
+            }
+            response.byState(
+                onSuccess = {
+                    commentPage = 0
+                    requestCafeComments()
                 }
             )
         }
