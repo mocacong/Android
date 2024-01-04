@@ -11,18 +11,25 @@ import com.konkuk.mocacong.remote.models.request.FilteringRequest
 import com.konkuk.mocacong.remote.models.request.PostCafeRequest
 import com.konkuk.mocacong.remote.models.response.CafePreviewResponse
 import com.konkuk.mocacong.remote.models.response.Place
+import com.konkuk.mocacong.remote.repositories.KakaoRepository
 import com.konkuk.mocacong.remote.repositories.MapRepository
 import com.konkuk.mocacong.util.ApiState
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.MarkerIcons
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
+@HiltViewModel
+class MapViewModel @Inject constructor(
+    private val mapRepository: MapRepository,
+    private val kakaoRepository: KakaoRepository
+) : ViewModel() {
     private val TAG = "MapViewModel"
 
     val mapMarkers = HashMap<String, MapMarker>()
@@ -35,7 +42,7 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
             if (mapMarkers.size > 70) removeMarkers(mapMarkers.keys.toList())
         }
         Log.d(TAG, "updateMarkers")
-        mapRepository.getPlaces(x, y, radius).byState({ response ->
+        kakaoRepository.getPlaces(x, y, radius).byState({ response ->
             response.documents.let {
                 Log.d(TAG, "카카오 검색 결과: $it")
                 _newPlaces.postValue(it.filter { place ->
@@ -136,7 +143,8 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
                         mapMarkers[id]
                     }
                     return@byState markers
-                })
+                }
+            )
         }.await()
 
     private val _clickedMarker = MutableLiveData<MapMarker?>(null)
@@ -185,7 +193,7 @@ class MapViewModel(val mapRepository: MapRepository) : ViewModel() {
     fun requestSearchByKeyword(keyword: String) {
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO) {
-                mapRepository.getSearchResult(
+                kakaoRepository.getSearchResult(
                     keyword = keyword,
                     y = currentLocation.target.latitude.toString(),
                     x = currentLocation.target.longitude.toString()

@@ -7,10 +7,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.FragmentJoinBinding
-import com.konkuk.mocacong.objects.Utils.handleEnterKey
 import com.konkuk.mocacong.presentation.base.BaseFragment
 import com.konkuk.mocacong.presentation.main.MainActivity
 import com.konkuk.mocacong.util.TokenManager
+import com.konkuk.mocacong.util.handleEnterKey
 import kotlinx.coroutines.launch
 
 class JoinFragment : BaseFragment<FragmentJoinBinding>() {

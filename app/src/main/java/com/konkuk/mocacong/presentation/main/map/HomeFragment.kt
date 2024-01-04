@@ -1,6 +1,7 @@
 package com.konkuk.mocacong.presentation.main.map
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
@@ -22,6 +23,7 @@ import com.konkuk.mocacong.R
 import com.konkuk.mocacong.data.entities.MapMarker
 import com.konkuk.mocacong.databinding.FragmentHomeBinding
 import com.konkuk.mocacong.presentation.base.BaseFragment
+import com.konkuk.mocacong.presentation.login.WebViewActivity
 import com.konkuk.mocacong.presentation.main.MainPage
 import com.konkuk.mocacong.presentation.main.MainViewModel
 import com.konkuk.mocacong.presentation.main.mypage.MypageViewModel
@@ -105,6 +107,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
                     mypageViewModel.commentPage = 0
                     mypageViewModel.requestMyComments()
                     mainViewModel.goto(MainPage.MyComment)
+                }
+                R.id.customerCenter -> {
+                    val intent = Intent(requireContext(), WebViewActivity::class.java)
+                    intent.putExtra("urlString", resources.getString(R.string.qnaUrl))
+                    startActivity(intent)
+                }
+                R.id.appInfo -> {
+                    val intent = Intent(requireContext(), WebViewActivity::class.java)
+                    intent.putExtra("urlString", resources.getString(R.string.termsUrl))
+                    startActivity(intent)
+                }
+                R.id.qna -> {
+                    val intent = Intent(requireContext(), WebViewActivity::class.java)
+                    intent.putExtra("urlString", resources.getString(R.string.qnaUrl))
+                    startActivity(intent)
                 }
             }
 
@@ -317,8 +334,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), OnMapReadyCallback {
 
                         delay(500)
                         mapViewModel.mapMarkers[place.id]?.marker?.performClick()
+                        mainViewModel.consumeLocation()
                     } else {
-                        showToast("죄송합니다. 정보를 찾지 못했습니다.")
+
                     }
                 }
             }

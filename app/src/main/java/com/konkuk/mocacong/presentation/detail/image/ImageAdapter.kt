@@ -1,4 +1,4 @@
-package com.konkuk.mocacong.presentation.detail
+package com.konkuk.mocacong.presentation.detail.image
 
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +23,7 @@ class ImageAdapter(
 
     interface ButtonClickListener {
         fun onMoreClicked()
-        fun onMenuClicked(cafeImage: CafeImage)
+        fun onImageClicked(cafeImage: CafeImage)
     }
 
     var images: List<CafeImage> = emptyList()
@@ -32,8 +32,15 @@ class ImageAdapter(
     inner class ItemViewHolder(private val binding: ItemImageBinding) :
         ViewHolder(binding.root) {
         fun bind(image: CafeImage) {
+            binding.imageView.apply {
+                clipToOutline = true
+                setOnClickListener {
+                    btnClickListener.onImageClicked(image)
+                }
+            }
             if (image.imageUrl == null) binding.imageView.setImageResource(R.drawable.img_nothing)
             else Glide.with(binding.imageView.context).load(image.imageUrl).into(binding.imageView)
+
         }
     }
 

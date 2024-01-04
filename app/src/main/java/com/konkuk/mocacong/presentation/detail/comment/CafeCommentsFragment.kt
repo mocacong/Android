@@ -1,4 +1,4 @@
-package com.konkuk.mocacong.presentation.detail
+package com.konkuk.mocacong.presentation.detail.comment
 
 import android.view.MenuItem
 import android.view.View
@@ -11,14 +11,18 @@ import com.konkuk.mocacong.R
 import com.konkuk.mocacong.data.entities.Comment
 import com.konkuk.mocacong.databinding.FragmentCafeCommentsBinding
 import com.konkuk.mocacong.presentation.base.BaseBottomSheet
+import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
+import com.konkuk.mocacong.presentation.main.mypage.MypageViewModel
 
 class CafeCommentsFragment : BaseBottomSheet<FragmentCafeCommentsBinding>() {
     override val TAG: String = "CafeCommentsFragment"
     override val layoutRes: Int = R.layout.fragment_cafe_comments
     private val detailViewModel: CafeDetailViewModel by activityViewModels()
+    private val mypageViewModel: MypageViewModel by activityViewModels()
 
     override fun afterViewCreated() {
         binding.vm = detailViewModel
+        binding.mypageVm = mypageViewModel
         val clickListener = object : CafeCommentsAdapter.ButtonClickListener {
             override fun onMenuClicked(comment: Comment, menu: View) {
                 //메뉴

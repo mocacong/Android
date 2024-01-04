@@ -1,4 +1,4 @@
-package com.konkuk.mocacong.presentation.detail
+package com.konkuk.mocacong.presentation.detail.comment
 
 import android.app.Dialog
 import android.os.Bundle
@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.FragmentWriteCommentBinding
 import com.konkuk.mocacong.presentation.base.BaseBottomSheet
+import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
 
 class WriteCommentFragment : BaseBottomSheet<FragmentWriteCommentBinding>() {
     override val TAG: String
@@ -32,7 +33,8 @@ class WriteCommentFragment : BaseBottomSheet<FragmentWriteCommentBinding>() {
     }
 
     override fun afterViewCreated() {
-        val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        val bottomSheet =
+            dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
         val behavior = BottomSheetBehavior.from<View>(bottomSheet!!)
         behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {

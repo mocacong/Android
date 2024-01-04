@@ -20,7 +20,6 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, layoutRes)
         binding.lifecycleOwner = this
-        initViewModel()
         afterViewCreated()
     }
 
@@ -31,8 +30,6 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         startActivity(intent)
     }
 
-
-    open fun initViewModel() {}
     abstract fun afterViewCreated()
 
     //  토스트 생성

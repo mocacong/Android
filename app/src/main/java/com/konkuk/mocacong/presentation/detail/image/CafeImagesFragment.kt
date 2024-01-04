@@ -1,4 +1,4 @@
-package com.konkuk.mocacong.presentation.detail
+package com.konkuk.mocacong.presentation.detail.image
 
 import android.database.Cursor
 import android.net.Uri
@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.konkuk.mocacong.databinding.FragmentCafeImagesBinding
 import com.konkuk.mocacong.presentation.base.BaseFragment
+import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
 import com.konkuk.mocacong.remote.models.response.CafeImage
 import com.konkuk.mocacong.util.ApiState
 import gun0912.tedimagepicker.builder.TedImagePicker
@@ -60,8 +61,11 @@ class CafeImagesFragment : BaseFragment<FragmentCafeImagesBinding>() {
         binding.vm = detailViewModel
 
         val clickListener = object : ImageAdapter.ButtonClickListener {
-            override fun onMenuClicked(cafeImage: CafeImage) {
+            override fun onImageClicked(cafeImage: CafeImage) {
                 //메뉴
+//                detailViewModel.currentImage = cafeImage
+//                val dialog = FullImageDialog()
+//                dialog.show(childFragmentManager, dialog.tag)
             }
 
             override fun onMoreClicked() {
@@ -72,7 +76,7 @@ class CafeImagesFragment : BaseFragment<FragmentCafeImagesBinding>() {
         }
 
         adapter = ImageAdapter(clickListener)
-        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerView.adapter = adapter
 
         binding.plusBtn.setOnClickListener {

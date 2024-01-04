@@ -7,7 +7,7 @@
             type="com.konkuk.mocacong.data.entities.Comment" />
     </data>
 
-    <com.konkuk.mocacong.presentation.detail.CafeCommentView
+    <com.konkuk.mocacong.presentation.detail.comment.CafeCommentView
         comment="@{comment}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

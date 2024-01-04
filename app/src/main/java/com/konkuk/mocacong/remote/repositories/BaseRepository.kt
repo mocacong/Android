@@ -3,11 +3,11 @@ package com.konkuk.mocacong.remote.repositories
 import android.util.Log
 import com.konkuk.mocacong.remote.models.response.ErrorResponse
 import com.konkuk.mocacong.util.ApiState
-import com.konkuk.mocacong.util.RetrofitClient
 import okhttp3.ResponseBody
 import retrofit2.Response
+import retrofit2.Retrofit
 
-abstract class BaseRepository {
+abstract class BaseRepository(private val retrofit: Retrofit) {
 
     protected suspend fun <T> makeRequest(call: suspend () -> Response<T>): ApiState<T> {
         val response = call()
@@ -23,7 +23,7 @@ abstract class BaseRepository {
 
 
     private fun getErrorResponse(errorBody: ResponseBody): ErrorResponse? {
-        return RetrofitClient.retrofit.responseBodyConverter<ErrorResponse>(
+        return retrofit.responseBodyConverter<ErrorResponse>(
             ErrorResponse::class.java, ErrorResponse::class.java.annotations
         ).convert(errorBody)
     }

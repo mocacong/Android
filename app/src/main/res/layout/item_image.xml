@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:background="@drawable/shape_rect_r10_filled"
+        android:backgroundTint="@color/mocaBrown"
+        android:layout_margin="4dp"
+        android:layout_height="300dp">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="1dp"
-            android:background="@color/stroke"
+            android:layout_margin="0.5dp"
+            android:background="@drawable/shape_rect_r10_filled"
+            android:backgroundTint="@color/stroke"
             android:scaleType="centerCrop" />
 
-        <ImageButton
-            android:id="@+id/menuBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_margin="10dp"
-            android:background="@color/transparent"
-            android:src="@drawable/icon_more"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/level1" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

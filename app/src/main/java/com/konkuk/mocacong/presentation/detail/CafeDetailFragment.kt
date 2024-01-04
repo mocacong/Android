@@ -4,17 +4,21 @@ import androidx.fragment.app.activityViewModels
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.FragmentCafeDetailBinding
 import com.konkuk.mocacong.presentation.base.BaseFragment
+import com.konkuk.mocacong.presentation.detail.comment.WriteCommentFragment
 import com.konkuk.mocacong.presentation.main.MainPage
 import com.konkuk.mocacong.presentation.main.MainViewModel
+import com.konkuk.mocacong.presentation.main.mypage.MypageViewModel
 
 class CafeDetailFragment : BaseFragment<FragmentCafeDetailBinding>() {
     override val TAG: String = "DetailFragment"
     override val layoutRes: Int = R.layout.fragment_cafe_detail
     private val mainViewModel: MainViewModel by activityViewModels()
     private val detailViewModel: CafeDetailViewModel by activityViewModels()
+    private val mypageViewModel: MypageViewModel by activityViewModels()
 
     override fun afterViewCreated() {
         binding.vm = detailViewModel
+        binding.mypageVm = mypageViewModel
         detailViewModel.requestCafeDetailInfo()
         initLayout()
     }
@@ -47,6 +51,8 @@ class CafeDetailFragment : BaseFragment<FragmentCafeDetailBinding>() {
 
             mainViewModel.goto(MainPage.COMMENTS)
         }
+
+        binding
 
     }
 

@@ -35,7 +35,7 @@
             <ImageView
                 android:id="@+id/goBtn"
                 android:layout_width="0dp"
-                android:layout_height="20dp"
+                android:layout_height="10dp"
                 android:src="@drawable/btn_go"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

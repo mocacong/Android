@@ -11,13 +11,16 @@ import com.konkuk.mocacong.remote.models.response.CheckDuplicateResponse
 import com.konkuk.mocacong.remote.models.response.KakaoLoginResponse
 import com.konkuk.mocacong.remote.repositories.LoginRepository
 import com.konkuk.mocacong.util.ApiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(val repository: LoginRepository) : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val repository: LoginRepository) : ViewModel() {
     val TAG = "LoginViewModel"
     var mKakaoLoginResponse: MutableLiveData<ApiState<KakaoLoginResponse>> =
         MutableLiveData(ApiState.Loading())

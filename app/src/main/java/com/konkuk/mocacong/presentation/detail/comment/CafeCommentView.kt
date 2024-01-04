@@ -1,4 +1,4 @@
-package com.konkuk.mocacong.presentation.detail
+package com.konkuk.mocacong.presentation.detail.comment
 
 import android.content.Context
 import android.util.AttributeSet
@@ -17,6 +17,7 @@ class CafeCommentView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var binding: LayoutCafeCommentBinding
+
     init {
         binding = LayoutCafeCommentBinding.bind(
             LayoutInflater.from(context).inflate(R.layout.layout_cafe_comment, this, false)
@@ -24,14 +25,12 @@ class CafeCommentView @JvmOverloads constructor(
         addView(binding.root)
     }
 
-    fun setComment(comment: Comment?){
-        if(comment==null) binding.root.visibility = View.GONE
+    fun setComment(comment: Comment?) {
+        if (comment == null) binding.root.visibility = View.GONE
         else {
             binding.root.visibility = View.VISIBLE
-            if(comment.isMe) binding.commentMenuBtn.visibility = View.VISIBLE
-            else binding.commentMenuBtn.visibility = View.GONE
-
             binding.profileImg.clipToOutline = true
+            binding.commentMenuBtn.visibility = View.GONE
             if (comment.imgUrl.isNullOrBlank()) binding.profileImg.setImageResource(R.drawable.img_no_profile)
             else Glide.with(context).load(comment.imgUrl).into(binding.profileImg)
 

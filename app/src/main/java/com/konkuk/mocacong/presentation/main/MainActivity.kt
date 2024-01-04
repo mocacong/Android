@@ -1,21 +1,20 @@
 package com.konkuk.mocacong.presentation.main
 
 
-import android.util.Log
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.ActivityMainBinding
 import com.konkuk.mocacong.presentation.base.BaseActivity
-import com.konkuk.mocacong.presentation.detail.CafeCommentsFragment
 import com.konkuk.mocacong.presentation.detail.CafeDetailFragment
 import com.konkuk.mocacong.presentation.detail.CafeDetailViewModel
-import com.konkuk.mocacong.presentation.detail.CafeImagesFragment
+import com.konkuk.mocacong.presentation.detail.comment.CafeCommentsFragment
+import com.konkuk.mocacong.presentation.detail.image.CafeImagesFragment
 import com.konkuk.mocacong.presentation.main.map.HomeFragment
 import com.konkuk.mocacong.presentation.main.map.MapViewModel
 import com.konkuk.mocacong.presentation.main.map.SearchFragment
@@ -23,20 +22,17 @@ import com.konkuk.mocacong.presentation.main.mypage.MyCommentsFragment
 import com.konkuk.mocacong.presentation.main.mypage.MyFavsFragment
 import com.konkuk.mocacong.presentation.main.mypage.MyReviewsFragment
 import com.konkuk.mocacong.presentation.main.mypage.MypageViewModel
-import com.konkuk.mocacong.remote.repositories.CafeDetailRepository
-import com.konkuk.mocacong.remote.repositories.MapRepository
-import com.konkuk.mocacong.remote.repositories.MypageRepository
-import com.konkuk.mocacong.util.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-
-    private lateinit var mapViewModel: MapViewModel
-    private lateinit var detailViewModel: CafeDetailViewModel
-    private lateinit var mypageViewModel: MypageViewModel
-    private lateinit var mainViewModel: MainViewModel
+    private val mapViewModel: MapViewModel by viewModels()
+    private val detailViewModel: CafeDetailViewModel by viewModels()
+    private val mypageViewModel: MypageViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
 
 
     override val TAG: String = "MainActivity"
@@ -104,30 +100,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    override fun initViewModel() {
-        Log.d(TAG, "initViewModel")
-        mapViewModel =
-            ViewModelProvider(this, ViewModelFactory(MapRepository()))[MapViewModel::class.java]
-        detailViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(CafeDetailRepository())
-        )[CafeDetailViewModel::class.java]
-        mypageViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(MypageRepository())
-        )[MypageViewModel::class.java]
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-    }
-
     override fun afterViewCreated() {
         onBackPressedDispatcher.addCallback(this, callback)
         collectPage()
         observeMyPlace()
-        getUserProfile()
-    }
-
-    private fun getUserProfile() {
-        mypageViewModel.requestMyProfile()
+        getMemberProfile()
     }
 
 
@@ -165,10 +142,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
 
-
     private fun observeMyPlace() {
         mypageViewModel.selectedPlaces.observe(this) {
             mainViewModel.gotoMap(it)
+        }
+    }
+
+
+    private fun getMemberProfile() {
+        lifecycleScope.launch {
+            mypageViewModel.getMyProfile()
         }
     }
 

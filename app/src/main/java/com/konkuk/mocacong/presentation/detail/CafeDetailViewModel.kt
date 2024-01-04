@@ -9,16 +9,20 @@ import com.konkuk.mocacong.data.entities.BasicPlaceInfo
 import com.konkuk.mocacong.presentation.models.CafeCommentsUiModel
 import com.konkuk.mocacong.presentation.models.CafeDetailUiModel
 import com.konkuk.mocacong.remote.models.request.ReviewRequest
+import com.konkuk.mocacong.remote.models.response.CafeImage
 import com.konkuk.mocacong.remote.models.response.CafeImageResponse
 import com.konkuk.mocacong.remote.models.response.MyReviewResponse
 import com.konkuk.mocacong.remote.repositories.CafeDetailRepository
 import com.konkuk.mocacong.util.ApiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository) : ViewModel() {
+@HiltViewModel
+class CafeDetailViewModel @Inject constructor(private val cafeDetailRepository: CafeDetailRepository) : ViewModel() {
     val TAG = "CafeDetailViewModel"
     lateinit var cafeId: String
 
@@ -175,6 +179,7 @@ class CafeDetailViewModel(private val cafeDetailRepository: CafeDetailRepository
         }
     }
 
+    var currentImage: CafeImage? = null
 
 
     fun deleteComment(id: Long) {

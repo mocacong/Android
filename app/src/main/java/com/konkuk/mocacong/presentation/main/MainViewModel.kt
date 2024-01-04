@@ -4,12 +4,16 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.mocacong.remote.models.response.Place
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
+@HiltViewModel
+
+class MainViewModel @Inject constructor() : ViewModel() {
 
     private val _pageFlow = MutableStateFlow(MainPage.HOME)
     val pageFlow = _pageFlow
@@ -30,6 +34,12 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             _locationFlow.emit(place)
             goto(MainPage.HOME)
+        }
+    }
+
+    fun consumeLocation(){
+        viewModelScope.launch {
+            _locationFlow.emit(null)
         }
     }
 

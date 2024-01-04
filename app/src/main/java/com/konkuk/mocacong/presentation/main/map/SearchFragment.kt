@@ -9,11 +9,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.FragmentSearchBinding
-import com.konkuk.mocacong.objects.Utils.handleEnterKey
-import com.konkuk.mocacong.objects.Utils.showKeyboard
 import com.konkuk.mocacong.presentation.base.BaseFragment
 import com.konkuk.mocacong.presentation.main.MainViewModel
 import com.konkuk.mocacong.remote.models.response.Place
+import com.konkuk.mocacong.util.handleEnterKey
+import com.konkuk.mocacong.util.showKeyboard
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     override val TAG: String

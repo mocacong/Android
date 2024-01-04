@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922499845818",
+    "project_id": "mocacong-54f51",
+    "storage_bucket": "mocacong-54f51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922499845818:android:dfbbb72ee44af09b07bc83",
+        "android_client_info": {
+          "package_name": "com.konkuk.mocacong"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq9jay2XQk27KqIMegBHWp28Au6jGd7uk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

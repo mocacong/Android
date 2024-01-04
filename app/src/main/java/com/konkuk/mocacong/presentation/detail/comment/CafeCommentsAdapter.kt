@@ -1,4 +1,4 @@
-package com.konkuk.mocacong.presentation.detail
+package com.konkuk.mocacong.presentation.detail.comment
 
 import android.view.LayoutInflater
 import android.view.View

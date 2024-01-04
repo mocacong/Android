@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="profile"
+            type="com.konkuk.mocacong.remote.models.response.ProfileResponse" />
+    </data>
 
     <LinearLayout
         android:id="@+id/commentInputBar"
@@ -14,8 +19,10 @@
             android:id="@+id/myProfileImg"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:src="@drawable/img_no_profile"
+            profileImgUrl = "@{profile.imgUrl}"
             android:background="@drawable/shape_circle"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerCrop" />
 
         <TextView
             android:layout_width="0dp"
@@ -23,7 +30,7 @@
             android:layout_weight="8"
             android:gravity="center|start"
             android:paddingHorizontal="20dp"
-            android:text="000님의 댓글 쓰기"
+            android:text="@{profile.nicknameString}"
             android:textColor="#898888" />
 
         <TextView

@@ -8,10 +8,10 @@ import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.data.entities.Comment
-import com.konkuk.mocacong.presentation.detail.CafeCommentView
-import com.konkuk.mocacong.presentation.detail.CafeCommentsAdapter
-import com.konkuk.mocacong.presentation.detail.ImageAdapter
 import com.konkuk.mocacong.presentation.detail.ReviewButtonGroup
+import com.konkuk.mocacong.presentation.detail.comment.CafeCommentView
+import com.konkuk.mocacong.presentation.detail.comment.CafeCommentsAdapter
+import com.konkuk.mocacong.presentation.detail.image.ImageAdapter
 import com.konkuk.mocacong.presentation.main.mypage.MyCommentsAdapter
 import com.konkuk.mocacong.presentation.main.mypage.MyFavsAdapter
 import com.konkuk.mocacong.presentation.main.mypage.MyReviewsAdapter
@@ -26,6 +26,7 @@ object BindingAdapters {
     fun setProfileImageUrl(imageView: ImageView, url: String?) {
         if (url.isNullOrBlank()) imageView.setImageResource(R.drawable.img_no_profile)
         else Glide.with(imageView.context).load(url).into(imageView)
+        imageView.clipToOutline = true
     }
 
 

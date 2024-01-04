@@ -28,7 +28,7 @@ data class CafePreviewUiModel(
                 "group" -> {
                     groupVisibility = View.VISIBLE
                 }
-                else -> {
+                "both" -> {
                     soloVisibility = View.VISIBLE
                     groupVisibility = View.VISIBLE
                 }

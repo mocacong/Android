@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/bottom_sheet_behavior"
-    tools:context=".presentation.detail.CafeImagesFragment">
+    tools:context=".presentation.detail.image.CafeImagesFragment">
 
     <data>
 
@@ -67,9 +67,9 @@
             comments="@{vm.cafeComments}"
             images="@{vm.cafeImages}"
             android:layout_width="match_parent"
-            android:background="@color/white"
+            android:background="@color/brownGray"
             android:layout_height="0dp"
-            android:paddingBottom="30dp"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header" />
 

@@ -6,6 +6,8 @@ import com.konkuk.mocacong.R
 import com.konkuk.mocacong.databinding.FragmentMyCommentsBinding
 import com.konkuk.mocacong.presentation.base.BaseFragment
 import com.konkuk.mocacong.remote.models.response.MyComments
+import dagger.hilt.android.AndroidEntryPoint
+
 
 class MyCommentsFragment : BaseFragment<FragmentMyCommentsBinding>() {
     override val TAG: String

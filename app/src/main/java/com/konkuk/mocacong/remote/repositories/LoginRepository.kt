@@ -6,11 +6,12 @@ import com.konkuk.mocacong.remote.models.request.OAuthRequest
 import com.konkuk.mocacong.remote.models.response.CheckDuplicateResponse
 import com.konkuk.mocacong.remote.models.response.KakaoLoginResponse
 import com.konkuk.mocacong.util.ApiState
-import com.konkuk.mocacong.util.RetrofitClient
+import com.konkuk.mocacong.util.MocacongRetrofit
+import retrofit2.Retrofit
+import javax.inject.Inject
 
-class LoginRepository : BaseRepository() {
-    val api = RetrofitClient.create(AuthAPI::class.java)
-
+class LoginRepository @Inject constructor(private val api: AuthAPI,@MocacongRetrofit retrofit: Retrofit) :
+    BaseRepository(retrofit) {
     suspend fun postKakaoLogin(kakaoRequest: KakaoRequest): ApiState<KakaoLoginResponse> =
         makeRequest { api.kakaoLoginPost(kakaoRequest) }
 

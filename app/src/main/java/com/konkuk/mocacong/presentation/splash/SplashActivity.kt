@@ -11,10 +11,13 @@ import com.konkuk.mocacong.presentation.main.MainActivity
 import com.konkuk.mocacong.remote.models.request.ReIssueRequest
 import com.konkuk.mocacong.remote.repositories.TokenRepository
 import com.konkuk.mocacong.util.TokenManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
     val TAG = "Splash"
 
@@ -23,17 +26,15 @@ class SplashActivity : AppCompatActivity() {
         checkToken()
     }
 
-    private val repository = TokenRepository()
+    @Inject lateinit var repository: TokenRepository
 
     private fun checkToken() = lifecycleScope.launch {
         val startTime = System.currentTimeMillis().toInt()
 
-        Log.d(TAG, "checkToken 들어옴")
-        val refreshToken = withContext(Dispatchers.Default) {
+        val refreshToken = withContext(Dispatchers.IO) {
             TokenManager.getRefreshToken().first()
         }
         if (refreshToken.isNullOrBlank()) {
-            Log.d(TAG, "refresh token is NULL")
             gotoActivity(LoginActivity::class.java, startTime)
             return@launch
         }
@@ -41,10 +42,14 @@ class SplashActivity : AppCompatActivity() {
         val response = withContext(Dispatchers.IO) {
             postRefresh(refreshToken)
         }
+
         response.byState(
             onSuccess = {
+                Log.d(TAG, "성공")
                 CoroutineScope(Dispatchers.Default).launch {
-                    TokenManager.saveAccessToken(it.accessToken)
+                    withContext(Dispatchers.IO) {
+                        TokenManager.saveAccessToken(it.accessToken)
+                    }
                     gotoActivity(MainActivity::class.java, startTime)
                 }
             },
@@ -66,18 +71,18 @@ class SplashActivity : AppCompatActivity() {
 
     private suspend fun postRefresh(token: String) = repository.refresh(ReIssueRequest(token))
 
-    private fun gotoActivity(activity: Class<*>?, startTime: Int) = lifecycleScope.launch {
-        val endTime = System.currentTimeMillis()  // 종료 시간 기록
-        val elapsedTime = endTime - startTime  // 경과 시간 계산
+    private fun gotoActivity(activity: Class<*>, startTime: Int) =
+        CoroutineScope(Dispatchers.Main).launch {
+            val endTime = System.currentTimeMillis()
+            val elapsedTime = endTime - startTime
+            if (elapsedTime < 2000) {
+                delay(2000 - elapsedTime)
+            }
 
-        if (elapsedTime < 2000) {
-            delay(2000 - elapsedTime)  // 2초 동안 기다리기
+            val intent = Intent(this@SplashActivity, activity)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
-
-        val intent = Intent(this@SplashActivity, activity)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-    }
 
 
 }

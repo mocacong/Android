@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import com.konkuk.mocacong.R
 import com.konkuk.mocacong.data.entities.Review
@@ -34,8 +35,17 @@ class ReviewButtonGroup @JvmOverloads constructor(
 
         binding = LayoutReviewBtnBinding.inflate(LayoutInflater.from(context), this, true)
         setLevelText()
+        setRequiredIcon()
         setClickListeners()
 
+    }
+
+    private fun setRequiredIcon() {
+        if (category == "desk" || category == "power") {
+            binding.requiredIcon.visibility = View.VISIBLE
+            invalidate()
+            requestLayout()
+        }
     }
 
     @SuppressLint("DiscouragedApi")

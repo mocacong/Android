@@ -7,12 +7,13 @@ import com.konkuk.mocacong.remote.models.response.CafeResponse
 import com.konkuk.mocacong.remote.models.response.CommentsResponse
 import com.konkuk.mocacong.remote.models.response.MyReviewResponse
 import com.konkuk.mocacong.util.ApiState
-import com.konkuk.mocacong.util.RetrofitClient
+import com.konkuk.mocacong.util.MocacongRetrofit
 import okhttp3.MultipartBody
+import retrofit2.Retrofit
+import javax.inject.Inject
 
-class CafeDetailRepository : BaseRepository() {
-
-    private val api = RetrofitClient.create(CafeDetailAPI::class.java)
+class CafeDetailRepository @Inject constructor(private val api: CafeDetailAPI,@MocacongRetrofit retrofit: Retrofit) :
+    BaseRepository(retrofit) {
 
     suspend fun getCafeDetailInfo(id: String): ApiState<CafeResponse> =
         makeRequest { api.getCafeResponse(cafeId = id) }

@@ -1,30 +1,19 @@
 package com.konkuk.mocacong.remote.repositories
 
-import com.konkuk.mocacong.objects.KakaoLocalClient
-import com.konkuk.mocacong.util.RetrofitClient
-import com.konkuk.mocacong.remote.apis.KakaoSearchAPI
 import com.konkuk.mocacong.remote.apis.MapApi
 import com.konkuk.mocacong.remote.models.request.FilteringRequest
 import com.konkuk.mocacong.remote.models.request.PostCafeRequest
 import com.konkuk.mocacong.remote.models.response.CafePreviewResponse
 import com.konkuk.mocacong.remote.models.response.FilteringResponse
-import com.konkuk.mocacong.remote.models.response.LocalSearchResponse
 import com.konkuk.mocacong.util.ApiState
+import com.konkuk.mocacong.util.MocacongRetrofit
+import retrofit2.Retrofit
+import javax.inject.Inject
 
-class MapRepository : BaseRepository() {
-
-    private val mapApi = RetrofitClient.create(MapApi::class.java)
-    private val kakaoApi = KakaoLocalClient.create(KakaoSearchAPI::class.java)
-
-    suspend fun getPlaces(x: String, y: String, radius: Int): ApiState<LocalSearchResponse> =
-        makeRequest { kakaoApi.getLocalSearchResponse(x = x, y = y, radius = radius) }
-
-    suspend fun getSearchResult(
-        x: String,
-        y: String,
-        keyword: String
-    ): ApiState<LocalSearchResponse> =
-        makeRequest { kakaoApi.getKeywordSearchResponse(query = keyword, x = x, y = y) }
+class MapRepository @Inject constructor(
+    private val mapApi: MapApi,
+    @MocacongRetrofit retrofit: Retrofit
+) : BaseRepository(retrofit) {
 
     suspend fun filterStudyType(type: String, fr: FilteringRequest): ApiState<FilteringResponse> =
         makeRequest { mapApi.getFilteredCafes(studyType = type, filteringRequest = fr) }
